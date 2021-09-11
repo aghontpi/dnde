@@ -1,0 +1,17 @@
+.editor {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  height: 100%;
+
+  .bank,
+  .attributes {
+    flex: 1;
+    background-color: antiquewhite;
+  }
+
+  .view {
+    flex: 2;
+    background-color: azure;
+  }
+}
