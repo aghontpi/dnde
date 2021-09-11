@@ -1,4 +1,5 @@
-import { createContext, FC, useState } from 'react';
+import _ from 'lodash';
+import { createContext, FC, useEffect, useState } from 'react';
 
 export const EditorContext = createContext<any>(null);
 
@@ -20,5 +21,33 @@ export const EDContext: FC = (props) => {
     ],
     attributes: {},
   });
-  return <EditorContext.Provider value={{ mjmlJson: mjmlJson, setMjmlJson }}>{props.children}</EditorContext.Provider>;
+  const [attributes, setAttributes] = useState<any>({});
+  const [active, setActive] = useState<any>({});
+  const [mjmlstring, setMjmlString] = useState('');
+
+  useEffect(() => {
+    console.log('apth', active);
+    if (active.change) {
+      const original = mjmlJson;
+      const changed = _.set(original, active.path.slice(1) + '.attributes', active.change);
+      setMjmlString(JSON.stringify(changed, null, 2));
+    }
+  }, [active]);
+
+  return (
+    <EditorContext.Provider
+      value={{
+        mjmlJson: mjmlJson,
+        setMjmlJson,
+        attributes,
+        setAttributes,
+        active,
+        setActive,
+        mjmlstring: mjmlstring,
+        setMjmlString,
+      }}
+    >
+      {props.children}
+    </EditorContext.Provider>
+  );
 };

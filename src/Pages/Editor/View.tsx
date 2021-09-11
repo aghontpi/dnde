@@ -9,28 +9,11 @@ import _ from 'lodash';
 interface ViewProps {}
 
 export const View = (props: ViewProps) => {
-  const [mjmlstring, setMjmlString] = useState('');
-  const [mjmlJson, setMjmlJson] = useState<any>({
-    tagName: 'mjml',
-    children: [
-      {
-        tagName: 'mj-body',
-        attributes: { 'css-class': 'mjml-tag identifier-mj-body', 'background-color': 'red', width: '500px' },
-        children: [
-          {
-            tagName: 'mj-section',
-            attributes: { 'css-class': 'mjml-tag identifier-mj-section', 'background-color': 'blue' },
-            children: [],
-          },
-        ],
-      },
-    ],
-    attributes: {},
-  });
+  const { mjmlJson, setMjmlJson, setAttributes, setActive, mjmlstring, setMjmlString } = useEditor();
 
   useEffect(() => {
     setMjmlString(JSON.stringify(mjmlJson, null, 2));
-  });
+  }, []);
 
   useEffect(() => {
     console.log('update trigger', mjmlJson);
@@ -38,7 +21,7 @@ export const View = (props: ViewProps) => {
 
   const onDrop = (e: any) => {
     e.preventDefault();
-    const config = e.dataTransfer.getData('config');
+    const config = JSON.parse(e.dataTransfer.getData('config'));
 
     const closest = e.target.closest('.mjml-tag');
     let uniqueClassName = '';
@@ -70,7 +53,9 @@ export const View = (props: ViewProps) => {
 
     console.log('item', item, 'path', path);
 
-    item.children.push(JSON.parse(config));
+    item.children.push(config);
+
+    setActive({ value: item, path: path + `.children[${item.children.length - 1}]` });
 
     console.log('added child', item);
 
@@ -78,6 +63,8 @@ export const View = (props: ViewProps) => {
     setMjmlJson((prev: any) => updated);
 
     setMjmlString(JSON.stringify(updated, null, 2));
+
+    setAttributes(config.mutalbePropertiesWithDefaultValues);
   };
 
   return (

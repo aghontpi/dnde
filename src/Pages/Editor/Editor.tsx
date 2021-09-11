@@ -1,6 +1,7 @@
 import { Button } from '../../Components/Button';
 import { View } from './View';
 import css from './Editor.module.scss';
+import { Attributes } from './Attributes';
 
 export const Editor = () => {
   return (
@@ -17,7 +18,9 @@ export const Editor = () => {
       <div className={css.view}>
         <View />
       </div>
-      <div className={css.attributes}>attributes</div>
+      <div className={css.attributes}>
+        <Attributes />
+      </div>
     </div>
   );
 };

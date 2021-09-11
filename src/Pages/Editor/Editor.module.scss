@@ -25,6 +25,16 @@
       flex: 1;
       justify-content: space-around;
     }
+
+    .mods {
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .mods > div {
+      padding-top: 20px;
+    }
   }
 
   .iconsContainer {
