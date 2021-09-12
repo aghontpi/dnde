@@ -21,7 +21,7 @@ export const Editor = () => {
           <Button key="1">Copy as html</Button>,
         ]}
       ></PageHeader>
-      <Content style={{ height: '100%' }}>
+      <Content>
         <div className={css.editor}>
           <div className={css.bank}>
             <ComponentBank />

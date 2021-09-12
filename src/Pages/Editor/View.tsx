@@ -1,10 +1,11 @@
 import HTMLReactParser from 'html-react-parser';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useEditor } from '../../Hooks/Editor.hook';
 import mjml2html from 'mjml-browser';
 import css from './Editor.module.scss';
 import { findElementInJson } from '../../Utils/findElementInMjmlJson';
 import _ from 'lodash';
+import Scrollbars from 'react-custom-scrollbars-2';
 
 interface ViewProps {}
 
@@ -68,9 +69,11 @@ export const View = (props: ViewProps) => {
   };
 
   return (
-    <div className={`${css.viewHolder} mjml-wrapper`} onDrop={onDrop} onDragOver={onDragOver}>
-      {mjmlstring && HTMLReactParser(mjml2html(JSON.parse(mjmlstring), { minify: true }).html)}
-    </div>
+    <Scrollbars style={{ height: '100%' }}>
+      <div className={`${css.viewHolder} mjml-wrapper`} onDrop={onDrop} onDragOver={onDragOver}>
+        {mjmlstring && HTMLReactParser(mjml2html(JSON.parse(mjmlstring), { minify: true }).html)}
+      </div>
+    </Scrollbars>
   );
 };
 
