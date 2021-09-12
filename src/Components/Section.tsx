@@ -22,6 +22,7 @@ export const Section = () => {
       ...assigned_default_values,
       'css-class': 'mjml-tag identifier-mj-section',
       'background-color': '#fff',
+      'text-align': 'center',
     },
     children: [],
     cannot_have: ['mj-section'],

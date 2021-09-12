@@ -6,7 +6,7 @@ from pathlib import Path
 
 
 s = bs(open(str(Path(__file__).resolve().parent) +
-            '/section.html', 'r').read(), 'html.parser')
+            '/divider.html', 'r').read(), 'html.parser')
 
 heading1 = heading4 = None
 as_json = {}
@@ -25,6 +25,8 @@ for r in s.find_all('tr'):
         as_json_only_default[attribute] = value
     properties.append(attribute)
 
-print(json.dumps(as_json))
-print(properties)
-print(json.dumps(as_json_only_default))
+print('// prettier-ignore\nconst properties = ' + json.dumps(as_json))
+print('\n// prettier-ignore\nconst properties_with_default_values = ' +
+      json.dumps(as_json))
+print('\n// prettier-ignore\nconst assigned_default_values = ' +
+      json.dumps(as_json_only_default))
