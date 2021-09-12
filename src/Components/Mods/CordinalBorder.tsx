@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import styled from 'styled-components';
 import { useEditor } from '../../Hooks/Editor.hook';
+import { Form, Input, Layout, Row, Col } from 'antd';
 
 const Container = styled.div`
   display: flex;
@@ -80,44 +81,51 @@ export const CordinalBorder = () => {
     valueb = _.get(mjmlJson, active.path.slice(1) + 'attributes.border-bottom');
   }
 
-  return (
-    <Container>
-      {active.path && (
-        <>
-          <label>Border Directions</label>
-          <div>
-            <div>
-              <label>Top</label>
-              <input onKeyDown={(e) => onKeyDown(e, 'top')} onChange={(e) => handleChange(e, 'top')} value={valuet} />
-            </div>
+  return active.path ? (
+    <Form.Item label="Border Directions">
+      <Input.Group style={{ marginBottom: '6px' }}>
+        <Row>
+          <Col span={11} offset={0}>
+            <Input
+              addonBefore="top"
+              onKeyDown={(e) => onKeyDown(e, 'top')}
+              onChange={(e) => handleChange(e, 'top')}
+              value={valuet}
+            />
+          </Col>
+          <Col span={11} offset={2}>
+            <Input
+              addonBefore="right"
+              onKeyDown={(e) => onKeyDown(e, 'right')}
+              onChange={(e) => handleChange(e, 'right')}
+              value={valuer}
+            />
+          </Col>
+        </Row>
+      </Input.Group>
+      <Input.Group>
+        <Row>
+          <Col span={11} offset={0}>
+            <Input
+              addonBefore="bottom"
+              onKeyDown={(e) => onKeyDown(e, 'bottom')}
+              onChange={(e) => handleChange(e, 'bottom')}
+              value={valueb}
+            />
+          </Col>
 
-            <div>
-              <label>Right</label>
-              <input
-                onKeyDown={(e) => onKeyDown(e, 'right')}
-                onChange={(e) => handleChange(e, 'right')}
-                value={valuer}
-              />
-            </div>
-
-            <div>
-              <label>Bottom</label>
-              <input
-                onKeyDown={(e) => onKeyDown(e, 'bottom')}
-                onChange={(e) => handleChange(e, 'bottom')}
-                value={valueb}
-              />
-            </div>
-
-            <div>
-              <label>Left</label>
-              <input onKeyDown={(e) => onKeyDown(e, 'left')} onChange={(e) => handleChange(e, 'left')} value={valuel} />
-            </div>
-          </div>
-        </>
-      )}
-    </Container>
-  );
+          <Col span={11} offset={2}>
+            <Input
+              addonBefore="left"
+              onKeyDown={(e) => onKeyDown(e, 'left')}
+              onChange={(e) => handleChange(e, 'left')}
+              value={valuel}
+            />
+          </Col>
+        </Row>
+      </Input.Group>
+    </Form.Item>
+  ) : null;
 };
 
 const changeValue = (

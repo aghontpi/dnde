@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import styled from 'styled-components';
 import { useEditor } from '../../Hooks/Editor.hook';
+import { Form, Input } from 'antd';
 
 const Container = styled.div`
   display: flex;
@@ -41,14 +42,9 @@ export const Border = () => {
     value = _.get(mjmlJson, active.path.slice(1) + 'attributes.border');
   }
 
-  return (
-    <Container>
-      {active.path && (
-        <>
-          <label>Border</label>
-          <input onChange={handleChange} value={value} onKeyDown={onKeyDown} />
-        </>
-      )}
-    </Container>
-  );
+  return active.path ? (
+    <Form.Item label="Border">
+      <Input onChange={handleChange} value={value} onKeyDown={onKeyDown} />
+    </Form.Item>
+  ) : null;
 };

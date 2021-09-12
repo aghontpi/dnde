@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import styled from 'styled-components';
 import { useEditor } from '../../Hooks/Editor.hook';
+import { Form, Input } from 'antd';
 
 const Container = styled.div`
   display: flex;
@@ -62,14 +63,9 @@ export const BorderRadius = () => {
     value = _.get(mjmlJson, active.path.slice(1) + 'attributes.border-radius');
   }
 
-  return (
-    <Container>
-      {active.path && (
-        <>
-          <label>Border-Radius</label>
-          <input onKeyDown={onKeyDown} onChange={handleChange} value={value} />
-        </>
-      )}
-    </Container>
-  );
+  return active.path ? (
+    <Form.Item label="Border Radius">
+      <Input onChange={handleChange} value={value} onKeyDown={onKeyDown} />
+    </Form.Item>
+  ) : null;
 };
