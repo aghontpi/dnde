@@ -12,7 +12,7 @@ const properties_with_default_values = {"align": "center", "background-color": "
 // prettier-ignore
 const assigned_default_values  = {"align": "center", "background-color": "#414141", "border": "none", "border-radius": "3px", "color": "#ffffff", "font-family": "Ubuntu, Helvetica, Arial, sans-serif", "font-size": "13px", "font-weight": "normal", "inner-padding": "10px 25px", "line-height": "120%", "padding": "10px 25px", "target": "_blank", "text-align": "none", "text-decoration": "none", "text-transform": "none", "vertical-align": "middle"}
 
-export const Button = () => {
+export const Text = () => {
   const config = {
     tagName: 'mj-button',
     attributes: {
@@ -38,7 +38,7 @@ export const Button = () => {
 
   return (
     <div onDragStart={onDragStart} draggable={true}>
-      <UiWrapper background="button" label="Button" />
+      <UiWrapper background="text" label="Text" />
     </div>
   );
 };
