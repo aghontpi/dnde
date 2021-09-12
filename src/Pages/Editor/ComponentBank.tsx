@@ -9,8 +9,7 @@ import { Image } from '../../Components/Image';
 import { Spacer } from '../../Components/Spacer';
 import { Html } from '../../Components/Html';
 import { Divider } from '../../Components/Divider';
-import { floor } from 'lodash';
-import { BorderRadius } from '../../Components/Mods/BorderRadius';
+import { Section } from '../../Components/Section';
 
 const { Panel } = Collapse;
 
@@ -29,22 +28,7 @@ export const ComponentBank = () => {
         expandIcon={({ isActive }) => <CaretDownOutlined rotate={isActive ? 0 : 180} />}
       >
         <Panel header={<Header title="Drag & Drop Section" />} key="1">
-          {[1, 2, 3, 4, 5, 6].map((value, index) => {
-            return (
-              <>
-                <Row className={css.sectionTitle}>
-                  <p>{value} Column</p>
-                </Row>
-                <Row className={css.rows} draggable={true}>
-                  <div className={css.singleColumnWrapper}>
-                    <div className={css.child1}>
-                      <Generator length={value} />
-                    </div>
-                  </div>
-                </Row>
-              </>
-            );
-          })}
+          <Section />
         </Panel>
         <Panel header={<Header title="Drag & Drop Content" />} key="2">
           <div className={css.components}>
@@ -59,24 +43,4 @@ export const ComponentBank = () => {
       </Collapse>
     </Scrollbars>
   );
-};
-
-const Generator = ({ length }: { length: number }) => {
-  let content = [];
-  const flexGrow = floor(100 / length);
-
-  for (let i = 0; i < length; i++) {
-    content.push(
-      <div
-        style={{
-          display: 'flex',
-          flexGrow,
-          height: '16px',
-          borderRight: i === length - 1 ? '' : '1px solid rgb(85, 85, 85)',
-          borderRadius: '0px',
-        }}
-      ></div>
-    );
-  }
-  return <>{content}</>;
 };
