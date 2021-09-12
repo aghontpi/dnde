@@ -4,8 +4,9 @@ import json
 from bs4 import BeautifulSoup as bs
 from pathlib import Path
 
+
 s = bs(open(str(Path(__file__).resolve().parent) +
-            '/button.html', 'r').read(), 'html.parser')
+            '/section.html', 'r').read(), 'html.parser')
 
 heading1 = heading4 = None
 as_json = {}

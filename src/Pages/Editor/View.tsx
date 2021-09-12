@@ -70,7 +70,11 @@ export const View = (props: ViewProps) => {
 
   return (
     <Scrollbars style={{ height: '100%' }}>
-      <div className={`${css.viewHolder} mjml-wrapper`} onDrop={onDrop} onDragOver={onDragOver}>
+      <div
+        className={`${css.viewHolder} mjml-wrapper mjml-tag identifier-mj-body`}
+        onDrop={onDrop}
+        onDragOver={onDragOver}
+      >
         {mjmlstring && HTMLReactParser(mjml2html(JSON.parse(mjmlstring), { minify: true }).html)}
       </div>
     </Scrollbars>

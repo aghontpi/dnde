@@ -1,33 +1,30 @@
 import { Row } from 'antd';
 import { floor } from 'lodash';
-import { SyntheticEvent } from 'react';
+import { Fragment, SyntheticEvent } from 'react';
 import styled from 'styled-components';
 import { UiWrapper } from './UiWrapper';
 
 export type DragEvent = SyntheticEvent & { dataTransfer: DataTransfer };
 
 // prettier-ignore
-const properties = ['align', 'background-color', 'border', 'border-bottom', 'border-left', 'border-radius', 'border-right', 'border-top', 'color', 'container-background-color', 'css-class', 'font-family', 'font-size', 'font-style', 'font-weight', 'height', 'href', 'inner-padding', 'letter-spacing', 'line-height', 'padding', 'padding-bottom', 'padding-left', 'padding-right', 'padding-top', 'rel', 'target', 'text-align', 'text-decoration', 'text-transform', 'title', 'vertical-align', 'width'];
+const properties = ['background-color', 'background-position', 'background-position-x', 'background-position-y', 'background-repeat', 'background-size', 'background-url', 'border', 'border-bottom', 'border-left', 'border-radius', 'border-right', 'border-top', 'css-class', 'direction', 'full-width', 'padding', 'padding-bottom', 'padding-left', 'padding-right', 'padding-top', 'text-align'];
 
 // prettier-ignore
-const properties_with_default_values = {"align": "center", "background-color": "#414141", "border": "none", "border-bottom": "", "border-left": "", "border-radius": "3px", "border-right": "", "border-top": "", "color": "#ffffff", "container-background-color": "", "css-class": "", "font-family": "Ubuntu, Helvetica, Arial, sans-serif", "font-size": "13px", "font-style": "", "font-weight": "normal", "height": "", "href": "", "inner-padding": "10px 25px", "letter-spacing": "", "line-height": "120%", "padding": "10px 25px", "padding-bottom": "", "padding-left": "", "padding-right": "", "padding-top": "", "rel": "", "target": "_blank", "text-align": "none", "text-decoration": "none", "text-transform": "none", "title": "", "vertical-align": "middle", "width": ""}
+const properties_with_default_values = {"background-color": "", "background-position": "top center", "background-position-x": "none", "background-position-y": "none", "background-repeat": "repeat", "background-size": "auto", "background-url": "", "border": "none", "border-bottom": "", "border-left": "", "border-radius": "", "border-right": "", "border-top": "", "css-class": "", "direction": "ltr", "full-width": "", "padding": "20px 0", "padding-bottom": "", "padding-left": "", "padding-right": "", "padding-top": "", "text-align": "center"};
 
 // prettier-ignore
-const assigned_default_values  = {"align": "center", "background-color": "#414141", "border": "none", "border-radius": "3px", "color": "#ffffff", "font-family": "Ubuntu, Helvetica, Arial, sans-serif", "font-size": "13px", "font-weight": "normal", "inner-padding": "10px 25px", "line-height": "120%", "padding": "10px 25px", "target": "_blank", "text-align": "none", "text-decoration": "none", "text-transform": "none", "vertical-align": "middle"}
+const assigned_default_values  = {"align": "center", "background-color": "#414141", "border": "none", "border-radius": "3px", "color": "#ffffff", "font-family": "Ubuntu, Helvetica, Arial, sans-serif", "font-size": "13px", "font-weight": "normal", "inner-padding": "10px 25px", "line-height": "120%", "padding": "10px 25px", "target": "_blank", "text-align": "none", "text-decoration": "none", "text-transform": "none", "vertical-align": "middle"};
 
 export const Section = () => {
   const config = {
-    tagName: 'mj-button',
+    tagName: 'mj-section',
     attributes: {
       ...assigned_default_values,
-      'border-right': '',
-      'border-top': '',
-      'border-bottom': '',
-      'border-left': '',
-      'css-class': 'button',
+      'css-class': 'mjml-tag identifier-mj-section',
+      'background-color': '#fff',
     },
     children: [],
-    content: 'Customize this button!',
+    cannot_have: ['mj-section'],
     mutableProperties: properties,
     mutalbePropertiesWithDefaultValues: properties_with_default_values,
   };
@@ -41,18 +38,18 @@ export const Section = () => {
 
   let dynamicRenderer = [1, 2, 3, 4, 5, 6].map((value, index) => {
     return (
-      <>
-        <SectionTitle>
+      <Fragment key={value}>
+        <SectionTitle key={value + index + 'title'}>
           <p>{value} Column</p>
         </SectionTitle>
-        <SectionImage draggable={true}>
+        <SectionImage key={value + index + 'section'} draggable={true} onDragStart={onDragStart}>
           <div className="wrapper">
             <div className="border">
               <Generator length={value} />
             </div>
           </div>
         </SectionImage>
-      </>
+      </Fragment>
     );
   });
   return <>{dynamicRenderer}</>;
@@ -114,6 +111,7 @@ const Generator = ({ length }: { length: number }) => {
   for (let i = 0; i < length; i++) {
     content.push(
       <div
+        key={i + flexGrow}
         style={{
           display: 'flex',
           flexGrow,
