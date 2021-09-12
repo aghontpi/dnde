@@ -1,19 +1,30 @@
 .button {
   width: 100px;
   display: flex;
-  padding: 12px 64px;
+  padding: 12px 57px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   border: 1px solid rgb(229, 229, 229);
 
+  &:hover {
+    background-color: rgb(255, 255, 255);
+    box-shadow: rgb(0 0 0 / 20%) 0px 1px 4px;
+    border-color: rgb(255, 255, 255);
+  }
+
   .container {
     height: 64px;
     width: 64px;
     background: url(../Assets/Images/button_component_drag_and_drop.svg) no-repeat center;
-    span {
-      font-weight: bolder;
-      font-size: 16px;
-    }
+  }
+
+  p {
+    text-align: center;
+    color: rgb(126, 113, 113);
+    font-size: 15px;
+    font-weight: 400;
+    margin-top: 0px;
+    margin-bottom: 14px;
   }
 }

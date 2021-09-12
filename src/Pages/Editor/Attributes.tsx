@@ -1,7 +1,6 @@
 import { Border } from '../../Components/Mods/Border';
 import { BorderRadius } from '../../Components/Mods/BorderRadius';
 import { CordinalBorder } from '../../Components/Mods/CordinalBorder';
-import { useEditor } from '../../Hooks/Editor.hook';
 import css from './Editor.module.scss';
 
 export const Attributes = () => {

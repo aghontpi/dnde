@@ -40,7 +40,7 @@ export const Button = () => {
     <div onDragStart={onDragStart} draggable={true}>
       <div className={css.button}>
         <div className={css.container}></div>
-        <span>Button</span>
+        <p>Button</p>
       </div>
     </div>
   );
