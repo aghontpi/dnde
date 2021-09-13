@@ -1,11 +1,8 @@
 import _ from 'lodash';
-import React, { Children, ReactFragment, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import possibleStandardNames from './reactPropertyNames';
 
 const DEBUG = false;
-
-let doc: Document | null = null;
-let counter = 0;
 
 export const htmlProcessor = (html: string): ReactNode => {
   if (typeof html !== 'string') {
@@ -13,14 +10,17 @@ export const htmlProcessor = (html: string): ReactNode => {
     return React.createElement('div', {}, 'errors: please check dev console') as ReactNode;
   }
 
+  let doc = new DOMParser().parseFromString(html, 'text/html');
+
   if (doc === null) {
-    doc = new DOMParser().parseFromString(html, 'text/html');
+    console.error('htmlParser: doc is null, unable to process html');
+    return React.createElement('p', {}, 'errors: please check dev console') as ReactNode;
   }
-  //   const head = converter(doc.head, 0);
-  return converter(doc.body);
+
+  return converter(doc.body as HTMLElement, 1);
 };
 
-const converter = (element: HTMLElement) => {
+const converter = (element: HTMLElement, key = 0) => {
   if (element === undefined) {
     return;
   }
@@ -30,15 +30,9 @@ const converter = (element: HTMLElement) => {
   // meta, script, style tags don't have children, for design ignoring meta tag while render
   if (nodeName === 'script' || nodeName === 'style' || nodeName === 'meta') {
     if (nodeName !== 'meta') {
-      return React.createElement(nodeName, { key: ++counter, dangerouslySetInnerHTML: { __html: element.outerHTML } });
+      return React.createElement(nodeName, { dangerouslySetInnerHTML: { __html: element.outerHTML } });
     }
     return;
-  }
-
-  // rerender trigger https://reactjs.org/docs/react-api.html#cloneelement
-  if (React.isValidElement(element)) {
-    DEBUG && console.info('cloning:', element);
-    return React.cloneElement(element, { key: element.key ? element.key : ++counter }, null);
   }
 
   let attributes: { [key: string]: string | { [key: string]: string } | any } = {};
@@ -54,10 +48,12 @@ const converter = (element: HTMLElement) => {
       DEBUG && console.error(msg, element);
     }
 
-    let value = attribute.name === 'style' ? convertStyleStringToObject(attribute.value) : attribute.value;
+    let value = attribute.name === 'style' ? convertStyleStringToObject(attribute.value) : attribute.value.trim();
 
     attributes[reactName] = value;
   }
+
+  attributes['key'] = key++;
 
   let children: ReactNode[] = [];
 
@@ -65,29 +61,32 @@ const converter = (element: HTMLElement) => {
     let child = element.childNodes[i];
 
     if (child.nodeType === 1 && nodeName !== 'script' && nodeName !== 'style') {
-      children.push(converter(child as HTMLElement));
+      children.push(converter(child as HTMLElement, key++));
     } else if (child.nodeType === 3) {
       // text
       children.push(child.textContent?.trim());
     }
   }
 
-  // todo: fix all key realted errors
-
   if (element.classList.contains('mjml-tag')) {
-    // const ReactNode = React.createElement(nodeName, { key: ++counter, ...attributes }, children);
-    // return React.createElement(
-    //   'div',
-    //   {
-    //     draggable: true,
-    //     style: { outline: '2px dashed #000', outlineOffset: '-1px' },
-    //     key: ++counter,
-    //   },
-    //   ReactNode
-    // );
+    const ReactNode = React.createElement(nodeName, { key: key++, ...attributes }, children);
+    return React.createElement(
+      'div',
+      {
+        draggable: true,
+        style: { outline: '2px dashed #000', outlineOffset: '-1px' },
+        key: key++,
+      },
+      ReactNode
+    );
   }
 
-  return React.createElement(nodeName, { key: ++counter, ...attributes }, children);
+  // img tag should not have child param passed to it
+  if (nodeName === 'img') {
+    return React.createElement(nodeName, { key: key++, ...attributes }, null);
+  }
+
+  return React.createElement(nodeName, attributes, children);
 };
 
 const convertStyleStringToObject = (style: string) => {

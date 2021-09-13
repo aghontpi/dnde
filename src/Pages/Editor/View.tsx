@@ -1,4 +1,3 @@
-import HTMLReactParser from 'html-react-parser';
 import { useEffect } from 'react';
 import { useEditor } from '../../Hooks/Editor.hook';
 import mjml2html from 'mjml-browser';
@@ -6,6 +5,7 @@ import css from './Editor.module.scss';
 import { findElementInJson } from '../../Utils/findElementInMjmlJson';
 import _ from 'lodash';
 import Scrollbars from 'react-custom-scrollbars-2';
+import { htmlProcessor } from '../../Utils/htmlProcessor';
 
 interface ViewProps {}
 
@@ -75,7 +75,7 @@ export const View = (props: ViewProps) => {
         onDrop={onDrop}
         onDragOver={onDragOver}
       >
-        {mjmlstring && HTMLReactParser(mjml2html(JSON.parse(mjmlstring), { minify: true }).html)}
+        {mjmlstring && htmlProcessor(mjml2html(mjmlJson, { minify: true }).html)}
       </div>
     </Scrollbars>
   );
