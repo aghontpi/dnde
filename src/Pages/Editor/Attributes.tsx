@@ -1,3 +1,4 @@
+import { Background } from '../../Components/Mods/Background';
 import { Border } from '../../Components/Mods/Border';
 import { BorderRadius } from '../../Components/Mods/BorderRadius';
 import { CordinalBorder } from '../../Components/Mods/CordinalBorder';
@@ -13,6 +14,7 @@ export const Attributes = () => {
         <Border />
         <BorderRadius />
         <CordinalBorder />
+        <Background />
       </div>
     </>
   );

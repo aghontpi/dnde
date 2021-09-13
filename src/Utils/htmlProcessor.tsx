@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React, { ReactNode } from 'react';
+import { HtmlWrapper } from '../Components/HtmlWrapper';
 import possibleStandardNames from './reactPropertyNames';
 
 const DEBUG = false;
@@ -70,15 +71,7 @@ const converter = (element: HTMLElement, key = 0) => {
 
   if (element.classList.contains('mjml-tag')) {
     const ReactNode = React.createElement(nodeName, { key: key++, ...attributes }, children);
-    return React.createElement(
-      'div',
-      {
-        draggable: true,
-        style: { outline: '2px dashed #000', outlineOffset: '-1px' },
-        key: key++,
-      },
-      ReactNode
-    );
+    return <HtmlWrapper children={ReactNode} key={key++} />;
   }
 
   // img tag should not have child param passed to it

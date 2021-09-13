@@ -17,11 +17,7 @@ export const Button = () => {
     tagName: 'mj-button',
     attributes: {
       ...assigned_default_values,
-      'border-right': '',
-      'border-top': '',
-      'border-bottom': '',
-      'border-left': '',
-      'css-class': 'button',
+      'css-class': 'mjml-tag button',
     },
     children: [],
     content: 'Customize this button!',
