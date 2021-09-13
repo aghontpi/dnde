@@ -1,6 +1,7 @@
 import React, { ChangeEvent, ReactNode, SyntheticEvent, useMemo, useState } from 'react';
 import { FC } from 'react';
 import styled from 'styled-components';
+import { Editor } from './Mods/Editor';
 
 interface HtmlWrapperProps {
   children: ReactNode;
@@ -38,6 +39,9 @@ export const HtmlWrapper = ({ children, key }: HtmlWrapperProps) => {
 
   return (
     <Wrapper draggable={true} key={key} onClick={onClick} onMouseEnter={onHover} onMouseOut={onHover}>
+      {/* todo: make it so, that only text editable fields are shown this, 
+        make sure to create only one instance of ckeditor and move the position relative to the position of the text */}
+      <Editor />
       <div>{children}</div>
     </Wrapper>
   );

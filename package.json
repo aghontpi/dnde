@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ckeditor/ckeditor5-react": "^3.0.2",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -11,6 +12,7 @@
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "antd": "^4.16.13",
+    "ckeditor5-custom-build": "file:ckeditor5",
     "lodash": "^4.17.21",
     "mjml-browser": "^4.10.3",
     "react": "^17.0.2",
@@ -49,6 +51,7 @@
   },
   "devDependencies": {
     "@sendgrid/mail": "^7.4.6",
+    "@types/ckeditor__ckeditor5-core": "^28.0.9",
     "@types/lodash": "^4.14.172",
     "@types/react-color": "^3.0.5",
     "@types/styled-components": "^5.1.14"
