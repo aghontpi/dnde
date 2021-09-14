@@ -10,38 +10,6 @@ export const Background = () => {
   const [active, setActive] = useState(() => false);
   const [color, setColor] = useState(() => "#ccc");
 
-  const ColorPicker = styled(Col)`
-    .color {
-      width: 25px;
-      height: 25px;
-      border-radius: 2px;
-      background: ${(props) => props.color};
-    }
-    .swatch {
-      padding: 5px;
-      background: #fff;
-      border-radius: 1px;
-      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
-      display: inline-block;
-      cursor: pointer;
-    }
-
-    .popover {
-      position: absolute;
-      z-index: 2;
-      top: -108px;
-      left: -200px;
-    }
-
-    .cover {
-      position: fixed;
-      top: 0px;
-      right: 0px;
-      bottom: 0px;
-      left: 0px;
-    }
-  `;
-
   let value = "";
   //   if (activep.path) {
   //     value = _.get(mjmlJson, activep.path.slice(1) + 'attributes.background');
@@ -76,3 +44,35 @@ export const Background = () => {
 };
 
 const decimalToHex = (alpha: number) => (alpha === 0 ? "00" : Math.round(255 * alpha).toString(16));
+
+const ColorPicker = styled(Col)`
+  .color {
+    width: 25px;
+    height: 25px;
+    border-radius: 2px;
+    background: ${(props) => props.color};
+  }
+  .swatch {
+    padding: 5px;
+    background: #fff;
+    border-radius: 1px;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+    display: inline-block;
+    cursor: pointer;
+  }
+
+  .popover {
+    position: absolute;
+    z-index: 2;
+    top: -108px;
+    left: -200px;
+  }
+
+  .cover {
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+  }
+`;
