@@ -1,13 +1,16 @@
-import { Editor } from './Editor';
-import { DNDContext } from '../../Context/DragAndDrop.context';
-import { EDContext } from '../../Context/Editor.context';
+import { Editor } from "./Editor";
+import { DNDContext } from "../../Context/DragAndDrop.context";
+import { EDContext } from "../../Context/Editor.context";
+import { Ckeditor } from "../../Context/Ckeditor.context";
 
 const wrapContext = () => (
-  <DNDContext>
-    <EDContext>
-      <Editor />
-    </EDContext>
-  </DNDContext>
+  <Ckeditor>
+    <DNDContext>
+      <EDContext>
+        <Editor />
+      </EDContext>
+    </DNDContext>
+  </Ckeditor>
 );
 
 export default wrapContext;
