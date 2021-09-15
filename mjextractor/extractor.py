@@ -6,7 +6,7 @@ from pathlib import Path
 
 
 s = bs(open(str(Path(__file__).resolve().parent) +
-            '/divider.html', 'r').read(), 'html.parser')
+            '/column.html', 'r').read(), 'html.parser')
 
 heading1 = heading4 = None
 as_json = {}
