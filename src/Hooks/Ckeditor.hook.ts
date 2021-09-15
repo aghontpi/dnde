@@ -9,7 +9,7 @@ export const useCkeditor = () => {
     setActive: () => void;
     x: number;
     y: number;
-    setX: () => void;
-    setY: () => void;
+    setX: (arg: number) => void;
+    setY: (arg: number) => void;
   };
 };

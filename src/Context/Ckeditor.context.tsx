@@ -4,7 +4,7 @@ export const CkeditorContext = createContext<any>(null);
 
 export const Ckeditor: FC = (props) => {
   const editorRef = useRef(null);
-  const [editorActive, setActive] = useState(false);
+  const [editorActive, setActive] = useState(true);
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
 

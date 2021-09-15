@@ -1,10 +1,10 @@
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ED from "ckeditor5-custom-build/build/ckeditor";
-import { useEffect } from "react";
-import { useCkeditor } from "../../Hooks/Ckeditor.hook";
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ED from 'ckeditor5-custom-build/build/ckeditor';
+import { useEffect } from 'react';
+import { useCkeditor } from '../../Hooks/Ckeditor.hook';
 
 export const Editor = () => {
-  const { ref, isActive } = useCkeditor();
+  const { ref, isActive, x, y } = useCkeditor();
   useEffect(() => {
     if (ref) {
       console.log(ref, ref.current);
@@ -12,40 +12,46 @@ export const Editor = () => {
   }, [ref]);
 
   return (
-    <div ref={ref} style={{ display: isActive ? "block" : "none" }}>
-      <div>
+    <div
+      key="editorContainer"
+      id="editorContainer"
+      ref={ref}
+      style={{ display: isActive ? 'block' : 'none', position: 'fixed', left: `${x}px`, top: `${y}px` }}
+    >
+      <div key="editor">
         <CKEditor
           editor={ED}
+          disabled={false}
           config={{
             toolbar: [
-              "fontSize",
-              "fontColor",
-              "FontFamily",
-              "FontBackgroundColor",
-              "|",
-              "heading",
-              "|",
-              "bold",
-              "italic",
-              "|",
-              "undo",
-              "redo",
-              "insertTable",
+              'fontSize',
+              'fontColor',
+              'FontFamily',
+              'FontBackgroundColor',
+              '|',
+              'heading',
+              '|',
+              'bold',
+              'italic',
+              '|',
+              'undo',
+              'redo',
+              'insertTable',
             ],
           }}
-          data="<p>Change the text here</p>"
+          data={'placement'}
           onReady={(editor) => {
-            console.log("", editor);
+            console.log('', editor);
           }}
           onChange={(event, editor) => {
             const data = editor.getData();
             console.log({ event, editor, data });
           }}
           onBlur={(event, editor) => {
-            console.log("Blur.", editor);
+            console.log('Blur.', editor);
           }}
           onFocus={(event, editor) => {
-            console.log("Focus.", editor);
+            console.log('Focus.', editor);
           }}
         />
       </div>

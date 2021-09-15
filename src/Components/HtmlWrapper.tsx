@@ -2,6 +2,8 @@ import _ from 'lodash';
 import React, { cloneElement, createElement, memo, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { FC } from 'react';
 import styled from 'styled-components';
+import { useCkeditor } from '../Hooks/Ckeditor.hook';
+import { useEditor } from '../Hooks/Editor.hook';
 import { useHtmlWrapper } from '../Hooks/Htmlwrapper.hook';
 
 interface HtmlWrapperProps {
@@ -12,6 +14,7 @@ interface HtmlWrapperProps {
 
 export const HtmlWrapper = memo(({ key, originalNode }: HtmlWrapperProps) => {
   const { setUIWrapperList, setActive, setActiveHover, active, activeHover, id, setId, getId } = useHtmlWrapper();
+  const { setX, setY } = useCkeditor();
   const idRef = useRef(id);
 
   useEffect(() => {
@@ -32,8 +35,19 @@ export const HtmlWrapper = memo(({ key, originalNode }: HtmlWrapperProps) => {
     () =>
       idRef.current === activeHover
         ? (e: any) => {
-            console.log('onClick', e, idRef.current, active, activeHover);
             setActive(idRef.current);
+            // console.log('onClick', e, idRef.current, active, activeHover);
+            console.log('clickevent', e);
+            const clickTarget = e.target;
+            const mjmlTarget = clickTarget.closest('.mjml-tag');
+            if (mjmlTarget) {
+              const pos = mjmlTarget.getBoundingClientRect();
+              const yoffset = mjmlTarget.offsetHeight;
+              if (pos) {
+                setX(pos.x);
+                setY(pos.y - yoffset);
+              }
+            }
           }
         : null,
     [idRef, activeHover]
