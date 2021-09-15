@@ -9,7 +9,7 @@ export const EDContext: FC = (props) => {
     children: [
       {
         tagName: 'mj-body',
-        attributes: { 'css-class': 'mjml-tag identifier-mj-body', 'background-color': 'grey', width: '500px' },
+        attributes: { 'css-class': 'mjml-tag identifier-mj-body', 'background-color': 'grey', width: '600px' },
         children: [],
       },
     ],

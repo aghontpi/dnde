@@ -44,7 +44,7 @@ export const Section = () => {
             tagName: 'mj-image',
             attributes: {
               'css-class': '',
-              src: 'https://dev.bluepie.in/dnde.png',
+              src: 'https://dev.bluepie.in/assets/87583817874843.svg',
             },
           },
         ],
