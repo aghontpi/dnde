@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React, { ReactNode } from 'react';
 import { HtmlWrapper } from '../Components/HtmlWrapper';
 import possibleStandardNames from './reactPropertyNames';
