@@ -17,7 +17,6 @@ export const htmlProcessor = (html: string): ReactNode => {
     console.error('htmlParser: doc is null, unable to process html');
     return React.createElement('p', {}, 'errors: please check dev console') as ReactNode;
   }
-
   return converter(doc.body as HTMLElement, 1);
 };
 
@@ -38,7 +37,7 @@ const converter = (element: HTMLElement, key = 0) => {
 
   let attributes: { [key: string]: string | { [key: string]: string } | any } = {};
 
-  for (var i = 0; i < element.attributes.length; i++) {
+  for (var i = 0; element.attributes && i < element.attributes.length; i++) {
     let attribute = element.attributes[i];
     let reactName = possibleStandardNames[attribute.name];
 
@@ -61,15 +60,21 @@ const converter = (element: HTMLElement, key = 0) => {
   for (let i = 0; i < element.childNodes.length; i++) {
     let child = element.childNodes[i];
 
-    if (child.nodeType === 1 && nodeName !== 'script' && nodeName !== 'style') {
+    if (child['nodeName'] === '#text') {
+      child.textContent && children.push(child.textContent.trim());
+      continue;
+    }
+
+    if (child['nodeName'] === '#comment') {
+      continue;
+    }
+
+    if (nodeName !== 'script' && nodeName !== 'style') {
       children.push(converter(child as HTMLElement, key++));
-    } else if (child.nodeType === 3) {
-      // text
-      children.push(child.textContent?.trim());
     }
   }
-
-  if (element.classList.contains('mjml-tag')) {
+  if (element.classList && element.classList.contains('mjml-tag')) {
+    DEBUG && console.info(`identified mjml-tag for : ${nodeName}, with attributes: ${JSON.stringify(attributes)}`);
     const ReactNode = React.createElement(nodeName, { key: key++, ...attributes }, children);
     return <HtmlWrapper children={ReactNode} key={key++} />;
   }
@@ -77,6 +82,8 @@ const converter = (element: HTMLElement, key = 0) => {
   // img tag should not have child param passed to it
   if (nodeName === 'img') {
     return React.createElement(nodeName, { key: key++, ...attributes }, null);
+  } else if (element.nodeType === 3) {
+    return React.createElement(nodeName, { ...attributes, key: key++ }, element.textContent);
   }
 
   return React.createElement(nodeName, attributes, children);
