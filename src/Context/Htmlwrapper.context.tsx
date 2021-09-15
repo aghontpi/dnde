@@ -1,6 +1,8 @@
-import { createContext, FC, memo, useRef, useState } from 'react';
+import { createContext, FC, memo, useContext, useEffect, useRef, useState } from "react";
 
 export const HtmlContext = createContext<any>(null);
+
+let id = 0;
 
 export const HtmlContextProvider: FC = memo((props) => {
   const [uiWrapperList, setUIWrapperList] = useState([]);
@@ -11,7 +13,12 @@ export const HtmlContextProvider: FC = memo((props) => {
 
   const ref = useRef<any>(0);
 
-  const [id, setId] = useState(0);
+  const [id, setId] = useState<any>(0);
+
+  const getId = () => {
+    setId(id + 1);
+    console.log("getId", id);
+  };
 
   //todo: fn remove id from the uiWrapperList, if possible upgrade list to map
 
@@ -26,9 +33,10 @@ export const HtmlContextProvider: FC = memo((props) => {
         setActive,
         id,
         setId,
+        getId,
       }}
     >
-      <div>{<>{console.log('uiContextRerendering', ref.current++)} </>}</div>
+      <div>{<>{console.log("uiContextRerendering", ref.current++)} </>}</div>
       {props.children}
     </HtmlContext.Provider>
   );

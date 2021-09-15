@@ -1,5 +1,5 @@
-import { useContext } from 'react';
-import { HtmlContext } from '../Context/Htmlwrapper.context';
+import { useContext } from "react";
+import { HtmlContext } from "../Context/Htmlwrapper.context";
 
 export const useHtmlWrapper = () => {
   const htmlContext = useContext(HtmlContext);
@@ -12,5 +12,6 @@ export const useHtmlWrapper = () => {
     setActive: (id: string) => void;
     id: any;
     setId: (prev?: any) => void;
+    getId: () => number;
   };
 };

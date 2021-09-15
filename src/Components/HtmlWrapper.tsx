@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React, { memo, ReactNode, useEffect, useMemo, useState } from 'react';
+import React, { memo, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { FC } from 'react';
 import styled from 'styled-components';
 import { useHtmlWrapper } from '../Hooks/Htmlwrapper.hook';
@@ -10,29 +10,27 @@ interface HtmlWrapperProps {
 }
 
 export const HtmlWrapper = memo(({ children, key }: HtmlWrapperProps) => {
-  const {
-    setUIWrapperList,
-    setActive,
-    setActiveHover,
-    active,
-    activeHover,
-    id: globalID,
-    setId: globalSetId,
-  } = useHtmlWrapper();
+  const { setUIWrapperList, setActive, setActiveHover, active, activeHover, id, setId, getId } = useHtmlWrapper();
+  const idRef = useRef(id);
 
-  // useEffect(() => {
-  //   if (id === '') {
-  //     setId('id' + globalID);
-  //     globalSetId(globalID + 1);
-  //   }
-  // }, []);
-  const id = 'id-' + _.uniqueId();
+  useEffect(() => {
+    getId();
+  }, []);
 
-  const onHover = useMemo(() => () => setActiveHover(id), [id]);
-  const onClick = useMemo(() => () => setActive(id), [id]);
+  const onHover = () => setActiveHover(idRef.current);
+  const onClick = () => setActive(idRef.current);
+  console.log('hover', activeHover, active);
 
   return (
-    <div key={key} id={id} draggable={activeHover === id} onClick={onClick} onMouseOver={onHover} className={id}>
+    <div
+      key={key}
+      id={idRef.current.toString()}
+      draggable={activeHover == idRef.current}
+      onMouseOver={onHover}
+      onClick={onClick}
+      className={idRef.current.toString()}
+      // register
+    >
       {/* todo: make it so, that only text editable fields are shown this, 
         make sure to create only one instance of ckeditor and move the position relative to the position of the text */}
       {children}
