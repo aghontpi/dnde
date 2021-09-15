@@ -7,13 +7,7 @@ const findClosestParent = (element: HTMLElement) => {
     return uniqueClassName;
   }
 
-  for (var i = 0; i < closest.classList.length; i++) {
-    const current = closest.classList[i];
-    if (current.includes('identifier-mj')) {
-      uniqueClassName = current;
-      break;
-    }
-  }
+  uniqueClassName = findUniqueIdentifier(closest, closest.classList);
 
   if (!uniqueClassName) {
     console.info('unable to find identifier');
@@ -21,4 +15,16 @@ const findClosestParent = (element: HTMLElement) => {
   return uniqueClassName;
 };
 
-export { findClosestParent };
+const findUniqueIdentifier = (element: Element, classlist: DOMTokenList) => {
+  let uniqueClassName = null;
+  for (var i = 0; i < classlist.length; i++) {
+    const current = classlist[i];
+    if (current.includes('identifier-mj')) {
+      uniqueClassName = current;
+      break;
+    }
+  }
+  return uniqueClassName;
+};
+
+export { findClosestParent, findUniqueIdentifier };

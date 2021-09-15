@@ -9,7 +9,7 @@ export const HtmlContextProvider: FC = memo((props) => {
 
   const [active, setActive] = useState<any>();
 
-  const ref = useRef<any>(0);
+  const ref = useRef<any>(1);
 
   const [id, setId] = useState<any>(1);
 

@@ -1,26 +1,57 @@
-import _ from "lodash";
-import styled from "styled-components";
-import { useEditor } from "../../Hooks/Editor.hook";
-import { Col, Form, Input, Row } from "antd";
-import { ChromePicker } from "react-color";
-import { useState } from "react";
+import _ from 'lodash';
+import styled from 'styled-components';
+import { useEditor } from '../../Hooks/Editor.hook';
+import { Col, Form, Input, Row } from 'antd';
+import { ChromePicker } from 'react-color';
+import { useEffect, useState } from 'react';
+import { useHtmlWrapper } from '../../Hooks/Htmlwrapper.hook';
+import { findUniqueIdentifier } from '../../Utils/closestParent';
+import { findElementInJson } from '../../Utils/findElementInMjmlJson';
 
 export const Background = () => {
-  const { active: activep } = useEditor();
+  const { mjmlJson, setMjmlJson } = useEditor();
   const [active, setActive] = useState(() => false);
-  const [color, setColor] = useState(() => "#ccc");
+  const [color, setColor] = useState(() => '#ccc');
+  const [visible, setVisible] = useState(false);
+  const { uiList, active: clicked } = useHtmlWrapper();
+  const [path, setPath] = useState('');
 
-  let value = "";
-  //   if (activep.path) {
-  //     value = _.get(mjmlJson, activep.path.slice(1) + 'attributes.background');
-  //   }
+  useEffect(() => {
+    console.log('activeEditor', clicked);
+    if (clicked) {
+      const uniqueIdentifier = findUniqueIdentifier(clicked, clicked.classList);
+      if (uniqueIdentifier) {
+        let path = findElementInJson(mjmlJson, uniqueIdentifier);
+        if (path) {
+          const [, pathToElement] = path;
+          setPath(pathToElement.slice(1));
+          const item = _.get(mjmlJson, pathToElement.slice(1));
+          if (item.mutableProperties.includes('background-color')) {
+            setVisible(true);
+            setColor(item.attributes['background-color']);
+          }
+        }
+      }
+    }
+  }, [clicked]);
+
+  useEffect(() => {
+    console.log('updated mjmljson', mjmlJson);
+  }, [mjmlJson]);
 
   const handleColorChange = (color: any) => {
     const hexCode = `${color.hex}${decimalToHex(color.rgb.a)}`;
     setColor(hexCode);
+    if (path && visible) {
+      let element = _.get(mjmlJson, path);
+      element.attributes['background-color'] = hexCode;
+      let json = _.set(mjmlJson, path, element);
+
+      setMjmlJson({ ...json });
+    }
   };
 
-  return activep.path ? (
+  return visible ? (
     <>
       <Row>
         <Col flex="auto">
@@ -43,7 +74,7 @@ export const Background = () => {
   ) : null;
 };
 
-const decimalToHex = (alpha: number) => (alpha === 0 ? "00" : Math.round(255 * alpha).toString(16));
+const decimalToHex = (alpha: number) => (alpha === 0 ? '00' : Math.round(255 * alpha).toString(16));
 
 const ColorPicker = styled(Col)`
   .color {

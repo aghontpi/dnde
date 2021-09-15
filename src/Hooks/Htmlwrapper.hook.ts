@@ -1,10 +1,10 @@
-import { useContext } from "react";
-import { HtmlContext } from "../Context/Htmlwrapper.context";
+import { useContext } from 'react';
+import { HtmlContext } from '../Context/Htmlwrapper.context';
 
 export const useHtmlWrapper = () => {
   const htmlContext = useContext(HtmlContext);
   return htmlContext as unknown as {
-    uiWrapperList: any[];
+    uiList: any[];
     setUIWrapperList: (prev?: any) => void;
     activeHover: any;
     setActiveHover: (id: string) => void;

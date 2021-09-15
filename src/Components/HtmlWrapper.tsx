@@ -1,5 +1,15 @@
 import _ from 'lodash';
-import React, { cloneElement, createElement, memo, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  cloneElement,
+  createElement,
+  memo,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { FC } from 'react';
 import styled from 'styled-components';
 import { useCkeditor } from '../Hooks/Ckeditor.hook';
@@ -13,13 +23,27 @@ interface HtmlWrapperProps {
 }
 
 export const HtmlWrapper = memo(({ key, originalNode }: HtmlWrapperProps) => {
-  const { setUIWrapperList, setActive, setActiveHover, active, activeHover, id, setId, getId } = useHtmlWrapper();
+  const { setUIWrapperList, setActive, setActiveHover, active, activeHover, id, setId, getId, uiList } =
+    useHtmlWrapper();
   const { setX, setY } = useCkeditor();
   const idRef = useRef(id);
+  const uniqueId = useRef(id);
 
   useEffect(() => {
     getId();
   }, []);
+
+  useEffect(() => {
+    if (idRef.current) {
+      if (uiList && uiList.indexOf(idRef.current) === -1) {
+        setUIWrapperList((prev: any) => {
+          let newFilter = prev.map((item: any) => item);
+          newFilter.push(idRef.current);
+          return newFilter;
+        });
+      }
+    }
+  }, [idRef, uiList]);
 
   const onHover = useMemo(
     () => () => {
@@ -66,7 +90,7 @@ export const HtmlWrapper = memo(({ key, originalNode }: HtmlWrapperProps) => {
           onMouseEnter: onHover,
           draggable,
           ref: idRef,
-          id: id.current,
+          id: uniqueId.current,
           onClick,
           style: {
             ...originalNode.props.style,
@@ -76,7 +100,7 @@ export const HtmlWrapper = memo(({ key, originalNode }: HtmlWrapperProps) => {
         },
         originalNode.children
       ),
-    [idRef, key, draggable, onHover, onClick, originalNode, outline, cursetStyle, outlineClick, active]
+    [idRef, draggable, onHover, onClick, originalNode, outline, cursetStyle, outlineClick, active, uniqueId]
   );
 
   // breaks the ui, so trying a different approach above,
