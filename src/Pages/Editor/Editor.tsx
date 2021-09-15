@@ -1,12 +1,15 @@
-import { View } from "./View";
-import css from "./Editor.module.scss";
-import { Attributes } from "./Attributes";
-import { ComponentBank } from "./ComponentBank";
-import { Button, PageHeader, Layout } from "antd";
-import { success } from "../../Components/Messages";
-import mjml2html from "mjml-browser";
-import { useEditor } from "../../Hooks/Editor.hook";
-const { Content, Header, Footer } = Layout;
+import { View } from './View';
+import css from './Editor.module.scss';
+import { Attributes } from './Attributes';
+import { ComponentBank } from './ComponentBank';
+import { Button, PageHeader, Layout, Modal, Input } from 'antd';
+import { success } from '../../Components/Messages';
+import mjml2html from 'mjml-browser';
+import { useEditor } from '../../Hooks/Editor.hook';
+import { sendMail } from '../../Utils/sendMail';
+import { useState } from 'react';
+const { Content } = Layout;
+const { confirm } = Modal;
 
 export const Editor = () => {
   const { mjmlJson } = useEditor();
@@ -15,26 +18,27 @@ export const Editor = () => {
     e.preventDefault();
     const html = mjml2html(mjmlJson).html;
     navigator.clipboard.writeText(html);
-    console.log("html", html);
+    console.log('html', html);
 
-    success("Copied to clipboard & logged in devtools ");
+    success('Copied to clipboard & logged in devtools ');
   };
 
   return (
-    <Layout style={{ height: "100%" }}>
+    <Layout style={{ height: '100%' }}>
       <PageHeader
         ghost={false}
         onBack={() => window.history.back()}
         title="dnde"
         subTitle=""
-        style={{ borderBottom: "1px solid #e8e8e8" }}
+        style={{ borderBottom: '1px solid #e8e8e8' }}
         extra={[
-          <Button key="2" type="primary">
-            Send Test Mail
-          </Button>,
-          <Button key="1" onClick={copyHTMLAsClipBoard}>
-            Copy as html
-          </Button>,
+          <>
+            <SendTestMail key="2" />
+            <Button key="1" onClick={copyHTMLAsClipBoard}>
+              Copy as html
+            </Button>
+            ,
+          </>,
         ]}
       ></PageHeader>
       <Content>
@@ -51,5 +55,30 @@ export const Editor = () => {
         </div>
       </Content>
     </Layout>
+  );
+};
+
+const SendTestMail = () => {
+  const { mjmlJson } = useEditor();
+  //todo: investigate onChange behaviour here ~sendTestMail
+  const [mail, SetMail] = useState('');
+  const onBlur = (e: any) => {
+    SetMail(e.currentTarget.value);
+  };
+
+  const msg = () =>
+    confirm({
+      title: 'Email',
+      icon: null,
+      content: <Input onBlur={onBlur} />,
+      onOk: () => {
+        mail && sendMail(mail, mjml2html(mjmlJson).html);
+      },
+    });
+
+  return (
+    <Button key="2" type="primary" onClick={msg}>
+      Send Test Mail
+    </Button>
   );
 };

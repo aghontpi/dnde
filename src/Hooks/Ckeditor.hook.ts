@@ -1,5 +1,5 @@
-import { useContext, useRef } from "react";
-import { CkeditorContext } from "../Context/Ckeditor.context";
+import { useContext, useRef } from 'react';
+import { CkeditorContext } from '../Context/Ckeditor.context';
 
 export const useCkeditor = () => {
   const Ckeditor = useContext(CkeditorContext);
