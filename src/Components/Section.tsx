@@ -15,16 +15,41 @@ const properties_with_default_values = {"background-color": "", "background-posi
 // prettier-ignore
 const assigned_default_values  = {"align": "center", "background-color": "#414141", "border": "none", "border-radius": "3px", "color": "#ffffff", "font-family": "Ubuntu, Helvetica, Arial, sans-serif", "font-size": "13px", "font-weight": "normal", "inner-padding": "10px 25px", "line-height": "120%", "padding": "10px 25px", "target": "_blank", "text-align": "none", "text-decoration": "none", "text-transform": "none", "vertical-align": "middle"};
 
+// prettier-ignore
+const properties_column = {"background-color": "", "inner-background-color": "", "border": "none", "border-bottom": "", "border-left": "", "border-right": "", "border-top": "", "border-radius": "", "inner-border": "", "inner-border-bottom": "", "inner-border-left": "", "inner-border-right": "", "inner-border-top": "", "inner-border-radius": "", "width": "(100 / number of non-raw elements in section)%", "vertical-align": "top", "padding": "", "padding-top": "", "padding-bottom": "", "padding-left": "", "padding-right": "", "css-class": ""}
+
+// prettier-ignore
+const properties_column_with_default_values = {"background-color": "", "inner-background-color": "", "border": "none", "border-bottom": "", "border-left": "", "border-right": "", "border-top": "", "border-radius": "", "inner-border": "", "inner-border-bottom": "", "inner-border-left": "", "inner-border-right": "", "inner-border-top": "", "inner-border-radius": "", "width": "(100 / number of non-raw elements in section)%", "vertical-align": "top", "padding": "", "padding-top": "", "padding-bottom": "", "padding-left": "", "padding-right": "", "css-class": ""}
+
+// prettier-ignore
+const assigned_column_default_values = {"border": "none", "width": "(100 / number of non-raw elements in section)%", "vertical-align": "top"}
+
 export const Section = () => {
   const config = {
     tagName: 'mj-section',
     attributes: {
-      ...assigned_default_values,
       'css-class': 'mjml-tag identifier-mj-section',
       'background-color': '#fff',
       'text-align': 'center',
     },
-    children: [],
+    children: [
+      {
+        tagName: 'mj-column',
+        attributes: {
+          ...assigned_column_default_values,
+          'css-class': 'mjml-tag identifier-mj-column',
+        },
+        children: [
+          {
+            tagName: 'mj-image',
+            attributes: {
+              'css-class': '',
+              src: 'https://dev.bluepie.in/dnde.png',
+            },
+          },
+        ],
+      },
+    ],
     cannot_have: ['mj-section'],
     mutableProperties: properties,
     mutalbePropertiesWithDefaultValues: properties_with_default_values,
