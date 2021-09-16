@@ -2,7 +2,6 @@ import { Row } from 'antd';
 import { floor } from 'lodash';
 import { Fragment, SyntheticEvent } from 'react';
 import styled from 'styled-components';
-import { UiWrapper } from './UiWrapper';
 
 export type DragEvent = SyntheticEvent & { dataTransfer: DataTransfer };
 
@@ -28,6 +27,7 @@ export const Section = () => {
   const config = {
     tagName: 'mj-section',
     attributes: {
+      ...assigned_default_values,
       'css-class': 'mjml-tag identifier-mj-section',
       'background-color': '#fff',
       'text-align': 'center',
@@ -39,12 +39,12 @@ export const Section = () => {
           ...assigned_column_default_values,
           'css-class': 'mjml-tag identifier-mj-column',
           mutableProperties: properties_column,
+          mutablePropertiesWithDefaultValues: properties_column_with_default_values,
         },
         children: [
           {
             tagName: 'mj-image',
             attributes: {
-              ...assigned_column_default_values,
               'css-class': 'section-empty-placeholder',
               src: 'https://dev.bluepie.in/assets/87583817874843.svg',
             },

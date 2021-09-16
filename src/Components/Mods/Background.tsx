@@ -19,18 +19,23 @@ export const Background = () => {
   useEffect(() => {
     console.log('activeEditor', clicked);
     if (clicked) {
-      const uniqueIdentifier = findUniqueIdentifier(clicked, clicked.classList);
-      if (uniqueIdentifier) {
-        let path = findElementInJson(mjmlJson, uniqueIdentifier);
-        if (path) {
-          const [, pathToElement] = path;
-          setPath(pathToElement.slice(1));
-          const item = _.get(mjmlJson, pathToElement.slice(1));
-          if (item.mutableProperties.includes('background-color')) {
-            setVisible(true);
-            setColor(item.attributes['background-color']);
+      try {
+        const uniqueIdentifier = findUniqueIdentifier(clicked, clicked.classList);
+        if (uniqueIdentifier) {
+          let path = findElementInJson(mjmlJson, uniqueIdentifier);
+          if (path) {
+            const [, pathToElement] = path;
+            setPath(pathToElement.slice(1));
+            const item = _.get(mjmlJson, pathToElement.slice(1));
+            if (item.mutableProperties.includes('background-color')) {
+              setVisible(true);
+              setColor(item.attributes['background-color']);
+            }
           }
         }
+      } catch (e) {
+        console.info('got exception, hiding background mod', e);
+        setVisible(false);
       }
     }
   }, [clicked]);

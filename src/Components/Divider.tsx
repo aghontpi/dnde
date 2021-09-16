@@ -4,7 +4,7 @@ import { UiWrapper } from './UiWrapper';
 export type DragEvent = SyntheticEvent & { dataTransfer: DataTransfer };
 
 // prettier-ignore
-const properties = {"border-color": "#000000", "border-style": "solid", "border-width": "4px", "container-background-color": "", "css-class": "", "padding": "10px 25px", "padding-bottom": "", "padding-left": "", "padding-right": "", "padding-top": "", "width": "100%", "align": "center"}
+const properties = ["border-color", "border-style", "border-width", "container-background-color", "css-class", "padding", "padding-bottom", "padding-left", "padding-right", "padding-top", "width", "align"]
 
 // prettier-ignore
 const properties_with_default_values = {"border-color": "#000000", "border-style": "solid", "border-width": "4px", "container-background-color": "", "css-class": "", "padding": "10px 25px", "padding-bottom": "", "padding-left": "", "padding-right": "", "padding-top": "", "width": "100%", "align": "center"}
