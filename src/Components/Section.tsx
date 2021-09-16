@@ -38,12 +38,14 @@ export const Section = () => {
         attributes: {
           ...assigned_column_default_values,
           'css-class': 'mjml-tag identifier-mj-column',
+          mutableProperties: properties_column,
         },
         children: [
           {
             tagName: 'mj-image',
             attributes: {
-              'css-class': '',
+              ...assigned_column_default_values,
+              'css-class': 'section-empty-placeholder',
               src: 'https://dev.bluepie.in/assets/87583817874843.svg',
             },
           },
