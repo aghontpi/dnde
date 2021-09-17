@@ -15,6 +15,7 @@ import styled from 'styled-components';
 import { useCkeditor } from '../Hooks/Ckeditor.hook';
 import { useEditor } from '../Hooks/Editor.hook';
 import { useHtmlWrapper } from '../Hooks/Htmlwrapper.hook';
+import { detectEmptyElement } from '../Utils/detectEmptyBody';
 
 interface HtmlWrapperProps {
   // children: React.DOMElement<React.DOMAttributes<Element>, Element>;
@@ -80,6 +81,15 @@ export const HtmlWrapper = memo(({ key, originalNode }: HtmlWrapperProps) => {
   const cursetStyle = useMemo(() => (activeHover === idRef.current ? 'pointer' : 'default'), [activeHover, idRef]);
   const outline = activeHover === idRef.current ? '2px dotted green' : 'unset';
   const outlineClick = active === idRef.current ? '2px dotted red' : 'unset';
+
+  // detect empty body
+  if (originalNode['nodeName'] === 'body' && detectEmptyElement(originalNode, 'body')) {
+    console.info('empty body detected');
+  }
+  // detect empty section
+  if (originalNode['nodeName'] === 'section' && detectEmptyElement(originalNode, 'section')) {
+    console.info('empty section detected');
+  }
 
   return useMemo(
     () =>
