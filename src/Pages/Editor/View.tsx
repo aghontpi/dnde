@@ -6,11 +6,13 @@ import Scrollbars from 'react-custom-scrollbars-2';
 import { htmlProcessor } from '../../Utils/htmlProcessor';
 import { Editor } from '../../Components/Mods/Editor';
 import { Add } from '../../Utils/operations';
+import { useDragAndDropUniqueId } from '../../Hooks/Drag.hook';
 
 interface ViewProps {}
 
 export const View = (props: ViewProps) => {
   const { mjmlJson, mjmlstring, setActive, setMjmlString, setMjmlJson, setAttributes } = useEditor();
+  const uid = useDragAndDropUniqueId();
 
   useEffect(() => {
     setMjmlString(JSON.stringify(mjmlJson, null, 2));
@@ -28,6 +30,7 @@ export const View = (props: ViewProps) => {
       setMjmlJson,
       setMjmlString,
       setAttributes,
+      uid: uid.getId(),
     });
   };
 

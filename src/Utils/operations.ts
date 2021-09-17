@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { error } from '../Components/Messages';
-import { findClosestParent } from './closestParent';
+import { findClosestParent, replaceGeneicTagWithUniqueId } from './closestParent';
 import { findElementInJson } from './findElementInMjmlJson';
 
 interface AddProps {
@@ -11,9 +11,19 @@ interface AddProps {
   setMjmlString: any;
   setAttributes: any;
   setActive: any;
+  uid: string;
 }
 
-const Add = ({ target, droppedConfig, setMjmlJson, mjmlJson, setMjmlString, setAttributes, setActive }: AddProps) => {
+const Add = ({
+  target,
+  droppedConfig,
+  setMjmlJson,
+  mjmlJson,
+  setMjmlString,
+  setAttributes,
+  setActive,
+  uid,
+}: AddProps) => {
   const uniqueClassName = findClosestParent(target);
   console.info('uniqueClassNames', uniqueClassName);
   if (!uniqueClassName) {
@@ -32,15 +42,24 @@ const Add = ({ target, droppedConfig, setMjmlJson, mjmlJson, setMjmlString, setA
     return null;
   }
 
+  let droppedConfigWithUid = _.cloneDeep(droppedConfig);
+  let classNameString = droppedConfigWithUid['attributes']['css-class'];
+  if (classNameString) {
+    classNameString = replaceGeneicTagWithUniqueId(classNameString, uid);
+  }
+  // set the classnames with uniqueId generated in classnames
+  droppedConfigWithUid['attributes']['css-class'] = classNameString;
+  console.info('dropped config recreated with uniqueId', droppedConfigWithUid);
+
   let [item, path] = ObjectEquivalent;
   console.info('item in Object:', item, 'path to Object:', path);
-  item.children.push(droppedConfig);
+  item.children.push(droppedConfigWithUid);
   setActive({ value: item, path: path + `.children[${item.children.length - 1}]` });
   const updated = _.set(mjmlJson, path.slice(1), item);
   console.info('updated:', updated);
   setMjmlJson((prev: any) => updated);
   setMjmlString(JSON.stringify(updated, null, 2));
-  setAttributes(droppedConfig.mutableProperiesWithDefaultValues);
+  setAttributes(droppedConfigWithUid.mutableProperiesWithDefaultValues);
 };
 
 export { Add };
