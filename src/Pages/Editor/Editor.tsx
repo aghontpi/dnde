@@ -23,6 +23,15 @@ export const Editor = () => {
     success('Copied to clipboard & logged in devtools ');
   };
 
+  const copyJsonInClipBoard = (e: any) => {
+    e.preventDefault();
+    const to_copy = JSON.stringify(mjmlJson);
+    navigator.clipboard.writeText(to_copy);
+    console.log('json', to_copy);
+
+    success('Copied to Clipboard & logged in devtools ');
+  };
+
   return (
     <Layout style={{ height: '100%' }}>
       <PageHeader
@@ -33,9 +42,12 @@ export const Editor = () => {
         style={{ borderBottom: '1px solid #e8e8e8' }}
         extra={[
           <>
-            <SendTestMail key="2" />
-            <Button key="1" onClick={copyHTMLAsClipBoard}>
+            <SendTestMail key="3" />
+            <Button key="2" onClick={copyHTMLAsClipBoard}>
               Copy as html
+            </Button>
+            <Button key="1" onClick={copyJsonInClipBoard}>
+              Copy as json
             </Button>
             ,
           </>,
