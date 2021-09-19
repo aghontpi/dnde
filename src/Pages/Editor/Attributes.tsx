@@ -1,3 +1,4 @@
+import { Scrollbars } from 'react-custom-scrollbars-2';
 import { Background } from '../../Components/Mods/Background';
 import { Border } from '../../Components/Mods/Border';
 import { BorderRadius } from '../../Components/Mods/BorderRadius';
@@ -9,7 +10,7 @@ import css from './Editor.module.scss';
 
 export const Attributes = () => {
   return (
-    <>
+    <Scrollbars style={{ height: '100%' }} autoHide={true}>
       <div className={css.heading}>
         <span>Attributes</span>
       </div>
@@ -22,6 +23,6 @@ export const Attributes = () => {
         <Link />
         <Img />
       </div>
-    </>
+    </Scrollbars>
   );
 };
