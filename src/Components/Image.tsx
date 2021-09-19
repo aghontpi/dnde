@@ -16,7 +16,6 @@ export const Image = () => {
   const config = {
     tagName: 'mj-image',
     attributes: {
-      ...assigned_default_values,
       'css-class': 'mjml-tag identifier-mj-image',
       src: 'https://dev.bluepie.in/dnde.png',
     },
