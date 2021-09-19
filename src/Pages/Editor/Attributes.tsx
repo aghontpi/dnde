@@ -3,6 +3,7 @@ import { Border } from '../../Components/Mods/Border';
 import { BorderRadius } from '../../Components/Mods/BorderRadius';
 import { CordinalBorder } from '../../Components/Mods/CordinalBorder';
 import { Img } from '../../Components/Mods/Img';
+import { Link } from '../../Components/Mods/Link';
 import { Padding } from '../../Components/Mods/Paddings';
 import css from './Editor.module.scss';
 
@@ -18,6 +19,7 @@ export const Attributes = () => {
         <CordinalBorder />
         <Background />
         <Padding />
+        <Link />
         <Img />
       </div>
     </>

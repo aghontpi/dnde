@@ -1,20 +1,18 @@
 import _ from 'lodash';
-import { memo, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { findUniqueIdentifier } from '../Utils/closestParent';
 import { findElementInJson } from '../Utils/findElementInMjmlJson';
 import { useEditor } from './Editor.hook';
 import { useHtmlWrapper } from './Htmlwrapper.hook';
 
 const useVisibility = (): [boolean | null, string] => {
-  const [visible, setVisible] = useState<boolean | null>(null);
+  const [visible, setVisible] = useState<boolean | null>(false);
 
   const { active } = useHtmlWrapper();
 
   const [path, setPath] = useState('');
 
   const { mjmlJson } = useEditor();
-
-  const { getValue } = useValue({ path, visible });
 
   useEffect(() => {
     if (active) {
@@ -34,8 +32,9 @@ const useVisibility = (): [boolean | null, string] => {
         }
       }
     }
+    console.log(`setting setvisible to ${visible}`);
     setVisible(false);
-  }, [active, mjmlJson]);
+  }, [active, mjmlJson, path, visible]);
 
   return [visible, path];
 };
@@ -43,20 +42,22 @@ const useVisibility = (): [boolean | null, string] => {
 interface useValueProps {
   path: string;
   visible: boolean | null;
+  attribute: string;
 }
 
-const useValue = ({ path, visible }: useValueProps) => {
+const useValue = ({ path, visible, attribute }: useValueProps) => {
   const { mjmlJson } = useEditor();
-  const getValue = useMemo(() => {
+  // todo: optimize this
+  const getValue = () => {
     let value = '';
     if (path && visible) {
       let element = _.get(mjmlJson, path);
       if (element && element.attributes) {
-        value = element.attributes['src'];
+        value = element.attributes[attribute];
       }
     }
     return value;
-  }, [path, visible, mjmlJson]);
+  };
 
   return { getValue };
 };

@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import styled from 'styled-components';
 import { useEditor } from '../../Hooks/Editor.hook';
-import { Col, Form, Input, Row } from 'antd';
+import { Col, Form, Row } from 'antd';
 import { ChromePicker } from 'react-color';
 import { useEffect, useState } from 'react';
 import { useHtmlWrapper } from '../../Hooks/Htmlwrapper.hook';
@@ -13,7 +13,7 @@ export const Background = () => {
   const [active, setActive] = useState(() => false);
   const [color, setColor] = useState(() => '#ccc');
   const [visible, setVisible] = useState(false);
-  const { uiList, active: clicked } = useHtmlWrapper();
+  const { active: clicked } = useHtmlWrapper();
   const [path, setPath] = useState('');
 
   useEffect(() => {
