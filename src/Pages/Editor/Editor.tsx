@@ -2,7 +2,7 @@ import { View } from './View';
 import css from './Editor.module.scss';
 import { Attributes } from './Attributes';
 import { ComponentBank } from './ComponentBank';
-import { Button, PageHeader, Layout, Modal, Input } from 'antd';
+import { Button, PageHeader, Layout, Modal, Input, Tabs } from 'antd';
 import { success } from '../../Components/Messages';
 import mjml2html from 'mjml-browser';
 import { useEditor } from '../../Hooks/Editor.hook';
@@ -10,6 +10,8 @@ import { sendMail } from '../../Utils/sendMail';
 import { useState } from 'react';
 const { Content } = Layout;
 const { confirm } = Modal;
+
+const { TabPane } = Tabs;
 
 export const Editor = () => {
   const { mjmlJson } = useEditor();
@@ -42,7 +44,8 @@ export const Editor = () => {
         style={{ borderBottom: '1px solid #e8e8e8' }}
         extra={[
           <>
-            <SendTestMail key="3" />
+            <SendTestMail key="4" />
+            <Button key="3">Preview</Button>
             <Button key="2" onClick={copyHTMLAsClipBoard}>
               Copy as html
             </Button>
