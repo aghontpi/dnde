@@ -8,16 +8,9 @@ import { findElementInJson } from '../../Utils/findElementInMjmlJson';
 
 const Padding = () => {
   const [visible, setVisible] = useState(false);
-  const [left, setLeft] = useState(0);
-  const [right, setRight] = useState(0);
-  const [top, setTop] = useState(0);
-  const [bottom, setBottom] = useState(0);
   const { active } = useHtmlWrapper();
   const { mjmlJson, setMjmlJson } = useEditor();
   const [path, setPath] = useState('');
-  useEffect(() => {
-    console.log(left, right, top, bottom);
-  }, [left, top, bottom, right]);
 
   useEffect(() => {
     if (active) {
@@ -30,20 +23,17 @@ const Padding = () => {
             setPath(pathToElement);
           }
           const item = _.get(mjmlJson, pathToElement.slice(1));
-          if (item.mutableProperties.includes('padding')) {
+          if (item.mutableProperties && item.mutableProperties.includes('padding')) {
             setVisible(true);
-            setLeft(item.attributes['padding-left']);
-            setRight(item.attributes['padding-right']);
-            setTop(item.attributes['padding-top']);
-            setBottom(item.attributes['padding-bottom']);
+            return;
           }
         }
       }
     }
+    setVisible(false);
   }, [active]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>, direction: string) => {
-    const value = e.currentTarget.value;
     // if (value === '') {
     //   e.currentTarget.value = '0px';
     // }
@@ -69,7 +59,7 @@ const Padding = () => {
         }
       }
     },
-    [left, right, top, bottom]
+    [visible, path]
   );
 
   const getValue = (direction: string) => {
@@ -81,7 +71,7 @@ const Padding = () => {
     return value;
   };
 
-  return (
+  return visible ? (
     <Form.Item label="Padding :">
       <Input.Group style={{ marginBottom: '6px' }}>
         <Row>
@@ -105,7 +95,7 @@ const Padding = () => {
         </Row>
       </Input.Group>
     </Form.Item>
-  );
+  ) : null;
 };
 
 export { Padding };
