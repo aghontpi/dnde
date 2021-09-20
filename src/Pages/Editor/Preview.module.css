@@ -1,0 +1,8 @@
+.ant-modal {
+    max-width:  unset;
+    width: unset!important;
+}
+
+.andt-modal-centered::before{
+    content: unset !important;
+}

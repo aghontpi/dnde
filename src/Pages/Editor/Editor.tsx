@@ -8,6 +8,7 @@ import mjml2html from 'mjml-browser';
 import { useEditor } from '../../Hooks/Editor.hook';
 import { sendMail } from '../../Utils/sendMail';
 import { useState } from 'react';
+import { Preview } from './Preview';
 const { Content } = Layout;
 const { confirm } = Modal;
 
@@ -15,6 +16,7 @@ const { TabPane } = Tabs;
 
 export const Editor = () => {
   const { mjmlJson } = useEditor();
+  const [preview, setPreview] = useState(false);
 
   const copyHTMLAsClipBoard = (e: any) => {
     e.preventDefault();
@@ -35,41 +37,46 @@ export const Editor = () => {
   };
 
   return (
-    <Layout style={{ height: '100%' }}>
-      <PageHeader
-        ghost={false}
-        onBack={() => window.history.back()}
-        title="dnde"
-        subTitle=""
-        style={{ borderBottom: '1px solid #e8e8e8' }}
-        extra={[
-          <>
-            <SendTestMail key="4" />
-            <Button key="3">Preview</Button>
-            <Button key="2" onClick={copyHTMLAsClipBoard}>
-              Copy as html
-            </Button>
-            <Button key="1" onClick={copyJsonInClipBoard}>
-              Copy as json
-            </Button>
-            ,
-          </>,
-        ]}
-      ></PageHeader>
-      <Content>
-        <div className={css.editor}>
-          <div className={css.bank}>
-            <ComponentBank />
+    <>
+      <Preview visible={preview} visibleChange={(flag) => setPreview(flag)} />
+      <Layout style={{ height: '100%' }}>
+        <PageHeader
+          ghost={false}
+          onBack={() => window.history.back()}
+          title="dnde"
+          subTitle=""
+          style={{ borderBottom: '1px solid #e8e8e8' }}
+          extra={[
+            <>
+              <SendTestMail key="4" />
+              <Button key="3" onClick={() => setPreview(true)}>
+                Preview
+              </Button>
+              <Button key="2" onClick={copyHTMLAsClipBoard}>
+                Copy as html
+              </Button>
+              <Button key="1" onClick={copyJsonInClipBoard}>
+                Copy as json
+              </Button>
+              ,
+            </>,
+          ]}
+        ></PageHeader>
+        <Content>
+          <div className={css.editor}>
+            <div className={css.bank}>
+              <ComponentBank />
+            </div>
+            <div className={css.view}>
+              <View />
+            </div>
+            <div className={css.attributes}>
+              <Attributes />
+            </div>
           </div>
-          <div className={css.view}>
-            <View />
-          </div>
-          <div className={css.attributes}>
-            <Attributes />
-          </div>
-        </div>
-      </Content>
-    </Layout>
+        </Content>
+      </Layout>
+    </>
   );
 };
 
