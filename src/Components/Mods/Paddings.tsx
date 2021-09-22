@@ -1,42 +1,17 @@
 import { Form, Input, Row, Col } from 'antd';
 import _ from 'lodash';
-import { ChangeEvent, useEffect, useMemo, useState } from 'react';
+import { ChangeEvent, useMemo } from 'react';
+import { useVisibility } from '../../Hooks/Attribute.hook';
 import { useEditor } from '../../Hooks/Editor.hook';
-import { useHtmlWrapper } from '../../Hooks/Htmlwrapper.hook';
-import { findUniqueIdentifier } from '../../Utils/closestParent';
-import { findElementInJson } from '../../Utils/findElementInMjmlJson';
 
 const Padding = () => {
-  const [visible, setVisible] = useState(false);
-  const { active } = useHtmlWrapper();
+  const [visible, path] = useVisibility();
   const { mjmlJson, setMjmlJson } = useEditor();
-  const [path, setPath] = useState('');
-
-  useEffect(() => {
-    if (active) {
-      const uniqueIdentifier = findUniqueIdentifier(active, active.classList);
-      if (uniqueIdentifier) {
-        let path = findElementInJson(mjmlJson, uniqueIdentifier);
-        if (path) {
-          const [, pathToElement] = path;
-          if (pathToElement.length > 0) {
-            setPath(pathToElement);
-          }
-          const item = _.get(mjmlJson, pathToElement.slice(1));
-          if (item.mutableProperties && item.mutableProperties.includes('padding')) {
-            setVisible(true);
-            return;
-          }
-        }
-      }
-    }
-    setVisible(false);
-  }, [active]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>, direction: string) => {
-    // if (value === '') {
-    //   e.currentTarget.value = '0px';
-    // }
+    if (e.currentTarget.value === '') {
+      e.currentTarget.value = '0px';
+    }
     // if (!value.includes('px')) {
     //   e.currentTarget.value = `${value}px`;
     // }
@@ -45,14 +20,11 @@ const Padding = () => {
 
   const setPadding = useMemo(
     () => (direction: string, value: string) => {
-      //   if (value === '') {
-      //     value = '0px';
-      //   }
       if (path && visible) {
         let json = {};
 
         if (direction) {
-          let element = _.get(mjmlJson, path.slice(1));
+          let element = _.get(mjmlJson, path);
           element.attributes[`padding-${direction}`] = value;
           json = _.set(mjmlJson, path, element);
           setMjmlJson({ ...json });
@@ -65,8 +37,23 @@ const Padding = () => {
   const getValue = (direction: string) => {
     let value = '';
     if (path && visible) {
-      let element = _.get(mjmlJson, path.slice(1));
+      let element = _.get(mjmlJson, path);
+
       value = element.attributes[`padding-${direction}`];
+      if (!value) {
+        value = element.attributes['padding'];
+        if (value) {
+          const [vertical, horizontal] = value.split(' ');
+          switch (direction) {
+            case 'top':
+            case 'bottom':
+              return vertical;
+            case 'left':
+            case 'right':
+              return horizontal;
+          }
+        }
+      }
     }
     return value;
   };
