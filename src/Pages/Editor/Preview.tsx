@@ -1,6 +1,11 @@
-import { Modal } from 'antd';
+import { Modal, Radio } from 'antd';
+import { RadioChangeEvent } from 'antd/lib/radio';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import './Preview.module.css';
+
+const DESKTOP_WIDTH = '800px';
+const MOBILE_WIDTH = '323px';
 
 const FullscreenModal = styled(Modal).attrs({ title: 'Preview' })`
   .ant-modal {
@@ -20,6 +25,12 @@ const FullscreenModal = styled(Modal).attrs({ title: 'Preview' })`
   }
 `;
 
+const PreviewMode = styled.div`
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+`;
+
 interface PreviewProps {
   visible: boolean;
   visibleChange: (visible: boolean) => void;
@@ -27,6 +38,14 @@ interface PreviewProps {
 }
 
 export const Preview = ({ visible, visibleChange, inframeContent }: PreviewProps) => {
+  const [mode, setMode] = useState('desktop');
+
+  const onChange = (e: RadioChangeEvent) => {
+    if (e.target.value) {
+      setMode(e.target.value);
+    }
+  };
+
   return (
     <FullscreenModal
       visible={visible}
@@ -39,15 +58,40 @@ export const Preview = ({ visible, visibleChange, inframeContent }: PreviewProps
       destroyOnClose={true}
       footer={null}
     >
+      <PreviewMode>
+        <ModeSelect onChange={onChange} value={mode} />
+      </PreviewMode>
       {inframeContent ? (
         <iframe
-          title="preview computer"
+          title="Preview"
           style={{ margin: '0px auto' }}
-          width="800px"
+          width={mode === 'desktop' ? DESKTOP_WIDTH : MOBILE_WIDTH}
           height="100%"
           srcDoc={inframeContent}
         />
       ) : null}
     </FullscreenModal>
+  );
+};
+
+interface ModeSelectProps {
+  onChange: (e: RadioChangeEvent) => void;
+  value: string;
+}
+
+const ModeSelect = ({ onChange, value }: ModeSelectProps) => {
+  return (
+    <>
+      <Radio.Group
+        onChange={onChange}
+        value={value}
+        options={[
+          { label: 'desktop', value: 'desktop' },
+          { label: 'mobile', value: 'mobile' },
+        ]}
+        buttonStyle="solid"
+        optionType="button"
+      />
+    </>
   );
 };
