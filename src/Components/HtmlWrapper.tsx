@@ -79,8 +79,8 @@ export const HtmlWrapper = memo(({ key, originalNode }: HtmlWrapperProps) => {
   );
   const draggable = activeHover === idRef.current;
   const cursetStyle = useMemo(() => (activeHover === idRef.current ? 'pointer' : 'default'), [activeHover, idRef]);
-  const outline = activeHover === idRef.current ? '2px dotted green' : 'unset';
-  const outlineClick = active === idRef.current ? '2px dotted red' : 'unset';
+  const outline = activeHover === idRef.current ? '2px dotted rgb(121, 202, 182)' : 'unset';
+  const outlineClick = active === idRef.current ? '2px solid rgb(121, 202, 182)' : 'unset';
 
   // detect empty body
   if (detectEmptyElement(originalNode, 'body')) {
@@ -98,19 +98,20 @@ export const HtmlWrapper = memo(({ key, originalNode }: HtmlWrapperProps) => {
         {
           ...originalNode.props,
           onMouseEnter: onHover,
+          onMouseLeave: onHover,
           draggable,
           ref: idRef,
           id: uniqueId.current,
           onClick,
           style: {
             ...originalNode.props.style,
-            cursor: cursetStyle,
+            cursor: 'pointer',
             outline: active === idRef.current ? outlineClick : outline,
           },
         },
         originalNode.children
       ),
-    [idRef, draggable, onHover, onClick, originalNode, outline, cursetStyle, outlineClick, active, uniqueId]
+    [idRef, draggable, onHover, onClick, originalNode, outline, outlineClick, active, uniqueId]
   );
 
   // breaks the ui, so trying a different approach above,
