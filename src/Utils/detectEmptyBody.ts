@@ -13,6 +13,8 @@ const detectElement = (nodeWithReactProperties: any, detect: string) => {
     detect = 'identifier-mj-body';
   } else if (detect === 'section') {
     detect = 'identifier-mj-section';
+  } else if (detect === 'column') {
+    detect = 'identifier-mj-column';
   } else {
     return false;
   }
@@ -25,4 +27,21 @@ const detectElement = (nodeWithReactProperties: any, detect: string) => {
   );
 };
 
-export { detectElement, detectEmptyElement };
+const countEmptyChildrenLevels = (nodeWithReactProperties: any, count: number = 0): number => {
+  if (!nodeWithReactProperties) {
+    return count + 0;
+  }
+  let children = null;
+  if (nodeWithReactProperties['children']) {
+    children = nodeWithReactProperties['children'][0];
+  } else if (nodeWithReactProperties['props']['children']) {
+    children = nodeWithReactProperties['props']['children'][0];
+  }
+  if (children) {
+    return countEmptyChildrenLevels(children, count + 1);
+  } else {
+    return count;
+  }
+};
+
+export { detectElement, detectEmptyElement, countEmptyChildrenLevels };
