@@ -14,7 +14,7 @@ interface ViewProps {}
 export const View = (props: ViewProps) => {
   const { mjmlJson, mjmlstring, setMjmlString, setMjmlJson, setAttributes } = useEditor();
   const { setActive } = useHtmlWrapper();
-  const uid = useDragAndDropUniqueId();
+  const { getId } = useDragAndDropUniqueId();
 
   useEffect(() => {
     setMjmlString(JSON.stringify(mjmlJson, null, 2));
@@ -32,7 +32,7 @@ export const View = (props: ViewProps) => {
       setMjmlJson,
       setMjmlString,
       setAttributes,
-      uid: uid.getId(),
+      uid: getId,
     });
   };
 

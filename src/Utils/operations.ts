@@ -1,7 +1,6 @@
 import _ from 'lodash';
-import { Children } from 'react';
 import { error } from '../Components/Messages';
-import { findClosestParent, replaceGeneicTagWithUniqueId } from './closestParent';
+import { findClosestParent, generateUiqueIdForColumns, replaceGeneicTagWithUniqueId } from './closestParent';
 import { findElementInJson } from './findElementInMjmlJson';
 
 interface AddProps {
@@ -12,7 +11,7 @@ interface AddProps {
   setMjmlString: any;
   setAttributes: any;
   setActive: any;
-  uid: string;
+  uid: () => string;
 }
 
 const Add = ({
@@ -31,11 +30,16 @@ const Add = ({
     return null;
   }
 
-  if (droppedConfig.tagName !== 'mj-column' && droppedConfig.tagName !== 'mj-section') {
+  if (droppedConfig.tagName !== 'mj-section') {
     if (uniqueClassName === 'identifier-mj-body' || uniqueClassName === 'identifier-mj-section') {
       error('kindly place the item on column instead ');
       return null;
     }
+  }
+
+  // if tag name is mj-section, generate uniqueId for all mj-column tags
+  if (droppedConfig.tagName === 'mj-section') {
+    droppedConfig = generateUiqueIdForColumns(droppedConfig, uid);
   }
 
   const ObjectEquivalent = findElementInJson(mjmlJson, uniqueClassName);
@@ -46,7 +50,7 @@ const Add = ({
   let droppedConfigWithUid = _.cloneDeep(droppedConfig);
   let classNameString = droppedConfigWithUid['attributes']['css-class'];
   if (classNameString) {
-    classNameString = replaceGeneicTagWithUniqueId(classNameString, uid);
+    classNameString = replaceGeneicTagWithUniqueId(classNameString, uid());
   }
   // set the classnames with uniqueId generated in classnames
   droppedConfigWithUid['attributes']['css-class'] = classNameString;

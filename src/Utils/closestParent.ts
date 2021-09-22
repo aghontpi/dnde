@@ -48,4 +48,31 @@ const replaceGeneicTagWithUniqueId = (classNames: string, uid: string) => {
   return updatedClassNames;
 };
 
-export { findClosestParent, findUniqueIdentifier, replaceGeneicTagWithUniqueId };
+// section with different columns are stored in config without unqiueId's,
+//   replacing those with unqiueIds (only for mj-columns).
+const generateUiqueIdForColumns = (children: any, uidGenerator: () => string): any => {
+  if (!children) {
+    return;
+  }
+
+  for (var i = 0; children['children'] && i < children['children'].length; i++) {
+    children['children'][i] = generateUiqueIdForColumns(children['children'][i], uidGenerator);
+  }
+
+  if (children.tagName !== 'mj-column') {
+    return children;
+  }
+
+  let attr = children['attributes'];
+  if (attr) {
+    let css_class = attr['css-class'];
+    css_class = replaceGeneicTagWithUniqueId(css_class, uidGenerator());
+    attr['css-class'] = css_class;
+  }
+
+  children['attributes'] = attr;
+
+  return children;
+};
+
+export { findClosestParent, findUniqueIdentifier, replaceGeneicTagWithUniqueId, generateUiqueIdForColumns };
