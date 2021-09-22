@@ -7,11 +7,13 @@ import { htmlProcessor } from '../../Utils/htmlProcessor';
 import { Editor } from '../../Components/Mods/Editor';
 import { Add } from '../../Utils/operations';
 import { useDragAndDropUniqueId } from '../../Hooks/Drag.hook';
+import { useHtmlWrapper } from '../../Hooks/Htmlwrapper.hook';
 
 interface ViewProps {}
 
 export const View = (props: ViewProps) => {
-  const { mjmlJson, mjmlstring, setActive, setMjmlString, setMjmlJson, setAttributes } = useEditor();
+  const { mjmlJson, mjmlstring, setMjmlString, setMjmlJson, setAttributes } = useEditor();
+  const { setActive } = useHtmlWrapper();
   const uid = useDragAndDropUniqueId();
 
   useEffect(() => {

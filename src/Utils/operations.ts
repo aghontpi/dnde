@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { Children } from 'react';
 import { error } from '../Components/Messages';
 import { findClosestParent, replaceGeneicTagWithUniqueId } from './closestParent';
 import { findElementInJson } from './findElementInMjmlJson';
@@ -53,13 +54,19 @@ const Add = ({
 
   let [item, path] = ObjectEquivalent;
   console.info('item in Object:', item, 'path to Object:', path);
+  // remove the empty placeholder if present
+  item.children = item.children.filter((v: any) => {
+    if (v && v['attributes'] && v['attributes']['css-class']) {
+      if (v['attributes']['css-class'].includes('mj-placeholder')) {
+        return false;
+      }
+    }
+    return true;
+  });
   item.children.push(droppedConfigWithUid);
-  setActive({ value: item, path: path + `.children[${item.children.length - 1}]` });
   const updated = _.set(mjmlJson, path.slice(1), item);
   console.info('updated:', updated);
-  setMjmlJson((prev: any) => updated);
-  setMjmlString(JSON.stringify(updated, null, 2));
-  setAttributes(droppedConfigWithUid.mutableProperiesWithDefaultValues);
+  setMjmlJson({ ...updated });
 };
 
 export { Add };
