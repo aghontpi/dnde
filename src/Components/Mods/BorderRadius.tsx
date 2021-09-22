@@ -1,37 +1,32 @@
 import _ from 'lodash';
-import styled from 'styled-components';
 import { useEditor } from '../../Hooks/Editor.hook';
 import { Form, Input } from 'antd';
+import { useVisibility } from '../../Hooks/Attribute.hook';
 
-const Container = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  line-height: 2;
-  label {
-    font-size: 16px;
-    font-weight: bold;
-  }
-  input {
-    border: 1px solid black;
-    width: 70%;
-    min-height: 26px;
-    border-radius: 2px;
-    :focus-visible {
-      outline: unset;
-    }
-  }
-`;
+const ATTRIBUTE = 'border-radius';
 
 export const BorderRadius = () => {
-  const { active, setActive, mjmlJson } = useEditor();
+  const { mjmlJson, setMjmlJson } = useEditor();
+  const [visible, path] = useVisibility({ attribute: ATTRIBUTE });
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (active && e.target.value) {
+    if (visible && e.target.value) {
       if (e.target.value === '') {
         e.target.value = 'none';
       }
-      const attributes = _.get(mjmlJson, active.path.slice(1) + 'attributes');
-      setActive({ ...active, change: { ...attributes, 'border-radius': e.target.value } });
+      setValue(e.currentTarget.value);
+    }
+  };
+
+  const setValue = (value: string) => {
+    if (path) {
+      if (value === '') {
+        value = 'none';
+      }
+      let element = _.get(mjmlJson, path);
+      element.attributes[ATTRIBUTE] = value;
+      const json = _.set(mjmlJson, path, element);
+      setMjmlJson({ ...json });
     }
   };
 
@@ -42,8 +37,8 @@ export const BorderRadius = () => {
 
     if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
       e.preventDefault();
-      if (active) {
-        const attributes = _.get(mjmlJson, active.path.slice(1) + 'attributes');
+      if (visible) {
+        const attributes = _.get(mjmlJson, path + 'attributes');
         let value = attributes['border-radius'];
         const re = new RegExp(/^\d+/);
         const match = re.exec(value);
@@ -53,17 +48,18 @@ export const BorderRadius = () => {
         } else if (e.key === 'ArrowDown' && matchedValue > 0) {
           value = value.replace(/^\d+/, matchedValue - 1);
         }
-        setActive({ ...active, change: { ...attributes, 'border-radius': value } });
+        e.currentTarget.value = value;
+        setValue(value);
       }
     }
   };
 
   let value = '';
-  if (active.path) {
-    value = _.get(mjmlJson, active.path.slice(1) + 'attributes.border-radius');
+  if (visible) {
+    value = _.get(mjmlJson, path + 'attributes.border-radius');
   }
 
-  return active.path ? (
+  return visible ? (
     <Form.Item label="Border Radius">
       <Input onChange={handleChange} value={value} onKeyDown={onKeyDown} />
     </Form.Item>
