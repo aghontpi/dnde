@@ -7,7 +7,7 @@ import { useValue, useVisibility } from '../../Hooks/Attribute.hook';
 const ATTRIBUTE = 'src';
 
 const Img = () => {
-  const [visible, path] = useVisibility();
+  const [visible, path] = useVisibility({ attribute: ATTRIBUTE });
   const { mjmlJson, setMjmlJson } = useEditor();
 
   const { getValue } = useValue({ path, visible, attribute: ATTRIBUTE });

@@ -5,7 +5,11 @@ import { findElementInJson } from '../Utils/findElementInMjmlJson';
 import { useEditor } from './Editor.hook';
 import { useHtmlWrapper } from './Htmlwrapper.hook';
 
-const useVisibility = (): [boolean | null, string] => {
+interface useVisibilityProps {
+  attribute: string;
+}
+
+const useVisibility = ({ attribute }: useVisibilityProps): [boolean | null, string] => {
   const [visible, setVisible] = useState<boolean | null>(false);
 
   const { active } = useHtmlWrapper();
@@ -25,7 +29,7 @@ const useVisibility = (): [boolean | null, string] => {
             setPath(pathToElement.slice(1));
           }
           const item = _.get(mjmlJson, pathToElement.slice(1));
-          if (item.mutableProperties && item.mutableProperties.includes('padding')) {
+          if (item.mutableProperties && item.mutableProperties.includes(attribute)) {
             setVisible(true);
             return;
           }

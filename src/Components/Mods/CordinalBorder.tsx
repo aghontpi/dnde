@@ -5,7 +5,7 @@ import { useVisibility } from '../../Hooks/Attribute.hook';
 
 export const CordinalBorder = () => {
   const { mjmlJson, setMjmlJson } = useEditor();
-  const [visible, path] = useVisibility();
+  const [visible, path] = useVisibility({ attribute: 'border-top' });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, direction: string) => {
     if (visible && path && e.target.value) {

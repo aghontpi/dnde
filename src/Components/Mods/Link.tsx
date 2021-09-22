@@ -9,7 +9,7 @@ import FormItem from 'antd/lib/form/FormItem';
 const ATTRIBUTE = 'href';
 
 const Link = () => {
-  const [visible, path] = useVisibility();
+  const [visible, path] = useVisibility({ attribute: ATTRIBUTE });
   const { mjmlJson, setMjmlJson } = useEditor();
 
   const { getValue } = useValue({ path, visible, attribute: ATTRIBUTE });

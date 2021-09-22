@@ -5,7 +5,7 @@ import { useVisibility } from '../../Hooks/Attribute.hook';
 import { useEditor } from '../../Hooks/Editor.hook';
 
 const Padding = () => {
-  const [visible, path] = useVisibility();
+  const [visible, path] = useVisibility({ attribute: 'padding' });
   const { mjmlJson, setMjmlJson } = useEditor();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>, direction: string) => {
