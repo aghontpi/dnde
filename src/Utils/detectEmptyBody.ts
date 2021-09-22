@@ -1,10 +1,18 @@
 const detectEmptyElement = (nodeWithReactProperties: any, detect: string) => {
+  return (
+    detectElement(nodeWithReactProperties, detect) &&
+    nodeWithReactProperties.children &&
+    nodeWithReactProperties.children < 1
+  );
+};
+
+const detectElement = (nodeWithReactProperties: any, detect: string) => {
   if (!detect) {
     return false;
   } else if (detect === 'body') {
-    detect = 'mj-identifier-body';
+    detect = 'identifier-mj-body';
   } else if (detect === 'section') {
-    detect = 'mj-identifier-section';
+    detect = 'identifier-mj-section';
   } else {
     return false;
   }
@@ -12,11 +20,9 @@ const detectEmptyElement = (nodeWithReactProperties: any, detect: string) => {
   return (
     nodeWithReactProperties.props &&
     nodeWithReactProperties.props['className'] &&
-    nodeWithReactProperties.props['className'] === 'string' &&
-    nodeWithReactProperties.props['className'].includes(detect) &&
-    nodeWithReactProperties.children &&
-    nodeWithReactProperties.children < 1
+    typeof nodeWithReactProperties.props['className'] === 'string' &&
+    nodeWithReactProperties.props['className'].includes(detect)
   );
 };
 
-export { detectEmptyElement };
+export { detectElement, detectEmptyElement };

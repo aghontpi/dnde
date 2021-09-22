@@ -83,11 +83,11 @@ export const HtmlWrapper = memo(({ key, originalNode }: HtmlWrapperProps) => {
   const outlineClick = active === idRef.current ? '2px dotted red' : 'unset';
 
   // detect empty body
-  if (originalNode['nodeName'] === 'body' && detectEmptyElement(originalNode, 'body')) {
+  if (detectEmptyElement(originalNode, 'body')) {
     console.info('empty body detected');
   }
   // detect empty section
-  if (originalNode['nodeName'] === 'section' && detectEmptyElement(originalNode, 'section')) {
+  if (detectEmptyElement(originalNode, 'section')) {
     console.info('empty section detected');
   }
 
