@@ -1,51 +1,30 @@
 import _ from 'lodash';
-import styled from 'styled-components';
 import { useEditor } from '../../Hooks/Editor.hook';
-import { Form, Input, Layout, Row, Col } from 'antd';
-
-const Container = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  line-height: 2;
-  label {
-    font-size: 16px;
-    font-weight: bold;
-  }
-  div {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    div {
-      width: 50%;
-      justify-content: space-between;
-
-      label: {
-        font-size: 16px;
-        font-weight: bold;
-      }
-      input {
-        border: 1px solid black;
-        width: 60%;
-        min-height: 26px;
-        border-radius: 2px;
-        :focus-visible {
-          outline: unset;
-        }
-      }
-    }
-  }
-`;
+import { Form, Input, Row, Col } from 'antd';
+import { useVisibility } from '../../Hooks/Attribute.hook';
 
 export const CordinalBorder = () => {
-  const { active, setActive, mjmlJson } = useEditor();
+  const { mjmlJson, setMjmlJson } = useEditor();
+  const [visible, path] = useVisibility();
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, direction: string) => {
-    if (active && e.target.value) {
+    if (visible && path && e.target.value) {
       if (e.target.value === '') {
-        e.target.value = 'none';
+        e.target.value = '';
       }
-      const attributes = _.get(mjmlJson, active.path.slice(1) + 'attributes');
-      changeValue(active, attributes, direction, e, setActive);
+      setValue(direction, e.target.value);
+    }
+  };
+
+  const setValue = (direction: string, value: string) => {
+    if (path) {
+      if (value === '') {
+        value = 'none';
+      }
+      let element = _.get(mjmlJson, path);
+      element.attributes[`border-${direction}`] = value;
+      const json = _.set(mjmlJson, path, element);
+      setMjmlJson({ ...json });
     }
   };
 
@@ -56,8 +35,8 @@ export const CordinalBorder = () => {
 
     if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
       e.preventDefault();
-      if (active.path) {
-        const attributes = _.get(mjmlJson, active.path.slice(1) + 'attributes');
+      if (visible) {
+        const attributes = _.get(mjmlJson, path + 'attributes');
         let value = attributes['border-' + direction];
         const re = new RegExp(/^\d+/);
         const match = re.exec(value);
@@ -68,20 +47,21 @@ export const CordinalBorder = () => {
           value = value.replace(/^\d+/, matchedValue - 1);
         }
         e.currentTarget.value = value;
-        changeValue(active, attributes, direction, e, setActive);
+
+        setValue(direction, e.currentTarget.value);
       }
     }
   };
 
   let [valuel, valuer, valueb, valuet] = ['', '', '', ''];
-  if (active.path) {
-    valuel = _.get(mjmlJson, active.path.slice(1) + 'attributes.border-left');
-    valuer = _.get(mjmlJson, active.path.slice(1) + 'attributes.border-right');
-    valuet = _.get(mjmlJson, active.path.slice(1) + 'attributes.border-top');
-    valueb = _.get(mjmlJson, active.path.slice(1) + 'attributes.border-bottom');
+  if (visible) {
+    valuel = _.get(mjmlJson, path + 'attributes.border-left');
+    valuer = _.get(mjmlJson, path + 'attributes.border-right');
+    valuet = _.get(mjmlJson, path + 'attributes.border-top');
+    valueb = _.get(mjmlJson, path + 'attributes.border-bottom');
   }
 
-  return active.path ? (
+  return visible ? (
     <Form.Item label="Border Directions">
       <Input.Group style={{ marginBottom: '6px' }}>
         <Row>
@@ -126,29 +106,4 @@ export const CordinalBorder = () => {
       </Input.Group>
     </Form.Item>
   ) : null;
-};
-
-const changeValue = (
-  active: any,
-  attributes: any,
-  direction: string,
-  e: React.KeyboardEvent<HTMLInputElement> | React.ChangeEvent<HTMLInputElement>,
-  setActive: (v: any) => void
-) => {
-  switch (direction) {
-    case 'left':
-      setActive({ ...active, change: { ...attributes, 'border-left': e.currentTarget.value } });
-      break;
-    case 'right':
-      setActive({ ...active, change: { ...attributes, 'border-right': e.currentTarget.value } });
-      break;
-    case 'top':
-      setActive({ ...active, change: { ...attributes, 'border-top': e.currentTarget.value } });
-      break;
-    case 'bottom':
-      setActive({ ...active, change: { ...attributes, 'border-bottom': e.currentTarget.value } });
-      break;
-    default:
-      console.error(`unable to handle ${direction} `);
-  }
 };
