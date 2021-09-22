@@ -36,7 +36,11 @@ export const Editor = () => {
 
   return (
     <>
-      <Preview visible={preview} visibleChange={(flag) => setPreview(flag)} inframeContent={mjml2html(mjmlJson).html} />
+      <Preview
+        visible={preview}
+        visibleChange={(flag) => setPreview(flag)}
+        inframeContent={preview ? mjml2html(mjmlJson).html : ''}
+      />
       <Layout style={{ height: '100%' }}>
         <PageHeader
           ghost={false}
