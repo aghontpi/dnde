@@ -12,8 +12,6 @@ import { Preview } from './Preview';
 const { Content } = Layout;
 const { confirm } = Modal;
 
-const { TabPane } = Tabs;
-
 export const Editor = () => {
   const { mjmlJson } = useEditor();
   const [preview, setPreview] = useState(false);
@@ -38,7 +36,7 @@ export const Editor = () => {
 
   return (
     <>
-      <Preview visible={preview} visibleChange={(flag) => setPreview(flag)} />
+      <Preview visible={preview} visibleChange={(flag) => setPreview(flag)} inframeContent={mjml2html(mjmlJson).html} />
       <Layout style={{ height: '100%' }}>
         <PageHeader
           ghost={false}
