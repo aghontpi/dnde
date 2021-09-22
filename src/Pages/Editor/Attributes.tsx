@@ -16,8 +16,8 @@ export const Attributes = () => {
       </div>
       <div className={css.mods}>
         <Border />
-        <BorderRadius />
         <CordinalBorder />
+        <BorderRadius />
         <Background />
         <Padding />
         <Link />

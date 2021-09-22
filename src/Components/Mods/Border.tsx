@@ -1,34 +1,21 @@
 import _ from 'lodash';
-import styled from 'styled-components';
 import { useEditor } from '../../Hooks/Editor.hook';
 import { Form, Input } from 'antd';
+import { useValue, useVisibility } from '../../Hooks/Attribute.hook';
 
-const Container = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  line-height: 2;
-  label {
-    font-size: 16px;
-    font-weight: bold;
-  }
-  input {
-    border: 1px solid black;
-    width: 70%;
-    min-height: 26px;
-    border-radius: 2px;
-    :focus-visible {
-      outline: unset;
-    }
-  }
-`;
+const ATTRIBUTE = 'border';
 
 export const Border = () => {
-  const { active, setActive, mjmlJson } = useEditor();
+  const [visible, path] = useVisibility();
+  const { mjmlJson, setMjmlJson } = useEditor();
+  const { getValue } = useValue({ path, visible, attribute: ATTRIBUTE });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (active && e.target.value) {
-      const attributes = _.get(mjmlJson, active.path.slice(1) + 'attributes');
-      setActive({ ...active, change: { ...attributes, border: e.target.value } });
+    if (visible && path && e.target.value) {
+      let json = {};
+      let element = _.get(mjmlJson, path);
+      element.attributes[ATTRIBUTE] = e.target.value;
+      json = _.set(mjmlJson, path, element);
+      setMjmlJson({ ...json });
     }
   };
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -37,14 +24,9 @@ export const Border = () => {
     }
   };
 
-  let value = '';
-  if (active.path) {
-    value = _.get(mjmlJson, active.path.slice(1) + 'attributes.border');
-  }
-
-  return active.path ? (
+  return visible ? (
     <Form.Item label="Border">
-      <Input onChange={handleChange} value={value} onKeyDown={onKeyDown} />
+      <Input onChange={handleChange} value={getValue()} onKeyDown={onKeyDown} />
     </Form.Item>
   ) : null;
 };
