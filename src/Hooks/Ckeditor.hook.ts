@@ -1,4 +1,4 @@
-import { useContext, useRef } from 'react';
+import { useContext } from 'react';
 import { CkeditorContext } from '../Context/Ckeditor.context';
 
 export const useCkeditor = () => {
@@ -6,10 +6,16 @@ export const useCkeditor = () => {
   return Ckeditor as unknown as {
     ref: any;
     isActive: boolean;
-    setActive: () => void;
+    setActive: (arg: boolean) => void;
     x: number;
     y: number;
     setX: (arg: number) => void;
     setY: (arg: number) => void;
+    delX: number;
+    delY: number;
+    setDelX: (arg: number) => void;
+    setDelY: (arg: number) => void;
+    delActive: boolean;
+    setDelActive: (arg: boolean) => void;
   };
 };

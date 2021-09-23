@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _, { floor } from 'lodash';
 import React, {
   cloneElement,
   createElement,
@@ -26,7 +26,7 @@ interface HtmlWrapperProps {
 export const HtmlWrapper = memo(({ key, originalNode }: HtmlWrapperProps) => {
   const { setUIWrapperList, setActive, setActiveHover, active, activeHover, id, setId, getId, uiList } =
     useHtmlWrapper();
-  const { setX, setY } = useCkeditor();
+  const { setX, setY, setDelActive, setDelX, setDelY } = useCkeditor();
   const idRef = useRef(id);
   const uniqueId = useRef(id);
 
@@ -71,6 +71,14 @@ export const HtmlWrapper = memo(({ key, originalNode }: HtmlWrapperProps) => {
               if (pos) {
                 setX(pos.x);
                 setY(pos.y - yoffset);
+              }
+
+              // moving the delete positon to currently selected elements right
+              setDelActive(true);
+              if (pos) {
+                setDelX(pos.right);
+                const middle = floor((pos.bottom - pos.top) / 2) - 32 / 2;
+                setDelY(pos.top + middle);
               }
             }
           }
