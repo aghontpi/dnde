@@ -61,9 +61,7 @@ const Add = ({
   // remove the empty placeholder if present
   item.children = item.children.filter((v: any) => {
     if (v && v['attributes'] && v['attributes']['css-class']) {
-      if (v['attributes']['css-class'].includes('mj-placeholder')) {
-        return false;
-      }
+      return !v['attributes']['css-class'].includes('mj-placeholder');
     }
     return true;
   });
