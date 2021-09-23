@@ -9,7 +9,7 @@ export const useHtmlWrapper = () => {
     activeHover: any;
     setActiveHover: (id: string) => void;
     active: any;
-    setActive: (id: string) => void;
+    setActive: (args: any) => void;
     id: any;
     setId: (prev?: any) => void;
     getId: () => number;

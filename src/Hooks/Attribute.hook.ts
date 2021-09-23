@@ -9,7 +9,7 @@ interface useVisibilityProps {
   attribute: string;
 }
 
-const useVisibility = ({ attribute }: useVisibilityProps): [boolean | null, string] => {
+const useVisibility = ({ attribute }: useVisibilityProps): [boolean | null, string, any] => {
   const [visible, setVisible] = useState<boolean | null>(false);
 
   const { active } = useHtmlWrapper();
@@ -36,11 +36,11 @@ const useVisibility = ({ attribute }: useVisibilityProps): [boolean | null, stri
         }
       }
     }
-    console.log(`setting setvisible to ${visible}`);
     setVisible(false);
-  }, [active, mjmlJson, path, visible]);
+    setPath('');
+  }, [active]);
 
-  return [visible, path];
+  return [visible, path, active];
 };
 
 interface useValueProps {
