@@ -1,11 +1,12 @@
 import { Form, Input, Row, Col } from 'antd';
 import _ from 'lodash';
-import { ChangeEvent, useMemo } from 'react';
+import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { useVisibility } from '../../Hooks/Attribute.hook';
 import { useEditor } from '../../Hooks/Editor.hook';
+import { useHtmlWrapper } from '../../Hooks/Htmlwrapper.hook';
 
 const Padding = () => {
-  const [visible, path] = useVisibility({ attribute: 'padding' });
+  let [visible, path, active] = useVisibility({ attribute: 'padding' });
   const { mjmlJson, setMjmlJson } = useEditor();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>, direction: string) => {
@@ -36,10 +37,11 @@ const Padding = () => {
 
   const getValue = (direction: string) => {
     let value = '';
-    if (path && visible) {
+    //todo: debug why removing active causes crash  getValue:{@mods/pad..tsx}
+    // move it to useeffect later
+    if (path && visible && active) {
       let element = _.get(mjmlJson, path);
-
-      value = element.attributes[`padding-${direction}`];
+      value = element.attributes ? element.attributes[`padding-${direction}`] : null;
       if (!value) {
         value = element.attributes['padding'];
         if (value) {
