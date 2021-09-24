@@ -1,4 +1,5 @@
 import { Scrollbars } from 'react-custom-scrollbars-2';
+import { Align } from '../../Components/Mods/Align';
 import { Background } from '../../Components/Mods/Background';
 import { Border } from '../../Components/Mods/Border';
 import { BorderRadius } from '../../Components/Mods/BorderRadius';
@@ -22,6 +23,7 @@ export const Attributes = () => {
         <Background />
         <ContainerBackground />
         <Padding />
+        <Align />
         <Link />
         <Img />
       </div>
