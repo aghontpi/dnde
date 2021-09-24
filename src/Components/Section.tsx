@@ -23,6 +23,26 @@ const properties_column_with_default_values = {"background-color": "", "inner-ba
 // prettier-ignore
 const assigned_column_default_values = {"border": "none", "width": "(100 / number of non-raw elements in section)%", "vertical-align": "top"}
 
+export const columnPlaceholder = [
+  {
+    tagName: 'mj-image',
+    attributes: {
+      src: 'https://dev.bluepie.in/assets/87583817874843.svg',
+      'css-class': 'mj-placeholder',
+    },
+  },
+  {
+    tagName: 'mj-text',
+    attributes: {
+      'paddint-top': '0px',
+      'font-size': '16px',
+      align: 'center',
+      'css-class': 'mj-placeholder',
+    },
+    content: 'drag and drop a content block here!',
+  },
+];
+
 export const Section = () => {
   const config = {
     tagName: 'mj-section',
@@ -41,25 +61,7 @@ export const Section = () => {
           mutableProperties: properties_column,
           'padding-bottom': '0px',
         },
-        children: [
-          {
-            tagName: 'mj-image',
-            attributes: {
-              src: 'https://dev.bluepie.in/assets/87583817874843.svg',
-              'css-class': 'mj-placeholder',
-            },
-          },
-          {
-            tagName: 'mj-text',
-            attributes: {
-              'paddint-top': '0px',
-              'font-size': '16px',
-              align: 'center',
-              'css-class': 'mj-placeholder',
-            },
-            content: 'drag and drop a content block here!',
-          },
-        ],
+        children: [...columnPlaceholder],
       },
     ],
     cannot_have: ['mj-section'],

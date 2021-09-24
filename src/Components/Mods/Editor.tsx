@@ -9,6 +9,7 @@ import { useEditor } from '../../Hooks/Editor.hook';
 import { useHtmlWrapper } from '../../Hooks/Htmlwrapper.hook';
 import { findClosestParent } from '../../Utils/closestParent';
 import { findElementInJson } from '../../Utils/findElementInMjmlJson';
+import { columnPlaceholder } from '../Section';
 
 export const Editor = () => {
   const { ref, isActive, x, y, delActive, delX, delY, setDelActive } = useCkeditor();
@@ -43,6 +44,16 @@ export const Editor = () => {
                   newChildren.push(item.children[i]);
                 }
               }
+
+              // if column is empty, fill it with placeholder
+              if (parent) {
+                const parentItem = _.get(mjmlJson, parent.slice(1));
+
+                if (parentItem.tagName && parentItem.tagName === 'mj-column' && newChildren.length === 0) {
+                  newChildren = columnPlaceholder;
+                }
+              }
+
               item.children = newChildren;
             }
 
