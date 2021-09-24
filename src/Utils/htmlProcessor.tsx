@@ -16,7 +16,7 @@ export const htmlProcessor = (html: string): ReactNode => {
     console.error('htmlParser: doc is null, unable to process html');
     return React.createElement('p', {}, 'errors: please check dev console') as ReactNode;
   }
-  return converter(doc.body as HTMLElement, 1);
+  return converter(doc as unknown as HTMLElement, 1);
 };
 
 const converter = (element: HTMLElement, key = 0) => {
@@ -27,11 +27,41 @@ const converter = (element: HTMLElement, key = 0) => {
   let nodeName = element.nodeName.toLowerCase();
 
   // meta, script, style tags don't have children, for design ignoring meta tag while render
-  if (nodeName === 'script' || nodeName === 'style' || nodeName === 'meta') {
-    if (nodeName !== 'meta') {
-      return React.createElement(nodeName, { dangerouslySetInnerHTML: { __html: element.outerHTML } });
+  if (
+    nodeName === 'script' ||
+    nodeName === 'style' ||
+    nodeName === 'meta' ||
+    nodeName === 'link' ||
+    nodeName === 'title'
+  ) {
+    if (nodeName === 'meta') {
+      let el = element as HTMLMetaElement;
+      return React.createElement(
+        nodeName,
+        { httpEquiv: el.httpEquiv, content: el.content, key: nodeName + key++ },
+        null
+      );
     }
-    return;
+    if (nodeName === 'link') {
+      let el = element as HTMLLinkElement;
+      let type = null;
+      if (el.type) {
+        type = el.type;
+      }
+      return React.createElement(
+        nodeName,
+        {
+          href: el.href,
+          rel: el.rel,
+          type,
+          key: nodeName + key++,
+        },
+        null
+      );
+    }
+    return React.createElement(nodeName, {
+      dangerouslySetInnerHTML: { __html: element.innerHTML, key: nodeName + key++ },
+    });
   }
 
   let attributes: { [key: string]: string | { [key: string]: string } | any } = {};
@@ -79,6 +109,12 @@ const converter = (element: HTMLElement, key = 0) => {
 
     return <HtmlWrapper key={key++} originalNode={original} />;
     // return <HtmlWrapper children={ReactNode} key={key++} originalNode={original} />;
+  }
+
+  // if root document, create it with div,
+  // todo: rnd if this document can be abstracted from the main document,
+  if (nodeName === '#document') {
+    nodeName = 'div';
   }
 
   // img tag should not have child param passed to it
