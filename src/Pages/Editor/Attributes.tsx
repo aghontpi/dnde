@@ -8,6 +8,7 @@ import { CordinalBorder } from '../../Components/Mods/CordinalBorder';
 import { Img } from '../../Components/Mods/Img';
 import { Link } from '../../Components/Mods/Link';
 import { Padding } from '../../Components/Mods/Paddings';
+import { Height, Width } from '../../Components/Mods/WidthHeight';
 import css from './Editor.module.scss';
 
 export const Attributes = () => {
@@ -17,6 +18,8 @@ export const Attributes = () => {
         <span>Attributes</span>
       </div>
       <div className={css.mods}>
+        <Width />
+        <Height />
         <Border />
         <CordinalBorder />
         <BorderRadius />
