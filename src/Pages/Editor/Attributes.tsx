@@ -2,6 +2,7 @@ import { Scrollbars } from 'react-custom-scrollbars-2';
 import { Background } from '../../Components/Mods/Background';
 import { Border } from '../../Components/Mods/Border';
 import { BorderRadius } from '../../Components/Mods/BorderRadius';
+import { ContainerBackground } from '../../Components/Mods/ContainerBackground';
 import { CordinalBorder } from '../../Components/Mods/CordinalBorder';
 import { Img } from '../../Components/Mods/Img';
 import { Link } from '../../Components/Mods/Link';
@@ -19,6 +20,7 @@ export const Attributes = () => {
         <CordinalBorder />
         <BorderRadius />
         <Background />
+        <ContainerBackground />
         <Padding />
         <Link />
         <Img />

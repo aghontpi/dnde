@@ -26,7 +26,7 @@ const converter = (element: HTMLElement, key = 0) => {
 
   let nodeName = element.nodeName.toLowerCase();
 
-  // meta, script, style tags don't have children, for design ignoring meta tag while render
+  // meta, script, style, ..etc, tags don't have children,
   if (
     nodeName === 'script' ||
     nodeName === 'style' ||
