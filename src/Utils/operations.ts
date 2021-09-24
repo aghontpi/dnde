@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { error } from '../Components/Messages';
+import { columnPlaceholder } from '../Components/Section';
 import { findClosestParent, generateUiqueIdForColumns, replaceGeneicTagWithUniqueId } from './closestParent';
 import { findElementInJson } from './findElementInMjmlJson';
 
@@ -71,4 +72,64 @@ const Add = ({
   setMjmlJson({ ...updated });
 };
 
-export { Add };
+interface RemoveProps {
+  target: HTMLElement;
+  mjmlJson: any;
+  setMjmlJson: any;
+  setDelActive: any;
+  setActive: any;
+}
+
+const Remove = ({ target, mjmlJson, setMjmlJson, setDelActive, setActive }: RemoveProps) => {
+  const uniqueClassName = findClosestParent(target);
+  if (!uniqueClassName) {
+    return null;
+  }
+
+  const ObjectEquivalent = findElementInJson(mjmlJson, uniqueClassName);
+  if (!ObjectEquivalent) {
+    return null;
+  }
+
+  let [, path]: [any, string] = ObjectEquivalent;
+  let parent: any = path.split('.');
+  const last: string = parent.pop();
+  parent = parent.join('.');
+  let item = _.get(mjmlJson, parent.slice(1));
+  const regExMatch = last.match(/\[(.*?)\]/);
+
+  if (regExMatch) {
+    const indexToRemove = parseInt(regExMatch[1]);
+    let newChildren = [];
+    for (var i = 0; item && item.children && i < item.children.length; i++) {
+      if (i !== indexToRemove) {
+        newChildren.push(item.children[i]);
+      }
+    }
+
+    // if column is empty, fill it with placeholder
+    if (parent) {
+      const parentItem = _.get(mjmlJson, parent.slice(1));
+
+      if (parentItem.tagName && parentItem.tagName === 'mj-column' && newChildren.length === 0) {
+        newChildren = columnPlaceholder;
+      }
+    }
+
+    item.children = newChildren;
+  }
+
+  setActive(null);
+  const updated = _.set(mjmlJson, parent.slice(1), item);
+
+  if (updated) {
+    setDelActive(false);
+    setMjmlJson({ ...updated });
+  } else {
+    console.info('unable to delete the item');
+  }
+
+  setMjmlJson({ ...updated });
+};
+
+export { Add, Remove };

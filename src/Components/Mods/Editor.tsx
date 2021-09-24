@@ -9,6 +9,7 @@ import { useEditor } from '../../Hooks/Editor.hook';
 import { useHtmlWrapper } from '../../Hooks/Htmlwrapper.hook';
 import { findClosestParent } from '../../Utils/closestParent';
 import { findElementInJson } from '../../Utils/findElementInMjmlJson';
+import { Remove } from '../../Utils/operations';
 import { columnPlaceholder } from '../Section';
 
 export const Editor = () => {
@@ -24,49 +25,7 @@ export const Editor = () => {
   const deleteConfirm = useMemo(
     () => () => {
       if (active) {
-        const identifier = findClosestParent(active);
-        if (identifier) {
-          const finder = findElementInJson(mjmlJson, identifier);
-          if (finder) {
-            setActive(null);
-            let [, path]: [any, string] = finder;
-            let parent: any = path.split('.');
-            const last: string = parent.pop();
-            parent = parent.join('.');
-            let item = _.get(mjmlJson, parent.slice(1));
-            const regExMatch = last.match(/\[(.*?)\]/);
-
-            if (regExMatch) {
-              const indexToRemove = parseInt(regExMatch[1]);
-              let newChildren = [];
-              for (var i = 0; item && item.children && i < item.children.length; i++) {
-                if (i !== indexToRemove) {
-                  newChildren.push(item.children[i]);
-                }
-              }
-
-              // if column is empty, fill it with placeholder
-              if (parent) {
-                const parentItem = _.get(mjmlJson, parent.slice(1));
-
-                if (parentItem.tagName && parentItem.tagName === 'mj-column' && newChildren.length === 0) {
-                  newChildren = columnPlaceholder;
-                }
-              }
-
-              item.children = newChildren;
-            }
-
-            const updated = _.set(mjmlJson, parent.slice(1), item);
-
-            if (updated) {
-              setDelActive(false);
-              setMjmlJson({ ...updated });
-            } else {
-              console.info('unable to delete the item');
-            }
-          }
-        }
+        Remove({ target: active, mjmlJson, setMjmlJson, setDelActive, setActive });
       }
     },
     [active]
