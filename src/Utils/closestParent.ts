@@ -16,11 +16,11 @@ const findClosestParent = (element: HTMLElement) => {
   return uniqueClassName;
 };
 
-const findUniqueIdentifier = (element: Element, classlist: DOMTokenList) => {
+const findUniqueIdentifier = (element: Element, classlist: DOMTokenList, identifier = 'identifier-mj') => {
   let uniqueClassName = null;
   for (var i = 0; i < classlist.length; i++) {
     const current = classlist[i];
-    if (current.includes('identifier-mj')) {
+    if (current.includes(identifier)) {
       uniqueClassName = current;
       break;
     }
