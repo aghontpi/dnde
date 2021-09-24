@@ -1,7 +1,8 @@
 import { Row } from 'antd';
-import { floor } from 'lodash';
+import _, { floor } from 'lodash';
 import { Fragment, SyntheticEvent } from 'react';
 import styled from 'styled-components';
+import { findUniqueIdentifier } from '../Utils/closestParent';
 
 export type DragEvent = SyntheticEvent & { dataTransfer: DataTransfer };
 
@@ -29,6 +30,7 @@ export const columnPlaceholder = [
     attributes: {
       src: 'https://dev.bluepie.in/assets/87583817874843.svg',
       'css-class': 'mj-placeholder',
+      width: '120px',
     },
   },
   {
@@ -43,8 +45,17 @@ export const columnPlaceholder = [
   },
 ];
 
+const COLUMN = {
+  tagName: 'mj-column',
+  attributes: {
+    'css-class': 'mjml-tag identifier-mj-column',
+    mutableProperties: properties_column,
+  },
+  children: [...columnPlaceholder],
+};
+
 export const Section = () => {
-  const config = {
+  let config = {
     tagName: 'mj-section',
     attributes: {
       ...assigned_default_values,
@@ -52,27 +63,28 @@ export const Section = () => {
       'background-color': '#fff',
       'text-align': 'center',
     },
-    children: [
-      {
-        tagName: 'mj-column',
-        attributes: {
-          ...assigned_column_default_values,
-          'css-class': 'mjml-tag identifier-mj-column',
-          mutableProperties: properties_column,
-          'padding-bottom': '0px',
-        },
-        children: [...columnPlaceholder],
-      },
-    ],
-    cannot_have: ['mj-section'],
+    children: [],
+    cannot_have: ['mj-section', 'mj-column'], // 'https://documentation.mjml.io/#mj-column' Columns cannot be nested into columns, and sections cannot be nested into columns as well.
     mutableProperties: properties,
-    mutalbePropertiesWithDefaultValues: properties_with_default_values,
   };
 
   const onDragStart = (e: DragEvent) => {
+    const target = e.target as Element;
+    const identifier = findUniqueIdentifier(target, target.classList, 'mj-columns');
+    if (identifier) {
+      const match = identifier.match(/mj-columns-(.*)/);
+      if (match) {
+        let count = parseInt(match[1]);
+        let children = [];
+        while (count > 0) {
+          children.push(COLUMN);
+          count--;
+        }
+        config = _.set(config, 'children', children);
+      }
+    }
     e.dataTransfer.dropEffect = 'copy';
     e.dataTransfer.setData('config', JSON.stringify(config));
-    console.log(e);
   };
   // access type, etc from comp nd set to context
 
@@ -82,8 +94,13 @@ export const Section = () => {
         <SectionTitle key={value + index + 'title'}>
           <p>{value} Column</p>
         </SectionTitle>
-        <SectionImage key={value + index + 'section'} draggable={true} onDragStart={onDragStart}>
-          <div className="wrapper">
+        <SectionImage
+          key={value + index + 'section'}
+          className={`mj-columns-${value}`}
+          draggable={true}
+          onDragStart={onDragStart}
+        >
+          <div className={`wrapper`}>
             <div className="border">
               <Generator length={value} />
             </div>
