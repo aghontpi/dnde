@@ -28,7 +28,7 @@ export const Align = () => {
 
   return visible ? (
     <Row>
-      <Col flex="4">
+      <Col flex="3">
         <Form.Item label="Align"></Form.Item>
       </Col>
       <Col flex="2">

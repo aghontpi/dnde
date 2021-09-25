@@ -8,6 +8,7 @@ import { Editor } from '../../Components/Mods/Editor';
 import { Add } from '../../Utils/operations';
 import { useDragAndDropUniqueId } from '../../Hooks/Drag.hook';
 import { useHtmlWrapper } from '../../Hooks/Htmlwrapper.hook';
+import '../../Assets/Css/ckeditorOverride.css';
 
 interface ViewProps {}
 

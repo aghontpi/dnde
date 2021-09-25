@@ -17,5 +17,6 @@ export const useCkeditor = () => {
     setDelY: (arg: number) => void;
     delActive: boolean;
     setDelActive: (arg: boolean) => void;
+    ckeditorInstance: any;
   };
 };
