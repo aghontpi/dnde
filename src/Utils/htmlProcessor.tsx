@@ -32,7 +32,8 @@ const converter = (element: HTMLElement, key = 0) => {
     nodeName === 'style' ||
     nodeName === 'meta' ||
     nodeName === 'link' ||
-    nodeName === 'title'
+    nodeName === 'title' ||
+    nodeName === 'br'
   ) {
     if (nodeName === 'meta') {
       let el = element as HTMLMetaElement;
@@ -59,6 +60,10 @@ const converter = (element: HTMLElement, key = 0) => {
         null
       );
     }
+    if (nodeName === 'br') {
+      return React.createElement(nodeName, { key: nodeName + key++ }, null);
+    }
+
     return React.createElement(nodeName, {
       dangerouslySetInnerHTML: { __html: element.innerHTML, key: nodeName + key++ },
     });
