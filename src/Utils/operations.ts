@@ -9,22 +9,10 @@ interface AddProps {
   droppedConfig: any;
   mjmlJson: any;
   setMjmlJson: any;
-  setMjmlString: any;
-  setAttributes: any;
-  setActive: any;
   uid: () => string;
 }
 
-const Add = ({
-  target,
-  droppedConfig,
-  setMjmlJson,
-  mjmlJson,
-  setMjmlString,
-  setAttributes,
-  setActive,
-  uid,
-}: AddProps) => {
+const Add = ({ target, droppedConfig, setMjmlJson, mjmlJson, uid }: AddProps) => {
   const uniqueClassName = findClosestParent(target);
   console.info('uniqueClassNames', uniqueClassName);
   if (!uniqueClassName) {

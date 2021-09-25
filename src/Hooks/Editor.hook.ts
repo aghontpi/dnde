@@ -1,5 +1,5 @@
-import { useContext } from "react";
-import { EditorContext } from "../Context/Editor.context";
+import { useContext } from 'react';
+import { EditorContext } from '../Context/Editor.context';
 
 export const useEditor = () => {
   const context = useContext(EditorContext);
@@ -8,9 +8,5 @@ export const useEditor = () => {
     setMjmlJson: (v: any) => void;
     attributes: any;
     setAttributes: (v: any) => void;
-    active: any;
-    setActive: (v: any) => void;
-    mjmlstring: any;
-    setMjmlString: (v: any) => void;
   };
 };
