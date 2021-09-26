@@ -15,6 +15,8 @@ import styled from 'styled-components';
 import { useCkeditor } from '../Hooks/Ckeditor.hook';
 import { useEditor } from '../Hooks/Editor.hook';
 import { useHtmlWrapper } from '../Hooks/Htmlwrapper.hook';
+import { useQuillEditor } from '../Hooks/Quill.hook';
+import { findUniqueIdentifier } from '../Utils/closestParent';
 import { detectEmptyElement } from '../Utils/detectEmptyBody';
 
 interface HtmlWrapperProps {
@@ -27,6 +29,7 @@ export const HtmlWrapper = memo(({ key, originalNode }: HtmlWrapperProps) => {
   const { setUIWrapperList, setActive, setActiveHover, active, activeHover, id, setId, getId, uiList } =
     useHtmlWrapper();
   const { setX, setY, setDelActive, setDelX, setDelY } = useCkeditor();
+  const { setQuillActive, setQuillX, setQuillY } = useQuillEditor();
   const idRef = useRef(id);
   const uniqueId = useRef(id);
 
@@ -67,10 +70,26 @@ export const HtmlWrapper = memo(({ key, originalNode }: HtmlWrapperProps) => {
             const mjmlTarget = clickTarget.closest('.mjml-tag');
             if (mjmlTarget) {
               const pos = mjmlTarget.getBoundingClientRect();
-              const yoffset = mjmlTarget.offsetHeight;
-              if (pos) {
-                setX(pos.x);
-                setY(pos.y - yoffset);
+
+              // activate editor only for text elements, todo: extend for btn later
+              const identifier = findUniqueIdentifier(mjmlTarget, mjmlTarget.classList);
+              if (identifier?.includes('text')) {
+                const yoffset = mjmlTarget.offsetHeight;
+                const x = pos.x;
+                const y = pos.y - yoffset;
+
+                // ckeditor
+                if (pos) {
+                  setX(x);
+                  setY(y);
+                }
+
+                //quilleditor
+                setQuillActive(true);
+                setQuillX(x);
+                setQuillY(y);
+              } else {
+                setQuillActive(false);
               }
 
               // moving the delete positon to currently selected elements right

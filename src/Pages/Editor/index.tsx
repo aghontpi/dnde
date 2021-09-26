@@ -3,16 +3,19 @@ import { DNDContext } from '../../Context/DragAndDrop.context';
 import { EDContext } from '../../Context/Editor.context';
 import { Ckeditor } from '../../Context/Ckeditor.context';
 import { HtmlContextProvider } from '../../Context/Htmlwrapper.context';
+import { QuillEditor } from '../../Context/Quill.context';
 
 const wrapContext = () => (
   <HtmlContextProvider>
-    <Ckeditor>
-      <DNDContext>
-        <EDContext>
-          <Editor />
-        </EDContext>
-      </DNDContext>
-    </Ckeditor>
+    <QuillEditor>
+      <Ckeditor>
+        <DNDContext>
+          <EDContext>
+            <Editor />
+          </EDContext>
+        </DNDContext>
+      </Ckeditor>
+    </QuillEditor>
   </HtmlContextProvider>
 );
 

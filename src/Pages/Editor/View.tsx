@@ -7,6 +7,7 @@ import { Editor } from '../../Components/Mods/Editor';
 import { Add } from '../../Utils/operations';
 import { useDragAndDropUniqueId } from '../../Hooks/Drag.hook';
 import '../../Assets/Css/ckeditorOverride.css';
+import '../../Assets/Css/quillOverride.css';
 
 interface ViewProps {}
 
