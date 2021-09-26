@@ -43,7 +43,7 @@ export const Editor = () => {
   }, [quillEditor]);
 
   useEffect(() => {
-    if (active) {
+    if (active && QuillActive) {
       let textNode = findTextNode(active);
 
       if (quillEditor) {
