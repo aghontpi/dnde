@@ -8,6 +8,8 @@ export const Html = () => {
     tagName: 'mj-raw',
     attributes: {
       'css-class': 'mjml-tag identifier-mj-raw',
+      height: '100px',
+      width: '100px',
     },
     children: [],
     content: `<table>
