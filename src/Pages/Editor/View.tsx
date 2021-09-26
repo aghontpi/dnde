@@ -35,7 +35,7 @@ export const View = (props: ViewProps) => {
         onDrop={onDrop}
         onDragOver={onDragOver}
       >
-        {htmlProcessor(mjml2html(mjmlJson, { minify: true }).html)}
+        {htmlProcessor(mjml2html(mjmlJson).html)}
       </div>
     </Scrollbars>
   );
