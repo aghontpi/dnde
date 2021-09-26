@@ -2,7 +2,7 @@ import DeleteOutlined from '@ant-design/icons/lib/icons/DeleteOutlined';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import { Button, Popconfirm } from 'antd';
 import ED from 'ckeditor5-custom-build/build/ckeditor';
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useCkeditor } from '../../Hooks/Ckeditor.hook';
 import { useEditor } from '../../Hooks/Editor.hook';
 import { useHtmlWrapper } from '../../Hooks/Htmlwrapper.hook';
@@ -10,12 +10,15 @@ import { Remove } from '../../Utils/operations';
 import { findTextNode } from '../../Utils/findTextNode';
 import Quill from 'quill';
 import { useQuillEditor } from '../../Hooks/Quill.hook';
+import { findUniqueIdentifier } from '../../Utils/closestParent';
+import { findElementInJson } from '../../Utils/findElementInMjmlJson';
+import _ from 'lodash';
 
 export const Editor = () => {
   const { ref, isActive, x, y, delActive, delX, delY, setDelActive } = useCkeditor();
   const { mjmlJson, setMjmlJson } = useEditor();
   const { active, setActive } = useHtmlWrapper();
-  const { QuillActive, quillX, quillY } = useQuillEditor();
+  const { QuillActive, quillX, quillY, quillEditor, setQuillEditor, setQuillActive } = useQuillEditor();
   useEffect(() => {
     if (ref) {
       console.log(ref, ref.current);
@@ -23,13 +26,44 @@ export const Editor = () => {
   }, [ref]);
 
   useEffect(() => {
+    if (quillEditor && !QuillActive) {
+      quillEditor.enable(false);
+    }
+  }, [QuillActive]);
+
+  const quillOnChange = useMemo(
+    () => (delta: any, oldDelta: any, source: any) => {
+      console.log('change', quillEditor);
+      if (quillEditor) {
+        console.log('quillContents', quillEditor.getContents());
+      }
+    },
+    [quillEditor]
+  );
+
+  useEffect(() => {
     if (active && QuillActive) {
       let textNode = findTextNode(active);
       if (textNode) {
         // todo: fix QuillWrapper keeps wrapping up an extra div on init
         let lquill: any = new Quill(textNode, { theme: 'snow', modules: { toolbar: '#toolbarContainer' } });
+        setQuillEditor(lquill);
         lquill.editor.scroll.domNode.classList.remove('ql-editor');
-
+        lquill.on('text-change', () => {
+          const change = lquill.container.firstChild.innerHTML;
+          console.log(change);
+          const identifier = findUniqueIdentifier(active, active.classList);
+          if (identifier) {
+            let position = findElementInJson(mjmlJson, identifier);
+            if (position) {
+              let [, path] = position;
+              let item = _.get(mjmlJson, path.slice(1));
+              item.content = change;
+              const updated = _.set(mjmlJson, path.slice(1), item);
+              setMjmlJson({ ...updated });
+            }
+          }
+        });
         // remove clipboard and tooltip
         lquill.container.children[1].remove();
         lquill.container.children[1].remove();
@@ -40,6 +74,7 @@ export const Editor = () => {
   const deleteConfirm = useMemo(
     () => () => {
       if (active) {
+        setQuillActive(false);
         Remove({ target: active, mjmlJson, setMjmlJson, setDelActive, setActive });
       }
     },
@@ -59,12 +94,6 @@ export const Editor = () => {
           top: `${quillY}px`,
         }}
       >
-        <select className="ql-size">
-          <option value="small"></option>
-          <option selected></option>
-          <option value="large"></option>
-          <option value="huge"></option>
-        </select>
         <button className="ql-bold"></button>
         <button className="ql-italic"></button>
         <button className="ql-underline"></button>

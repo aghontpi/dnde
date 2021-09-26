@@ -76,7 +76,7 @@ export const HtmlWrapper = memo(({ key, originalNode }: HtmlWrapperProps) => {
               if (identifier?.includes('text')) {
                 const yoffset = mjmlTarget.offsetHeight;
                 const x = pos.x;
-                const y = pos.y - yoffset;
+                const y = pos.y - yoffset + 13;
 
                 // ckeditor
                 if (pos) {
