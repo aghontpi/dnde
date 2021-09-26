@@ -95,7 +95,13 @@ const converter = (element: HTMLElement, key = 0) => {
     let child = element.childNodes[i];
 
     if (child['nodeName'] === '#text') {
-      child.textContent && children.push(child.textContent.trim());
+      if (child.textContent) {
+        // ignore whitespaces, react throws error
+        const content = child.textContent.trim();
+        if (content) {
+          children.push(content);
+        }
+      }
       continue;
     }
 
