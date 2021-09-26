@@ -116,9 +116,9 @@ const converter = (element: HTMLElement, key = 0) => {
   if (element.classList && element.classList.contains('mjml-tag')) {
     DEBUG && console.info(`identified mjml-tag for : ${nodeName}, with attributes: ${JSON.stringify(attributes)}`);
     // const ReactNode = React.createElement(nodeName, { key: key++, ...attributes }, children);
-    const original = { nodeName, props: { ...attributes, key }, children };
+    const original = { nodeName, props: { ...attributes }, children };
 
-    return <HtmlWrapper key={key++} originalNode={original} />;
+    return <HtmlWrapper uniqueKey={key++} originalNode={original} />;
     // return <HtmlWrapper children={ReactNode} key={key++} originalNode={original} />;
   }
 

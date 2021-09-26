@@ -21,11 +21,11 @@ import { detectEmptyElement } from '../Utils/detectEmptyBody';
 
 interface HtmlWrapperProps {
   // children: React.DOMElement<React.DOMAttributes<Element>, Element>;
-  key: string | number;
+  uniqueKey: string | number;
   originalNode: any;
 }
 
-export const HtmlWrapper = memo(({ key, originalNode }: HtmlWrapperProps) => {
+export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) => {
   const { setUIWrapperList, setActive, setActiveHover, active, activeHover, id, setId, getId, uiList } =
     useHtmlWrapper();
   const { setX, setY, setDelActive, setDelX, setDelY } = useCkeditor();
