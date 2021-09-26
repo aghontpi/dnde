@@ -3,6 +3,7 @@ import { error } from '../Components/Messages';
 import { columnPlaceholder } from '../Components/Section';
 import { findClosestParent, generateUiqueIdForColumns, replaceGeneicTagWithUniqueId } from './closestParent';
 import { findElementInJson } from './findElementInMjmlJson';
+import { cleanMjmlJson } from './mjmlProcessor';
 
 interface AddProps {
   target: HTMLElement;
@@ -16,11 +17,15 @@ const Add = ({ target, droppedConfig, setMjmlJson, mjmlJson, uid }: AddProps) =>
   const uniqueClassName = findClosestParent(target);
   console.info('uniqueClassNames', uniqueClassName);
   if (!uniqueClassName) {
+    const cleanedMjmlJson = cleanMjmlJson(mjmlJson);
+    setMjmlJson({ ...cleanedMjmlJson });
     return null;
   }
 
   if (droppedConfig.tagName !== 'mj-section') {
     if (uniqueClassName === 'identifier-mj-body' || uniqueClassName === 'identifier-mj-section') {
+      const cleanedMjmlJson = cleanMjmlJson(mjmlJson);
+      setMjmlJson({ ...cleanedMjmlJson });
       error('kindly place the item on column instead ');
       return null;
     }
@@ -47,15 +52,35 @@ const Add = ({ target, droppedConfig, setMjmlJson, mjmlJson, uid }: AddProps) =>
 
   let [item, path] = ObjectEquivalent;
   console.info('item in Object:', item, 'path to Object:', path);
+
   // remove the empty placeholder if present
-  item.children = item.children.filter((v: any) => {
-    if (v && v['attributes'] && v['attributes']['css-class']) {
-      return !v['attributes']['css-class'].includes('mj-placeholder');
+  if (item.children) {
+    item.children = item.children.filter((v: any) => {
+      if (v && v['attributes'] && v['attributes']['css-class']) {
+        return !v['attributes']['css-class'].includes('mj-placeholder');
+      }
+      return true;
+    });
+  }
+
+  // place the dropped config in the marked position, this only is needed for
+  //   items, which has children
+  if (item.tagName !== 'mj-body' && item.children.length) {
+    for (var i = 0; i < item.children.length; i++) {
+      const child = item.children[i];
+      const cssClass = child.attributes['css-class'];
+      if (cssClass && cssClass.includes('placeitem-placeholder')) {
+        item.children[i] = droppedConfigWithUid;
+        continue;
+      }
+      item.children[i] = child;
     }
-    return true;
-  });
-  item.children.push(droppedConfigWithUid);
-  const updated = _.set(mjmlJson, path.slice(1), item);
+  } else {
+    item.children.push(droppedConfigWithUid);
+  }
+
+  let updated = _.set(mjmlJson, path.slice(1), item);
+  updated = cleanMjmlJson(updated);
   console.info('updated:', updated);
   setMjmlJson({ ...updated });
 };

@@ -16,8 +16,11 @@ import { useCkeditor } from '../Hooks/Ckeditor.hook';
 import { useEditor } from '../Hooks/Editor.hook';
 import { useHtmlWrapper } from '../Hooks/Htmlwrapper.hook';
 import { useQuillEditor } from '../Hooks/Quill.hook';
-import { findUniqueIdentifier } from '../Utils/closestParent';
+import { findClosestParent, findUniqueIdentifier } from '../Utils/closestParent';
 import { detectEmptyElement } from '../Utils/detectEmptyBody';
+import { closeToTopOrBottom, isEventWithTargetElement } from '../Utils/eventElementRelation';
+import { findElementInJson } from '../Utils/findElementInMjmlJson';
+import { findColumnOfElement } from '../Utils/findElementsColumn';
 
 interface HtmlWrapperProps {
   // children: React.DOMElement<React.DOMAttributes<Element>, Element>;
@@ -30,6 +33,7 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
     useHtmlWrapper();
   const { setX, setY, setDelActive, setDelX, setDelY } = useCkeditor();
   const { setQuillActive, setQuillX, setQuillY } = useQuillEditor();
+  const { mjmlJson, setMjmlJson } = useEditor();
   const idRef = useRef(id);
   const uniqueId = useRef(id);
 
@@ -50,7 +54,7 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
   }, [idRef, uiList]);
 
   const onHover = useMemo(
-    () => () => {
+    () => (e: any) => {
       // console.log(idRef.current, active, activeHover);
       setActiveHover(idRef.current);
     },
@@ -105,6 +109,7 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
     [idRef, activeHover]
   );
   const draggable = activeHover === idRef.current;
+  const dropTarget = activeHover === idRef.current;
   const cursetStyle = useMemo(() => (activeHover === idRef.current ? 'pointer' : 'default'), [activeHover, idRef]);
   const outline = activeHover === idRef.current ? '2px dotted rgb(121, 202, 182)' : 'unset';
   const outlineClick = active === idRef.current ? '2px solid rgb(121, 202, 182)' : 'unset';
@@ -118,6 +123,71 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
     console.info('empty section detected');
   }
 
+  const onDragEnter = (e: any) => {
+    // console.log('on drag enter', e.currentTarget);
+  };
+
+  const onDragLeave = (e: any) => {
+    // console.log('on drag leave', e.currentTarget);
+  };
+
+  const memoFind = useCallback((e: HTMLElement) => findColumnOfElement(e), []);
+
+  const onDragOver = useCallback((e: any) => {
+    const currentTarget = e.nativeEvent.target;
+    const nearestTag = findClosestParent(currentTarget);
+    console.log('nearest tag', nearestTag);
+    // only show place item sign for column's children
+    if (nearestTag?.includes('mj-column') || nearestTag?.includes('mj-section')) {
+      return;
+    }
+    const columnElement = memoFind(currentTarget);
+    if (columnElement && nearestTag) {
+      const nearestElement = currentTarget.closest(`.${nearestTag}`);
+      if (nearestElement && columnElement) {
+        if (isEventWithTargetElement(e, columnElement)) {
+          const suggestionDirection = closeToTopOrBottom(e, nearestElement);
+          if (suggestionDirection) {
+            let item = findElementInJson(mjmlJson, nearestTag);
+            if (item) {
+              const [, path]: [any, string] = item;
+              // omit the last .child.. index, cuz parent is needed
+              const parent = path.slice(1, path.lastIndexOf('.children'));
+              let parentObj = _.get(mjmlJson, parent);
+              let newOrder = [];
+              for (var i = 0; parentObj && parentObj.children && i < parentObj.children.length; i++) {
+                let childItem = parentObj['children'][i];
+                console.log(childItem);
+                const cssClass = childItem.attributes && childItem['attributes']['css-class'];
+                // if there is existing placeholders, removing them
+                if (cssClass && cssClass.includes('placeitem-placeholder')) {
+                  continue;
+                }
+                if (cssClass && cssClass.includes(nearestTag)) {
+                  if (suggestionDirection === 'top') {
+                    newOrder.push(placeItemPlaceHolder, childItem);
+                  } else if (suggestionDirection === 'bottom') {
+                    newOrder.push(childItem, placeItemPlaceHolder);
+                  }
+                  continue;
+                }
+                newOrder.push(childItem);
+              }
+
+              if (parentObj && newOrder.length > 0) {
+                // replace with new order
+                console.log('old vs new order', parentObj.children, newOrder);
+                parentObj.children = newOrder;
+                const updated = _.set(mjmlJson, parent, parentObj);
+                setMjmlJson({ ...updated });
+              }
+            }
+          }
+        }
+      }
+    }
+  }, []);
+
   return useMemo(
     () =>
       createElement(
@@ -126,10 +196,14 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
           ...originalNode.props,
           onMouseEnter: onHover,
           onMouseLeave: onHover,
+          onDragEnter: onDragEnter,
+          onDragLeave: onDragLeave,
+          onDragOver: _.debounce(onDragOver, 100),
           draggable,
           ref: idRef,
           id: uniqueId.current,
           onClick,
+          key: uniqueKey,
           style: {
             ...originalNode.props.style,
             cursor: 'pointer',
@@ -138,7 +212,7 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
         },
         originalNode.children
       ),
-    [idRef, draggable, onHover, onClick, originalNode, outline, outlineClick, active, uniqueId]
+    [idRef, draggable, onHover, onClick, originalNode, outline, outlineClick, active, uniqueId, activeHover]
   );
 
   // breaks the ui, so trying a different approach above,
@@ -159,3 +233,12 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
   //   </div>
   // );
 });
+
+const placeItemPlaceHolder = {
+  tagName: 'mj-text',
+  attributes: {
+    align: 'center',
+    'css-class': 'placeitem-placeholder',
+  },
+  content: '<h2><--Place the item here--></h2>',
+};
