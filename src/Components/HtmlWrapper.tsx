@@ -95,7 +95,7 @@ export const HtmlWrapper = memo(({ key, originalNode }: HtmlWrapperProps) => {
               // moving the delete positon to currently selected elements right
               setDelActive(true);
               if (pos) {
-                setDelX(pos.right);
+                setDelX(pos.right + 4);
                 const middle = floor((pos.bottom - pos.top) / 2) - 32 / 2;
                 setDelY(pos.top + middle);
               }
