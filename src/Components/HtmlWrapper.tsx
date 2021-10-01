@@ -179,22 +179,4 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
       ),
     [idRef, draggable, onHover, onClick, originalNode, outline, outlineClick, active, uniqueId, activeHover]
   );
-
-  // breaks the ui, so trying a different approach above,
-  // return (
-  //   <div draggable={draggable}>
-  //     <div
-  //       key={key}
-  //       id={idRef.current.toString()}
-  //       onMouseEnter={onHover}
-  //       onClick={onClick}
-  //       className={idRef.current.toString()}
-  //       // register
-  //     >
-  //       {/* todo: make it so, that only text editable fields are shown this,
-  //       make sure to create only one instance of ckeditor and move the position relative to the position of the text */}
-  //       {children}
-  //     </div>
-  //   </div>
-  // );
 });
