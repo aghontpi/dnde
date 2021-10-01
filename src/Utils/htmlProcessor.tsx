@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import { HtmlWrapper } from '../Components/HtmlWrapper';
 import possibleStandardNames from './reactPropertyNames';
+import { WrapWithOutline } from './wrapWithOutline';
 
 const DEBUG = false;
 
@@ -120,6 +121,12 @@ const converter = (element: HTMLElement, key = 0) => {
 
     return <HtmlWrapper uniqueKey={key++} originalNode={original} />;
     // return <HtmlWrapper children={ReactNode} key={key++} originalNode={original} />;
+  }
+
+  // process placehodler item differently, if mj-text is placer, the wrapper is td,
+  //    td does not obey border properties, so outline can be used.
+  if (element.classList && element.classList.contains('placeitem-placeholder')) {
+    return <WrapWithOutline id={key++} nodeName={nodeName} props={{ ...attributes }} children={children} />;
   }
 
   // if root document, create it with div,

@@ -240,5 +240,5 @@ const placeItemPlaceHolder = {
     align: 'center',
     'css-class': 'placeitem-placeholder',
   },
-  content: '<h2><--Place the item here--></h2>',
+  content: '<h1>+</h1>',
 };
