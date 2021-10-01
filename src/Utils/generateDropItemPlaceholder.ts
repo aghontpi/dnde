@@ -1,6 +1,8 @@
 import _ from 'lodash';
+import { findUniqueIdentifier } from './closestParent';
 import { closeToTopOrBottom, isEventWithTargetElement } from './eventElementRelation';
 import { findElementInJson } from './findElementInMjmlJson';
+import { cleanMjmlJson } from './mjmlProcessor';
 
 interface generateDropItemPlacehodlerProps {
   setMjmlJson: any;
@@ -55,7 +57,17 @@ const generateDropItemPlaceholder = ({
               // replace with new order
               parentObj.children = newOrder;
               const updated = _.set(mjmlJson, parent, parentObj);
-              setMjmlJson({ ...updated });
+              const uniqueColumnIdentifier = findUniqueIdentifier(
+                columnElement,
+                columnElement.classList,
+                'identifier-mj-column'
+              );
+              if (uniqueColumnIdentifier) {
+                const cleaned = cleanMjmlJson(updated, uniqueColumnIdentifier);
+                setMjmlJson({ ...cleaned });
+              } else {
+                setMjmlJson({ ...updated });
+              }
             }
           }
         }

@@ -1,4 +1,4 @@
-const cleanMjmlJson = (mjmlJson: any) => {
+const cleanMjmlJson = (mjmlJson: any, ignore: string = '') => {
   if (!mjmlJson) {
     return null;
   }
@@ -10,10 +10,19 @@ const cleanMjmlJson = (mjmlJson: any) => {
     }
   }
 
+  // before processing children, if the parent has ignore class, then dont process its children
+  //  the active item being hovered on is passed as ignore, (specifically the column of the active item being hovered)
+  const isIgnoring =
+    ignore &&
+    mjmlJson['attributes'] &&
+    mjmlJson['attributes']['css-class'] &&
+    mjmlJson['attributes']['css-class'].includes(ignore);
+
   let newChildren: any = [];
   for (var i = 0; mjmlJson['children'] && i < mjmlJson['children'].length; i++) {
     const item = mjmlJson['children'][i];
-    const result = cleanMjmlJson(item);
+
+    const result = isIgnoring ? item : cleanMjmlJson(item, ignore);
     if (result) {
       newChildren.push(result);
     }
