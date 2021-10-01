@@ -21,6 +21,7 @@ import { detectEmptyElement } from '../Utils/detectEmptyBody';
 import { closeToTopOrBottom, isEventWithTargetElement } from '../Utils/eventElementRelation';
 import { findElementInJson } from '../Utils/findElementInMjmlJson';
 import { findColumnOfElement } from '../Utils/findElementsColumn';
+import { generateDropItemPlaceholder } from '../Utils/generateDropItemPlaceholder';
 
 interface HtmlWrapperProps {
   // children: React.DOMElement<React.DOMAttributes<Element>, Element>;
@@ -136,56 +137,20 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
   const onDragOver = useCallback((e: any) => {
     const currentTarget = e.nativeEvent.target;
     const nearestTag = findClosestParent(currentTarget);
-    console.log('nearest tag', nearestTag);
     // only show place item sign for column's children
     if (nearestTag?.includes('mj-column') || nearestTag?.includes('mj-section')) {
       return;
     }
     const columnElement = memoFind(currentTarget);
-    if (columnElement && nearestTag) {
-      const nearestElement = currentTarget.closest(`.${nearestTag}`);
-      if (nearestElement && columnElement) {
-        if (isEventWithTargetElement(e, columnElement)) {
-          const suggestionDirection = closeToTopOrBottom(e, nearestElement);
-          if (suggestionDirection) {
-            let item = findElementInJson(mjmlJson, nearestTag);
-            if (item) {
-              const [, path]: [any, string] = item;
-              // omit the last .child.. index, cuz parent is needed
-              const parent = path.slice(1, path.lastIndexOf('.children'));
-              let parentObj = _.get(mjmlJson, parent);
-              let newOrder = [];
-              for (var i = 0; parentObj && parentObj.children && i < parentObj.children.length; i++) {
-                let childItem = parentObj['children'][i];
-                console.log(childItem);
-                const cssClass = childItem.attributes && childItem['attributes']['css-class'];
-                // if there is existing placeholders, removing them
-                if (cssClass && cssClass.includes('placeitem-placeholder')) {
-                  continue;
-                }
-                if (cssClass && cssClass.includes(nearestTag)) {
-                  if (suggestionDirection === 'top') {
-                    newOrder.push(placeItemPlaceHolder, childItem);
-                  } else if (suggestionDirection === 'bottom') {
-                    newOrder.push(childItem, placeItemPlaceHolder);
-                  }
-                  continue;
-                }
-                newOrder.push(childItem);
-              }
 
-              if (parentObj && newOrder.length > 0) {
-                // replace with new order
-                console.log('old vs new order', parentObj.children, newOrder);
-                parentObj.children = newOrder;
-                const updated = _.set(mjmlJson, parent, parentObj);
-                setMjmlJson({ ...updated });
-              }
-            }
-          }
-        }
-      }
-    }
+    generateDropItemPlaceholder({
+      mjmlJson,
+      nearestTag,
+      columnElement,
+      currentTarget,
+      setMjmlJson,
+      event: e,
+    });
   }, []);
 
   return useMemo(
@@ -233,12 +198,3 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
   //   </div>
   // );
 });
-
-const placeItemPlaceHolder = {
-  tagName: 'mj-text',
-  attributes: {
-    align: 'center',
-    'css-class': 'placeitem-placeholder',
-  },
-  content: '<h1>+</h1>',
-};
