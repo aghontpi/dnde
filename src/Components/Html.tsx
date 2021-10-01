@@ -1,9 +1,12 @@
 import { SyntheticEvent } from 'react';
+import { useEditor } from '../Hooks/Editor.hook';
+import { cleanMjmlJson } from '../Utils/mjmlProcessor';
 import { UiWrapper } from './UiWrapper';
 
 export type DragEvent = SyntheticEvent & { dataTransfer: DataTransfer };
 
 export const Html = () => {
+  const { mjmlJson, setMjmlJson } = useEditor();
   const config = {
     tagName: 'mj-raw',
     attributes: {
@@ -35,8 +38,13 @@ export const Html = () => {
   };
   // access type, etc from comp nd set to context
 
+  const onDragEnd = (e: DragEvent) => {
+    const cleaned = cleanMjmlJson(mjmlJson);
+    setMjmlJson({ ...cleaned });
+  };
+
   return (
-    <div onDragStart={onDragStart} draggable={true}>
+    <div onDragEnd={onDragEnd} onDragStart={onDragStart} draggable={true}>
       <UiWrapper background="html" label=" Html" />
     </div>
   );

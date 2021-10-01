@@ -1,4 +1,6 @@
 import { SyntheticEvent } from 'react';
+import { useEditor } from '../Hooks/Editor.hook';
+import { cleanMjmlJson } from '../Utils/mjmlProcessor';
 import { UiWrapper } from './UiWrapper';
 
 export type DragEvent = SyntheticEvent & { dataTransfer: DataTransfer };
@@ -13,6 +15,7 @@ const properties_with_default_values = {"align": "center", "alt": "", "border": 
 const assigned_default_values = {"align": "center", "border": "none", "border-top": "none", "border-bottom": "none", "border-left": "none", "border-right": "none", "height": "auto", "padding": "10px 25px", "target": "_blank", "width": "100%"}
 
 export const Image = () => {
+  const { mjmlJson, setMjmlJson } = useEditor();
   const config = {
     tagName: 'mj-image',
     attributes: {
@@ -30,8 +33,13 @@ export const Image = () => {
   };
   // access type, etc from comp nd set to context
 
+  const onDragEnd = (e: DragEvent) => {
+    const cleaned = cleanMjmlJson(mjmlJson);
+    setMjmlJson({ ...cleaned });
+  };
+
   return (
-    <div onDragStart={onDragStart} draggable={true}>
+    <div onDragEnd={onDragEnd} onDragStart={onDragStart} draggable={true}>
       <UiWrapper background="image" label="Image" />
     </div>
   );

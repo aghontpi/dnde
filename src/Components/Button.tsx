@@ -1,4 +1,6 @@
 import { SyntheticEvent } from 'react';
+import { useEditor } from '../Hooks/Editor.hook';
+import { cleanMjmlJson } from '../Utils/mjmlProcessor';
 import { UiWrapper } from './UiWrapper';
 
 export type DragEvent = SyntheticEvent & { dataTransfer: DataTransfer };
@@ -13,6 +15,8 @@ const properties_with_default_values = {"align": "center", "background-color": "
 const assigned_default_values  = {"align": "center", "background-color": "#414141", "border": "none", "border-radius": "3px", "color": "#ffffff", "font-family": "Ubuntu, Helvetica, Arial, sans-serif", "font-size": "13px", "font-weight": "normal", "inner-padding": "10px 25px", "line-height": "120%", "padding": "10px 25px", "target": "_blank", "text-align": "none", "text-decoration": "none", "text-transform": "none", "vertical-align": "middle"}
 
 export const Button = () => {
+  const { mjmlJson, setMjmlJson } = useEditor();
+
   const config = {
     tagName: 'mj-button',
     attributes: {
@@ -32,8 +36,13 @@ export const Button = () => {
   };
   // access type, etc from comp nd set to context
 
+  const onDragEnd = (e: DragEvent) => {
+    const cleaned = cleanMjmlJson(mjmlJson);
+    setMjmlJson({ ...cleaned });
+  };
+
   return (
-    <div onDragStart={onDragStart} draggable={true}>
+    <div onDragEnd={onDragEnd} onDragStart={onDragStart} draggable={true}>
       <UiWrapper background="button" label="Button" />
     </div>
   );

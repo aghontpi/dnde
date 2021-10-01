@@ -1,4 +1,6 @@
 import { SyntheticEvent } from 'react';
+import { useEditor } from '../Hooks/Editor.hook';
+import { cleanMjmlJson } from '../Utils/mjmlProcessor';
 import { UiWrapper } from './UiWrapper';
 
 export type DragEvent = SyntheticEvent & { dataTransfer: DataTransfer };
@@ -13,6 +15,7 @@ const properties_with_default_values = {"container-background-color": "", "css-c
 const assigned_default_values = {"height": "20px", "padding": "none"}
 
 export const Spacer = () => {
+  const { mjmlJson, setMjmlJson } = useEditor();
   const config = {
     tagName: 'mj-spacer',
     attributes: {
@@ -31,8 +34,13 @@ export const Spacer = () => {
   };
   // access type, etc from comp nd set to context
 
+  const onDragEnd = (e: DragEvent) => {
+    const cleaned = cleanMjmlJson(mjmlJson);
+    setMjmlJson({ ...cleaned });
+  };
+
   return (
-    <div onDragStart={onDragStart} draggable={true}>
+    <div onDragEnd={onDragEnd} onDragStart={onDragStart} draggable={true}>
       <UiWrapper background="spacer" label="Spacer" />
     </div>
   );

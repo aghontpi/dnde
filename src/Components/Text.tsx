@@ -1,4 +1,6 @@
 import { SyntheticEvent } from 'react';
+import { useEditor } from '../Hooks/Editor.hook';
+import { cleanMjmlJson } from '../Utils/mjmlProcessor';
 import { UiWrapper } from './UiWrapper';
 
 export type DragEvent = SyntheticEvent & { dataTransfer: DataTransfer };
@@ -13,6 +15,7 @@ const properties_with_default_values = {"color": "#000000", "font-family": "Ubun
 const assigned_default_values  = {"color": "#000000", "font-family": "Ubuntu, Helvetica, Arial, sans-serif", "font-size": "13px", "line-height": "1", "letter-spacing": "none", "align": "center", "padding": "10px 25px"};
 
 export const Text = () => {
+  const { mjmlJson, setMjmlJson } = useEditor();
   const config = {
     tagName: 'mj-text',
     attributes: {
@@ -31,8 +34,13 @@ export const Text = () => {
   };
   // access type, etc from comp nd set to context
 
+  const onDragEnd = (e: DragEvent) => {
+    const cleaned = cleanMjmlJson(mjmlJson);
+    setMjmlJson({ ...cleaned });
+  };
+
   return (
-    <div onDragStart={onDragStart} draggable={true}>
+    <div onDragEnd={onDragEnd} onDragStart={onDragStart} draggable={true}>
       <UiWrapper background="text" label="Text" />
     </div>
   );
