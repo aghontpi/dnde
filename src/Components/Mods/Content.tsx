@@ -30,14 +30,13 @@ export const Content = () => {
 
   useEffect(() => {
     if (value) {
-      let json = {};
       let element = _.get(mjmlJson, path);
       // while in middle of editing, if the element is removed.
       if (element) {
-        element[PROPERTY] = value;
         if (element[PROPERTY] !== value) {
-          json = _.set(mjmlJson, path, element);
-          setMjmlJson({ ...json });
+          element[PROPERTY] = value;
+          const updated = _.set(mjmlJson, path, element);
+          setMjmlJson({ ...updated });
         }
       }
     }
