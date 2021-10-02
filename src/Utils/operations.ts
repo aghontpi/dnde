@@ -1,21 +1,37 @@
 import _ from 'lodash';
 import { error } from '../Components/Messages';
 import { columnPlaceholder } from '../Components/Section';
-import { findClosestParent, generateUiqueIdForColumns, replaceGeneicTagWithUniqueId } from './closestParent';
+import {
+  findClosestParent,
+  findUniqueIdentifier,
+  generateUiqueIdForColumns,
+  getIndexOfElementInColumn,
+  replaceGeneicTagWithUniqueId,
+} from './closestParent';
 import { findElementInJson } from './findElementInMjmlJson';
+import { findColumnOfElement } from './findElementsColumn';
 import { cleanMjmlJson } from './mjmlProcessor';
 
 interface AddProps {
-  target: HTMLElement;
+  target: HTMLElement | null;
   droppedConfig: any;
   mjmlJson: any;
   setMjmlJson: any;
   uid: () => string;
+  insert?: {
+    ParentUniqueClassIdentifier: string;
+    index: number;
+  };
 }
 
-const Add = ({ target, droppedConfig, setMjmlJson, mjmlJson, uid }: AddProps) => {
-  const uniqueClassName = findClosestParent(target);
-  console.info('uniqueClassNames', uniqueClassName);
+const Add = ({ target, droppedConfig, setMjmlJson, mjmlJson, uid, insert }: AddProps) => {
+  let uniqueClassName = null;
+  if (target) {
+    uniqueClassName = findClosestParent(target);
+  } else if (insert) {
+    uniqueClassName = insert.ParentUniqueClassIdentifier;
+  }
+
   if (!uniqueClassName) {
     const cleanedMjmlJson = cleanMjmlJson(mjmlJson);
     setMjmlJson({ ...cleanedMjmlJson });
@@ -24,10 +40,14 @@ const Add = ({ target, droppedConfig, setMjmlJson, mjmlJson, uid }: AddProps) =>
 
   if (droppedConfig.tagName !== 'mj-section') {
     if (uniqueClassName === 'identifier-mj-body' || uniqueClassName === 'identifier-mj-section') {
-      const cleanedMjmlJson = cleanMjmlJson(mjmlJson);
-      setMjmlJson({ ...cleanedMjmlJson });
-      error('kindly place the item on column instead ');
-      return null;
+      // if the action performed is clone, allow it to be performed,
+      //   since only body can not be cloned
+      if (!insert && droppedConfig.tagName !== 'mj-body') {
+        const cleanedMjmlJson = cleanMjmlJson(mjmlJson);
+        setMjmlJson({ ...cleanedMjmlJson });
+        error('kindly place the item on column instead ');
+        return null;
+      }
     }
   }
 
@@ -53,7 +73,7 @@ const Add = ({ target, droppedConfig, setMjmlJson, mjmlJson, uid }: AddProps) =>
   let [item, path] = ObjectEquivalent;
   console.info('item in Object:', item, 'path to Object:', path);
 
-  // remove the empty placeholder if present
+  // remove the empty placeholder-banner if present
   if (item.children) {
     item.children = item.children.filter((v: any) => {
       if (v && v['attributes'] && v['attributes']['css-class']) {
@@ -63,9 +83,17 @@ const Add = ({ target, droppedConfig, setMjmlJson, mjmlJson, uid }: AddProps) =>
     });
   }
 
-  // place the dropped config in the marked position, this only is needed for
+  // insert the dropped config at the specified location
+  if (insert && insert.index > -1) {
+    for (var i = 0; item && item.children && i < item.children.length; i++) {
+      if (i === insert.index) {
+        item.children.splice(i, 0, droppedConfigWithUid);
+      }
+    }
+  }
+  // place the dropped config in the placeholder position, this only is needed for
   //   items, which has children
-  if (item.tagName !== 'mj-body' && item.children.length) {
+  else if (item.tagName !== 'mj-body' && item.children.length) {
     for (var i = 0; i < item.children.length; i++) {
       const child = item.children[i];
       const cssClass = child.attributes['css-class'];
@@ -90,10 +118,11 @@ interface RemoveProps {
   mjmlJson: any;
   setMjmlJson: any;
   setDelActive: any;
+  setCopyActive: any;
   setActive: any;
 }
 
-const Remove = ({ target, mjmlJson, setMjmlJson, setDelActive, setActive }: RemoveProps) => {
+const Remove = ({ target, mjmlJson, setMjmlJson, setDelActive, setCopyActive, setActive }: RemoveProps) => {
   const uniqueClassName = findClosestParent(target);
   if (!uniqueClassName) {
     return null;
@@ -137,6 +166,7 @@ const Remove = ({ target, mjmlJson, setMjmlJson, setDelActive, setActive }: Remo
 
   if (updated) {
     setDelActive(false);
+    setCopyActive(false);
     setMjmlJson({ ...updated });
   } else {
     console.info('unable to delete the item');
@@ -155,7 +185,6 @@ interface UpdateValueProps {
 }
 
 const UpdateValue = ({ visible, path, mjmlJson, setMjmlJson, attribute, value }: UpdateValueProps) => {
-  debugger;
   if (visible && path) {
     let item = _.get(mjmlJson, path, visible);
     if (item) {
@@ -168,4 +197,40 @@ const UpdateValue = ({ visible, path, mjmlJson, setMjmlJson, attribute, value }:
   }
 };
 
-export { Add, Remove, UpdateValue };
+interface CopyProps extends RemoveProps {
+  uidGenerator: () => string;
+}
+
+const Copy = ({ mjmlJson, setActive, setMjmlJson, setCopyActive, setDelActive, target, uidGenerator }: CopyProps) => {
+  const uniqueIdentifier = findUniqueIdentifier(target, target.classList);
+  let columnUniqueIdentifier = findColumnOfElement(target);
+  let index = -1;
+
+  if (uniqueIdentifier && columnUniqueIdentifier) {
+    [, columnUniqueIdentifier] = columnUniqueIdentifier;
+    index = getIndexOfElementInColumn(mjmlJson, null, columnUniqueIdentifier, uniqueIdentifier);
+  }
+
+  if (index === -1) {
+    console.log('handle cloning of section and column');
+  }
+
+  let copyOfConfig = findElementInJson(mjmlJson, uniqueIdentifier);
+  if (copyOfConfig && index > -1) {
+    [copyOfConfig] = copyOfConfig;
+    setCopyActive(false);
+    setDelActive(false);
+    setActive(null);
+
+    return Add({
+      target: null,
+      droppedConfig: copyOfConfig,
+      setMjmlJson,
+      mjmlJson,
+      uid: uidGenerator,
+      insert: { index, ParentUniqueClassIdentifier: columnUniqueIdentifier },
+    });
+  }
+};
+
+export { Add, Remove, UpdateValue, Copy };

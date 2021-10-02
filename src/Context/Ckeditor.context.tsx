@@ -11,6 +11,9 @@ export const Ckeditor: FC = (props) => {
   const [delActive, setDelActive] = useState(false);
   const [delX, setDelX] = useState(0);
   const [delY, setDelY] = useState(0);
+  const [copyActive, setCopyActive] = useState(false);
+  const [copyX, setCopyX] = useState(0);
+  const [copyY, setCopyY] = useState(0);
 
   // should only be one instance, only manipulate the locations
   return (
@@ -27,6 +30,14 @@ export const Ckeditor: FC = (props) => {
         delY,
         setDelX,
         setDelY,
+        copy: {
+          copyActive,
+          setCopyActive,
+          copyX,
+          setCopyX,
+          copyY,
+          setCopyY,
+        },
         delActive,
         setDelActive,
         ckeditorInstance,

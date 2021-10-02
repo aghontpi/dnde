@@ -1,4 +1,3 @@
-import DeleteOutlined from '@ant-design/icons/lib/icons/DeleteOutlined';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import { Button, Popconfirm } from 'antd';
 import ED from 'ckeditor5-custom-build/build/ckeditor';
@@ -6,20 +5,25 @@ import { useEffect, useMemo } from 'react';
 import { useCkeditor } from '../../Hooks/Ckeditor.hook';
 import { useEditor } from '../../Hooks/Editor.hook';
 import { useHtmlWrapper } from '../../Hooks/Htmlwrapper.hook';
-import { Remove } from '../../Utils/operations';
+import { Remove, Copy as CopyOperation } from '../../Utils/operations';
 import { findTextNode } from '../../Utils/findTextNode';
 import Quill from 'quill';
 import { useQuillEditor } from '../../Hooks/Quill.hook';
 import { findUniqueIdentifier } from '../../Utils/closestParent';
 import { findElementInJson } from '../../Utils/findElementInMjmlJson';
 import _ from 'lodash';
+import CopyFilled from '@ant-design/icons/lib/icons/CopyFilled';
+import DeleteFilled from '@ant-design/icons/lib/icons/DeleteFilled';
+import { useUniqueIdGenerator } from '../../Hooks/Drag.hook';
 
 export const Editor = () => {
-  const { ref, isActive, x, y, delActive, delX, delY, setDelActive } = useCkeditor();
+  const { ref, isActive, x, y, delActive, delX, delY, setDelActive, copy } = useCkeditor();
   const { mjmlJson, setMjmlJson } = useEditor();
   const { active, setActive } = useHtmlWrapper();
   const { QuillActive, quillX, quillY, setQuillEditor, setQuillActive } = useQuillEditor();
   let { quillEditor } = useQuillEditor();
+  const { copyActive, setCopyActive, copyX, copyY } = copy;
+  const { getId } = useUniqueIdGenerator();
 
   useEffect(() => {
     if (quillEditor) {
@@ -92,11 +96,25 @@ export const Editor = () => {
     () => () => {
       if (active) {
         setQuillActive(false);
-        Remove({ target: active, mjmlJson, setMjmlJson, setDelActive, setActive });
+        Remove({ target: active, mjmlJson, setMjmlJson, setDelActive, setActive, setCopyActive });
       }
     },
     [active]
   );
+
+  const copyAction = () => {
+    if (active) {
+      CopyOperation({
+        mjmlJson,
+        setActive,
+        setMjmlJson,
+        setCopyActive,
+        setDelActive,
+        target: active,
+        uidGenerator: getId,
+      });
+    }
+  };
 
   return (
     <>
@@ -157,6 +175,10 @@ export const Editor = () => {
         style={{ display: delActive ? 'block' : 'none', position: 'fixed', left: `${delX}px`, top: `${delY}px` }}
         deleteConfirm={deleteConfirm}
       />
+      <Copy
+        onClick={copyAction}
+        style={{ display: copyActive ? 'block' : 'none', position: 'fixed', left: `${copyX}px`, top: `${copyY}px` }}
+      />
     </>
   );
 };
@@ -169,7 +191,16 @@ interface DeleteProps {
 const Delete = ({ style, deleteConfirm }: DeleteProps) => {
   return (
     <Popconfirm placement="right" title="Are you sure ?" okText="Delete" cancelText="Cancel" onConfirm={deleteConfirm}>
-      <Button style={style} type="primary" icon={<DeleteOutlined />} />
+      <Button style={style} type="primary" icon={<DeleteFilled />} />
     </Popconfirm>
   );
+};
+
+interface CopyProps {
+  style: any;
+  onClick: () => void;
+}
+
+const Copy = ({ style, onClick }: CopyProps) => {
+  return <Button style={style} onClick={onClick} type="primary" icon={<CopyFilled />} />;
 };

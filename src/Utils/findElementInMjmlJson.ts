@@ -1,6 +1,6 @@
 export const findElementInJson = (mjmljson: any, classidentifier: any, path = ''): any => {
   if (mjmljson === undefined) {
-    return;
+    return null;
   }
   const element = mjmljson;
   if (element.attributes && element.attributes['css-class']) {
@@ -18,4 +18,6 @@ export const findElementInJson = (mjmljson: any, classidentifier: any, path = ''
       }
     }
   }
+
+  return null;
 };

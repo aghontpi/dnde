@@ -32,11 +32,13 @@ interface HtmlWrapperProps {
 export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) => {
   const { setUIWrapperList, setActive, setActiveHover, active, activeHover, id, setId, getId, uiList } =
     useHtmlWrapper();
-  const { setX, setY, setDelActive, setDelX, setDelY } = useCkeditor();
+  const { setX, setY, setDelActive, setDelX, setDelY, copy } = useCkeditor();
   const { setQuillActive, setQuillX, setQuillY } = useQuillEditor();
   const { mjmlJson, setMjmlJson } = useEditor();
   const idRef = useRef(id);
   const uniqueId = useRef(id);
+
+  const { setCopyX, setCopyActive, setCopyY } = copy;
 
   useEffect(() => {
     getId();
@@ -98,10 +100,17 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
 
               // moving the delete positon to currently selected elements right
               setDelActive(true);
+              setCopyActive(true);
+
+              const IconSize = 32;
+              const numberOfIcons = 2 * IconSize;
               if (pos) {
                 setDelX(pos.right + 4);
-                const middle = floor((pos.bottom - pos.top) / 2) - 32 / 2;
+                const middle = floor((pos.bottom - pos.top) / 2) - numberOfIcons / 2;
                 setDelY(pos.top + middle);
+                setCopyX(pos.right + 4);
+                // below the delete icon, with a little offset
+                setCopyY(pos.top + middle + IconSize + 4);
               }
             }
           }

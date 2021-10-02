@@ -8,4 +8,4 @@ const useDragAndDropUniqueId = () => {
   };
 };
 
-export { useDragAndDropUniqueId };
+export { useDragAndDropUniqueId, useDragAndDropUniqueId as useUniqueIdGenerator };

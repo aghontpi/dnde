@@ -18,5 +18,13 @@ export const useCkeditor = () => {
     delActive: boolean;
     setDelActive: (arg: boolean) => void;
     ckeditorInstance: any;
+    copy: {
+      copyActive: boolean;
+      setCopyActive: (arg: boolean) => void;
+      copyX: number;
+      copyY: number;
+      setCopyX: (arg: number) => void;
+      setCopyY: (arg: number) => void;
+    };
   };
 };
