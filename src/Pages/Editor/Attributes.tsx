@@ -5,6 +5,7 @@ import { Border } from '../../Components/Mods/Border';
 import { BorderRadius } from '../../Components/Mods/BorderRadius';
 import { ContainerBackground } from '../../Components/Mods/ContainerBackground';
 import { CordinalBorder } from '../../Components/Mods/CordinalBorder';
+import { FontSize } from '../../Components/Mods/FontSize';
 import { Img } from '../../Components/Mods/Img';
 import { Link } from '../../Components/Mods/Link';
 import { Padding } from '../../Components/Mods/Paddings';
@@ -29,6 +30,7 @@ export const Attributes = () => {
         <Align />
         <Link />
         <Img />
+        <FontSize />
       </div>
     </Scrollbars>
   );
