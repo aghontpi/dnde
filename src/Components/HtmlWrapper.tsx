@@ -79,9 +79,8 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
               // activate editor only for text elements, todo: extend for btn later
               const identifier = findUniqueIdentifier(mjmlTarget, mjmlTarget.classList);
               if (identifier?.includes('text')) {
-                const yoffset = mjmlTarget.offsetHeight;
-                const x = pos.x;
-                const y = pos.y - yoffset + 13;
+                const x = pos.left;
+                const y = pos.top - 44;
 
                 // ckeditor
                 if (pos) {
