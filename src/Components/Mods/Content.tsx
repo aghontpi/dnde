@@ -26,7 +26,7 @@ export const Content = () => {
         }
       }
     }
-  }, [visible, mjmlJson, path]);
+  }, [visible, path]);
 
   useEffect(() => {
     if (value) {
@@ -35,8 +35,10 @@ export const Content = () => {
       // while in middle of editing, if the element is removed.
       if (element) {
         element[PROPERTY] = value;
-        json = _.set(mjmlJson, path, element);
-        setMjmlJson({ ...json });
+        if (element[PROPERTY] !== value) {
+          json = _.set(mjmlJson, path, element);
+          setMjmlJson({ ...json });
+        }
       }
     }
   }, [value]);
