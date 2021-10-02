@@ -8,7 +8,7 @@ const findColumnOfElement = (node: HTMLElement | any): any => {
   if (parent && parent.classList) {
     const uniqueIdentifier = findUniqueIdentifier(parent, parent.classList);
     if (uniqueIdentifier && uniqueIdentifier.includes('mj-column')) {
-      return parent;
+      return [parent, uniqueIdentifier];
     }
     parent = parent.parentElement;
   }

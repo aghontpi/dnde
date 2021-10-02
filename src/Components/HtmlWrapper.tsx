@@ -141,7 +141,12 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
     if (nearestTag?.includes('mj-column') || nearestTag?.includes('mj-section')) {
       return;
     }
-    const columnElement = memoFind(currentTarget);
+
+    let columnElement = memoFind(currentTarget);
+    // find column of element returns element and uniqueIdentifier
+    if (columnElement) {
+      [columnElement] = columnElement;
+    }
 
     generateDropItemPlaceholder({
       mjmlJson,
