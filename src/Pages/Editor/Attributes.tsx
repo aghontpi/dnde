@@ -8,6 +8,7 @@ import { Content } from '../../Components/Mods/Content';
 import { CordinalBorder } from '../../Components/Mods/CordinalBorder';
 import { FontSize } from '../../Components/Mods/FontSize';
 import { Img } from '../../Components/Mods/Img';
+import { InnerPadding } from '../../Components/Mods/InnerPadding';
 import { Link } from '../../Components/Mods/Link';
 import { Padding } from '../../Components/Mods/Paddings';
 import { Height, Width } from '../../Components/Mods/WidthHeight';
@@ -26,6 +27,7 @@ export const Attributes = () => {
         <Content />
         <FontSize />
         <Padding />
+        <InnerPadding />
         <ContainerBackground />
         <Background />
         <Border />

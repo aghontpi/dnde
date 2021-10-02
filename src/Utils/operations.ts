@@ -145,4 +145,27 @@ const Remove = ({ target, mjmlJson, setMjmlJson, setDelActive, setActive }: Remo
   setMjmlJson({ ...updated });
 };
 
-export { Add, Remove };
+interface UpdateValueProps {
+  visible: boolean | null;
+  path: string;
+  mjmlJson: any;
+  setMjmlJson: any;
+  attribute: string;
+  value: any;
+}
+
+const UpdateValue = ({ visible, path, mjmlJson, setMjmlJson, attribute, value }: UpdateValueProps) => {
+  debugger;
+  if (visible && path) {
+    let item = _.get(mjmlJson, path, visible);
+    if (item) {
+      if (item['attributes'] && item['attributes'][attribute] !== value) {
+        item['attributes'][attribute] = value;
+        const updated = _.set(mjmlJson, path, item);
+        setMjmlJson({ ...updated });
+      }
+    }
+  }
+};
+
+export { Add, Remove, UpdateValue };
