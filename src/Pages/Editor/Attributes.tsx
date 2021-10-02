@@ -4,6 +4,7 @@ import { Background } from '../../Components/Mods/Background';
 import { Border } from '../../Components/Mods/Border';
 import { BorderRadius } from '../../Components/Mods/BorderRadius';
 import { ContainerBackground } from '../../Components/Mods/ContainerBackground';
+import { Content } from '../../Components/Mods/Content';
 import { CordinalBorder } from '../../Components/Mods/CordinalBorder';
 import { FontSize } from '../../Components/Mods/FontSize';
 import { Img } from '../../Components/Mods/Img';
@@ -21,16 +22,17 @@ export const Attributes = () => {
       <div className={css.mods}>
         <Width />
         <Height />
+        <Align />
+        <Content />
+        <FontSize />
+        <Padding />
+        <ContainerBackground />
+        <Background />
         <Border />
         <CordinalBorder />
         <BorderRadius />
-        <Background />
-        <ContainerBackground />
-        <Padding />
-        <Align />
         <Link />
         <Img />
-        <FontSize />
       </div>
     </Scrollbars>
   );
