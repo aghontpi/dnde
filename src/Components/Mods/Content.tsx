@@ -26,7 +26,10 @@ export const Content = () => {
         }
       }
     }
-  }, [visible, path]);
+    // todo:  mjmlJson here creates two way dependency,
+    //   remove it, and handle 'mj-text' differently, this is dangerous, as it could lead
+    //   to infinite renders
+  }, [visible, path, mjmlJson]);
 
   useEffect(() => {
     if (value) {

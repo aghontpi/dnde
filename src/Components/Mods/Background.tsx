@@ -4,45 +4,24 @@ import { useEditor } from '../../Hooks/Editor.hook';
 import { Col, Form, Row } from 'antd';
 import { ChromePicker } from 'react-color';
 import { useEffect, useState } from 'react';
-import { useHtmlWrapper } from '../../Hooks/Htmlwrapper.hook';
-import { findUniqueIdentifier } from '../../Utils/closestParent';
-import { findElementInJson } from '../../Utils/findElementInMjmlJson';
+import { useVisibility } from '../../Hooks/Attribute.hook';
+
+const ATTRIBUTE = 'background-color';
 
 export const Background = () => {
   const { mjmlJson, setMjmlJson } = useEditor();
   const [active, setActive] = useState(() => false);
   const [color, setColor] = useState(() => '#ccc');
-  const [visible, setVisible] = useState(false);
-  const { active: clicked } = useHtmlWrapper();
-  const [path, setPath] = useState('');
+  const [visible, path] = useVisibility({ attribute: ATTRIBUTE });
 
   useEffect(() => {
-    console.log('activeEditor', clicked);
-    if (clicked) {
-      try {
-        const uniqueIdentifier = findUniqueIdentifier(clicked, clicked.classList);
-        if (uniqueIdentifier) {
-          let path = findElementInJson(mjmlJson, uniqueIdentifier);
-          if (path) {
-            const [, pathToElement] = path;
-            setPath(pathToElement.slice(1));
-            const item = _.get(mjmlJson, pathToElement.slice(1));
-            if (item.mutableProperties.includes('background-color')) {
-              setVisible(true);
-              setColor(item.attributes['background-color']);
-            }
-          }
-        }
-      } catch (e) {
-        console.info('got exception, hiding background mod', e);
-        setVisible(false);
+    if (visible && path) {
+      const item = _.get(mjmlJson, path);
+      if (item && item.attributes && item.attributes[ATTRIBUTE]) {
+        setColor(item.attributes[ATTRIBUTE]);
       }
     }
-  }, [clicked]);
-
-  useEffect(() => {
-    console.log('updated mjmljson', mjmlJson);
-  }, [mjmlJson]);
+  }, [path, visible]);
 
   const handleColorChange = (color: any) => {
     const hexCode = `${color.hex}${decimalToHex(color.rgb.a)}`;
