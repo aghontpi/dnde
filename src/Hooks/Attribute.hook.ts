@@ -6,10 +6,11 @@ import { useEditor } from './Editor.hook';
 import { useHtmlWrapper } from './Htmlwrapper.hook';
 
 interface useVisibilityProps {
-  attribute: string;
+  attribute?: string;
+  property?: string;
 }
 
-const useVisibility = ({ attribute }: useVisibilityProps): [boolean | null, string, any] => {
+const useVisibility = ({ attribute, property }: useVisibilityProps): [boolean | null, string, any] => {
   const [visible, setVisible] = useState<boolean | null>(false);
 
   const { active } = useHtmlWrapper();
@@ -28,10 +29,18 @@ const useVisibility = ({ attribute }: useVisibilityProps): [boolean | null, stri
           if (pathToElement.length > 0) {
             setPath(pathToElement.slice(1));
           }
-          const item = _.get(mjmlJson, pathToElement.slice(1));
-          if (item.mutableProperties && item.mutableProperties.includes(attribute)) {
-            setVisible(true);
-            return;
+          if (attribute) {
+            const item = _.get(mjmlJson, pathToElement.slice(1));
+            if (item.mutableProperties && item.mutableProperties.includes(attribute)) {
+              setVisible(true);
+              return;
+            }
+          } else if (property) {
+            const item = _.get(mjmlJson, pathToElement.slice(1));
+            if (item && item[property]) {
+              setVisible(true);
+              return;
+            }
           }
         }
       }
