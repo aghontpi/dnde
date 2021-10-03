@@ -21,7 +21,7 @@ const findClosestParent = (element: HTMLElement) => {
 
 const findUniqueIdentifier = (element: Element, classlist: DOMTokenList, identifier = 'identifier-mj') => {
   let uniqueClassName = null;
-  for (var i = 0; i < classlist.length; i++) {
+  for (var i = 0; classlist && i < classlist.length; i++) {
     const current = classlist[i];
     if (current.includes(identifier)) {
       uniqueClassName = current;
@@ -61,17 +61,24 @@ const replaceGeneicTagWithUniqueId = (classNames: string, uid: string) => {
 
 // section with different columns are stored in config without unqiueId's,
 //   replacing those with unqiueIds (only for mj-columns).
-const generateUiqueIdForColumns = (children: any, uidGenerator: () => string): any => {
+const generateUiqueIdForColumns = (
+  children: any,
+  uidGenerator: () => string,
+  allElementsRecursive: boolean = false
+): any => {
   if (!children) {
     return;
   }
 
   for (var i = 0; children['children'] && i < children['children'].length; i++) {
-    children['children'][i] = generateUiqueIdForColumns(children['children'][i], uidGenerator);
+    children['children'][i] = generateUiqueIdForColumns(children['children'][i], uidGenerator, allElementsRecursive);
   }
 
-  if (children.tagName !== 'mj-column') {
-    return children;
+  // ignore the column specific restriction and process all the elements
+  if (!allElementsRecursive) {
+    if (children.tagName !== 'mj-column') {
+      return children;
+    }
   }
 
   let attr = children['attributes'];
@@ -84,6 +91,20 @@ const generateUiqueIdForColumns = (children: any, uidGenerator: () => string): a
   children['attributes'] = attr;
 
   return children;
+};
+
+const generateUniqueIdRecursively = (item: any, uidGenerator: () => string) => {
+  return generateUiqueIdForColumns(item, uidGenerator, true);
+};
+
+const findIndexOfIdentifierInChildren = (children: [any], uniqueIdentifier: string) => {
+  for (var i = 0; uniqueIdentifier && children && children.length > 0 && i < children.length; i++) {
+    const child = children[i];
+    if (child && child['attributes'] && child['attributes']['css-class'].includes(uniqueIdentifier)) {
+      return i;
+    }
+  }
+  return -1;
 };
 
 // node/parenetUniqueIdentifier is used, one of the two can be passed
@@ -110,21 +131,52 @@ const getIndexOfElementInColumn = (
   //   facts we can use to search: a column can not have nested columns,
   if (columnInJson) {
     [columnInJson] = columnInJson;
-    for (
-      var i = 0;
-      columnInJson.children && columnInJson.children.length > 0 && i < columnInJson.children.length;
-      i++
-    ) {
-      const child = columnInJson.children[i];
-
-      if (child && child['attributes'] && child['attributes']['css-class'].includes(uniqueIdentifier)) {
-        index = i;
-        break;
-      }
-    }
+    index = findIndexOfIdentifierInChildren(columnInJson.children, uniqueIdentifier);
   }
 
   return index;
+};
+
+// todo: refractor getIndexOfElementInParent
+const getIndexOfElementInParent = (node: HTMLElement, mjmlJson: any, uniqueIdentifier: string) => {
+  let index = -1;
+  let parent = findColumnOfElement(node);
+
+  // within column
+  if (parent) {
+    [parent] = parent;
+  } else {
+    // outside column bounday
+    parent = node.closest('.mjml-tag');
+  }
+
+  // first check in columns, if it can be identified
+  index = getIndexOfElementInColumn(mjmlJson, node, '', uniqueIdentifier);
+
+  // element must be outside of column
+  while (index === -1 && parent) {
+    const parentUniqueIdentifier = findUniqueIdentifier(parent, parent.classList);
+    if (parentUniqueIdentifier) {
+      let element = findElementInJson(mjmlJson, parentUniqueIdentifier);
+      if (element) {
+        [element] = element;
+        index = findIndexOfIdentifierInChildren(element.children, uniqueIdentifier);
+        if (index !== -1) {
+          break;
+        }
+      }
+    }
+
+    const next_parent = parent.closest('.mjml-tag');
+    if (next_parent === parent) {
+      parent = parent.parentElement.closest('.mjml-tag');
+    } else {
+      parent = next_parent;
+    }
+  }
+
+  const parentIdentifier = findUniqueIdentifier(parent, parent.classList);
+  return [index, parentIdentifier];
 };
 
 export {
@@ -133,4 +185,6 @@ export {
   replaceGeneicTagWithUniqueId,
   generateUiqueIdForColumns,
   getIndexOfElementInColumn,
+  getIndexOfElementInParent,
+  generateUniqueIdRecursively,
 };

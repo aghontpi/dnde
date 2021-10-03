@@ -5,11 +5,11 @@ import {
   findClosestParent,
   findUniqueIdentifier,
   generateUiqueIdForColumns,
-  getIndexOfElementInColumn,
+  generateUniqueIdRecursively,
+  getIndexOfElementInParent,
   replaceGeneicTagWithUniqueId,
 } from './closestParent';
 import { findElementInJson } from './findElementInMjmlJson';
-import { findColumnOfElement } from './findElementsColumn';
 import { cleanMjmlJson } from './mjmlProcessor';
 
 interface AddProps {
@@ -51,24 +51,36 @@ const Add = ({ target, droppedConfig, setMjmlJson, mjmlJson, uid, insert }: AddP
     }
   }
 
-  // if tag name is mj-section, generate uniqueId for all mj-column tags
-  if (droppedConfig.tagName === 'mj-section') {
-    droppedConfig = generateUiqueIdForColumns(droppedConfig, uid);
+  let droppedConfigWithUid: any, classNameString: any;
+  // if operation is clone, whole section and columns, can be cloned,
+  //   thus regenerating ids for new elements is necessary,
+  // todo: add operation got complex, refactor by seperating append, insert, copy operations
+  if (!insert) {
+    // if tag name is mj-section, generate uniqueId for all mj-column tags
+    if (droppedConfig.tagName === 'mj-section') {
+      droppedConfig = generateUiqueIdForColumns(droppedConfig, uid);
+    }
+
+    droppedConfigWithUid = _.cloneDeep(droppedConfig);
+    classNameString = droppedConfigWithUid['attributes']['css-class'];
+    if (classNameString) {
+      classNameString = replaceGeneicTagWithUniqueId(classNameString, uid());
+    }
+
+    // set the classnames with uniqueId generated in classnames
+    droppedConfigWithUid['attributes']['css-class'] = classNameString;
+  } else {
+    droppedConfigWithUid = _.cloneDeep(droppedConfig);
+    droppedConfigWithUid = generateUniqueIdRecursively(droppedConfigWithUid, uid);
   }
 
+  console.info('dropped config recreated with uniqueId', droppedConfigWithUid);
+
   const ObjectEquivalent = findElementInJson(mjmlJson, uniqueClassName);
+
   if (!ObjectEquivalent) {
     return null;
   }
-
-  let droppedConfigWithUid = _.cloneDeep(droppedConfig);
-  let classNameString = droppedConfigWithUid['attributes']['css-class'];
-  if (classNameString) {
-    classNameString = replaceGeneicTagWithUniqueId(classNameString, uid());
-  }
-  // set the classnames with uniqueId generated in classnames
-  droppedConfigWithUid['attributes']['css-class'] = classNameString;
-  console.info('dropped config recreated with uniqueId', droppedConfigWithUid);
 
   let [item, path] = ObjectEquivalent;
   console.info('item in Object:', item, 'path to Object:', path);
@@ -203,16 +215,14 @@ interface CopyProps extends RemoveProps {
 
 const Copy = ({ mjmlJson, setActive, setMjmlJson, setCopyActive, setDelActive, target, uidGenerator }: CopyProps) => {
   const uniqueIdentifier = findUniqueIdentifier(target, target.classList);
-  let columnUniqueIdentifier = findColumnOfElement(target);
+  let parentUniqueIdentifier = '';
   let index = -1;
 
-  if (uniqueIdentifier && columnUniqueIdentifier) {
-    [, columnUniqueIdentifier] = columnUniqueIdentifier;
-    index = getIndexOfElementInColumn(mjmlJson, null, columnUniqueIdentifier, uniqueIdentifier);
-  }
-
-  if (index === -1) {
-    console.log('handle cloning of section and column');
+  if (uniqueIdentifier) {
+    const _ = getIndexOfElementInParent(target, mjmlJson, uniqueIdentifier);
+    if (_ && typeof _[0] === 'number' && typeof _[1] === 'string') {
+      [index, parentUniqueIdentifier] = _;
+    }
   }
 
   let copyOfConfig = findElementInJson(mjmlJson, uniqueIdentifier);
@@ -228,7 +238,7 @@ const Copy = ({ mjmlJson, setActive, setMjmlJson, setCopyActive, setDelActive, t
       setMjmlJson,
       mjmlJson,
       uid: uidGenerator,
-      insert: { index, ParentUniqueClassIdentifier: columnUniqueIdentifier },
+      insert: { index, ParentUniqueClassIdentifier: parentUniqueIdentifier },
     });
   }
 };
