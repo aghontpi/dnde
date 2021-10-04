@@ -95,7 +95,7 @@ export const Editor = () => {
   const deleteConfirm = useMemo(
     () => () => {
       if (active) {
-        setQuillActive(false);
+        // setQuillActive(false);
         Remove({ target: active, mjmlJson, setMjmlJson, setDelActive, setActive, setCopyActive });
       }
     },
@@ -118,7 +118,7 @@ export const Editor = () => {
 
   return (
     <>
-      <div
+      {/* <div
         id="toolbarContainer"
         style={{
           visibility: QuillActive ? 'visible' : 'hidden',
@@ -134,9 +134,9 @@ export const Editor = () => {
         <button className="ql-underline"></button>
         <button className="ql-script" value="sub"></button>
         <button className="ql-script" value="super"></button>
-      </div>
+      </div> */}
 
-      <div
+      {/* <div
         key="editorContainer"
         id="editorContainer"
         ref={ref}
@@ -170,7 +170,7 @@ export const Editor = () => {
             onFocus={(event, editor) => {}}
           />
         </div>
-      </div>
+      </div> */}
       <Delete
         style={{ display: delActive ? 'block' : 'none', position: 'fixed', left: `${delX}px`, top: `${delY}px` }}
         deleteConfirm={deleteConfirm}

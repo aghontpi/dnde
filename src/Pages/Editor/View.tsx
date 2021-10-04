@@ -8,6 +8,7 @@ import { Add } from '../../Utils/operations';
 import { useDragAndDropUniqueId } from '../../Hooks/Drag.hook';
 import '../../Assets/Css/ckeditorOverride.css';
 import '../../Assets/Css/quillOverride.css';
+import { InlineEditor } from '../../Components/Mods/CustomInlineEditor';
 
 interface ViewProps {}
 
@@ -30,6 +31,7 @@ export const View = (props: ViewProps) => {
   return (
     <Scrollbars style={{ height: '100%' }}>
       <Editor />
+      <InlineEditor />
       <div
         className={`${css.viewHolder} mjml-wrapper mjml-tag identifier-mj-body`}
         onDrop={onDrop}

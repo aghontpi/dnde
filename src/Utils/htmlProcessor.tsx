@@ -97,8 +97,10 @@ const converter = (element: HTMLElement, key = 0) => {
 
     if (child['nodeName'] === '#text') {
       if (child.textContent) {
-        // ignore whitespaces, react throws error
-        const content = child.textContent.trim();
+        // inline editor, whitespace characters are being trimmed.
+        // if whitespce is a problem in future, detect if text is related to
+        // inline editor and stop trimming if so.
+        const content = child.textContent;
         if (content) {
           children.push(content);
         }

@@ -22,7 +22,7 @@ export const Text = () => {
       ...assigned_default_values,
       'css-class': 'mjml-tag identifier-mj-text',
     },
-    content: '<p>hello, customize me!</p>',
+    content: 'hello, customize me!',
     mutableProperties: properties,
     mutalbePropertiesWithDefaultValues: properties_with_default_values,
   };

@@ -1,25 +1,12 @@
 import _, { floor } from 'lodash';
-import React, {
-  cloneElement,
-  createElement,
-  memo,
-  ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
-import { FC } from 'react';
-import styled from 'styled-components';
+import { createElement, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useCkeditor } from '../Hooks/Ckeditor.hook';
+import { useCustomEditorPosition, useCustomEditorStatus } from '../Hooks/CustomEditor.hook';
 import { useEditor } from '../Hooks/Editor.hook';
 import { useHtmlWrapper } from '../Hooks/Htmlwrapper.hook';
 import { useQuillEditor } from '../Hooks/Quill.hook';
 import { findClosestParent, findUniqueIdentifier } from '../Utils/closestParent';
 import { detectEmptyElement } from '../Utils/detectEmptyBody';
-import { closeToTopOrBottom, isEventWithTargetElement } from '../Utils/eventElementRelation';
-import { findElementInJson } from '../Utils/findElementInMjmlJson';
 import { findColumnOfElement } from '../Utils/findElementsColumn';
 import { generateDropItemPlaceholder } from '../Utils/generateDropItemPlaceholder';
 
@@ -35,8 +22,11 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
   const { setX, setY, setDelActive, setDelX, setDelY, copy } = useCkeditor();
   const { setQuillActive, setQuillX, setQuillY } = useQuillEditor();
   const { mjmlJson, setMjmlJson } = useEditor();
+  const { setX: customEditorSetX, setY: customEditorSetY } = useCustomEditorPosition();
+  const { setActive: setCustomEditorStatus } = useCustomEditorStatus();
   const idRef = useRef(id);
   const uniqueId = useRef(id);
+  const [contentEditable, setContentEditable] = useState(false);
 
   const { setCopyX, setCopyActive, setCopyY } = copy;
 
@@ -82,20 +72,28 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
               const identifier = findUniqueIdentifier(mjmlTarget, mjmlTarget.classList);
               if (identifier?.includes('text')) {
                 const x = pos.left;
-                const y = pos.top - 44;
+                const y = pos.top - 38;
 
                 // ckeditor
-                if (pos) {
-                  setX(x);
-                  setY(y);
-                }
+                // if (pos) {
+                //   setX(x);
+                //   setY(y);
+                // }
 
                 //quilleditor
-                setQuillActive(true);
-                setQuillX(x);
-                setQuillY(y);
+                // setQuillActive(true);
+                // setQuillX(x);
+                // setQuillY(y);
+
+                // customEditor
+
+                setCustomEditorStatus(true);
+                customEditorSetX(x);
+                customEditorSetY(y);
+                setContentEditable(true);
               } else {
-                setQuillActive(false);
+                // setQuillActive(false);
+                setCustomEditorStatus(false);
               }
 
               // moving the delete positon to currently selected elements right

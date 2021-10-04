@@ -4,18 +4,21 @@ import { EDContext } from '../../Context/Editor.context';
 import { Ckeditor } from '../../Context/Ckeditor.context';
 import { HtmlContextProvider } from '../../Context/Htmlwrapper.context';
 import { QuillEditor } from '../../Context/Quill.context';
+import { CustomEditorProvider } from '../../Context/CustomEditor.context';
 
 const wrapContext = () => (
   <HtmlContextProvider>
-    <QuillEditor>
-      <Ckeditor>
-        <DNDContext>
-          <EDContext>
-            <Editor />
-          </EDContext>
-        </DNDContext>
-      </Ckeditor>
-    </QuillEditor>
+    <CustomEditorProvider>
+      <QuillEditor>
+        <Ckeditor>
+          <DNDContext>
+            <EDContext>
+              <Editor />
+            </EDContext>
+          </DNDContext>
+        </Ckeditor>
+      </QuillEditor>
+    </CustomEditorProvider>
   </HtmlContextProvider>
 );
 
