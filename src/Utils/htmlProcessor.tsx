@@ -92,6 +92,15 @@ const converter = (element: HTMLElement, key = 0) => {
 
   let children: ReactNode[] = [];
 
+  if (element.className && element.className.includes('mj-text')) {
+    // if element is mj-text, we edit it with customInlineEditor by making div 'contentEditable' true.
+    //  do not handle children in react.
+
+    const original = { nodeName, props: { ...attributes, dangerouslySetInnerHTML: { __html: element.innerHTML } } };
+
+    return <HtmlWrapper uniqueKey={key++} originalNode={original} />;
+  }
+
   for (let i = 0; i < element.childNodes.length; i++) {
     let child = element.childNodes[i];
 
