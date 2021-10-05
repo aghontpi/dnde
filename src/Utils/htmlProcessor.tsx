@@ -100,7 +100,9 @@ const converter = (element: HTMLElement, key = 0) => {
         // inline editor, whitespace characters are being trimmed.
         // if whitespce is a problem in future, detect if text is related to
         // inline editor and stop trimming if so.
-        const content = child.textContent;
+
+        // remove all new line characters
+        const content = child.textContent.replaceAll('\n', '');
         if (content) {
           children.push(content);
         }
