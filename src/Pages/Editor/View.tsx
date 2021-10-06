@@ -9,8 +9,17 @@ import { useDragAndDropUniqueId } from '../../Hooks/Drag.hook';
 import '../../Assets/Css/ckeditorOverride.css';
 import '../../Assets/Css/quillOverride.css';
 import { InlineEditor } from '../../Components/Mods/CustomInlineEditor';
+import styled from 'styled-components';
 
 interface ViewProps {}
+
+const DesignContainer = styled('div')`
+  .editor-active {
+    :focus {
+      outline: none;
+    }
+  }
+`;
 
 export const View = (props: ViewProps) => {
   const { mjmlJson, setMjmlJson } = useEditor();
@@ -32,13 +41,13 @@ export const View = (props: ViewProps) => {
     <Scrollbars style={{ height: '100%' }}>
       <Editor />
       <InlineEditor />
-      <div
+      <DesignContainer
         className={`${css.viewHolder} mjml-wrapper mjml-tag identifier-mj-body`}
         onDrop={onDrop}
         onDragOver={onDragOver}
       >
         {htmlProcessor(mjml2html(mjmlJson).html)}
-      </div>
+      </DesignContainer>
     </Scrollbars>
   );
 };

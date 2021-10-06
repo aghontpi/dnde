@@ -2,8 +2,9 @@ import { Button, Select } from 'antd';
 import _ from 'lodash';
 import { useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
+import { useContentEditableCallback } from '../../Hooks/ContentEditable.hook';
 import { useCustomEditorPosition, useCustomEditorStatus } from '../../Hooks/CustomEditor.hook';
-import { useEditor, useEditorUpdater } from '../../Hooks/Editor.hook';
+import { useEditorUpdater } from '../../Hooks/Editor.hook';
 import { useHtmlWrapper } from '../../Hooks/Htmlwrapper.hook';
 
 const CustomSelect = styled(Select)`
@@ -21,34 +22,26 @@ const InlineEditor = () => {
 
   const inputChange = useCallback(
     (e: any) => {
-      console.log(e.target.innerHTML, item);
+      console.log('inputchange', e.target.innerHTML, item);
       if (item && item.content) {
         let updateToSend = _.cloneDeep(item);
-        updateToSend.content = e.target.innerHTML;
+        const html = e.target.innerHTML;
+        updateToSend.content = html;
         update(updateToSend);
       }
     },
     [item]
   );
 
-  useEffect(() => {
-    if (activeElement && active) {
-      console.info('attaching input listender for state sync on active ref');
-      activeElement.addEventListener('focusout', inputChange);
-      activeElement.children[0].setAttribute('contentEditable', 'true');
-      return () => {
-        console.log('removing input listender on active ref');
-
-        activeElement.children[0].setAttribute('contentEditable', 'false');
-        activeElement.removeEventListener('focusout', inputChange);
-      };
-    }
-  }, [activeElement, item, active]);
+  useContentEditableCallback(activeElement, inputChange, active);
 
   const performAction = useCallback((type: string) => {
     switch (type) {
       case 'bold':
         document.execCommand('bold');
+        break;
+      case 'underline':
+        document.execCommand('underline');
         break;
       default:
         console.info(`unhandled action ${type}`);
@@ -57,7 +50,6 @@ const InlineEditor = () => {
 
   return (
     <div
-      suppressContentEditableWarning
       style={{
         display: active ? 'block' : 'none',
         position: 'fixed',
@@ -97,7 +89,7 @@ const InlineEditor = () => {
       <Button style={{ fontSize: '12px' }} size="small">
         <i>I</i>
       </Button>
-      <Button style={{ fontSize: '12px' }} size="small">
+      <Button onClick={() => performAction('underline')} style={{ fontSize: '12px' }} size="small">
         <u>U</u>
       </Button>
     </div>
