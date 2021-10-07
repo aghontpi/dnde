@@ -9,3 +9,9 @@
     background-color: initial;
   }
 }
+
+.inline-editor-popover-color-picker {
+  .ant-popover-inner-content {
+    padding: 0;
+  }
+}

@@ -1,11 +1,20 @@
-import { Button, Select } from 'antd';
+import { Button, Popover, Select } from 'antd';
 import _ from 'lodash';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import styled from 'styled-components';
 import { useContentEditableCallback } from '../../Hooks/ContentEditable.hook';
 import { useCustomEditorPosition, useCustomEditorStatus } from '../../Hooks/CustomEditor.hook';
 import { useEditorUpdater } from '../../Hooks/Editor.hook';
 import { useHtmlWrapper } from '../../Hooks/Htmlwrapper.hook';
+import {
+  FontColorsOutlined,
+  BoldOutlined,
+  ItalicOutlined,
+  UnderlineOutlined,
+  BgColorsOutlined,
+} from '@ant-design/icons';
+import { InlineEditorActions } from '../../Utils/inlineEditorActions';
+import { ColorPicker } from '../ColorPicker';
 
 const CustomSelect = styled(Select)`
   .ant-select-selection-item {
@@ -30,23 +39,11 @@ const InlineEditor = () => {
         update(updateToSend);
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [item]
   );
 
   useContentEditableCallback(activeElement, inputChange, active);
-
-  const performAction = useCallback((type: string) => {
-    switch (type) {
-      case 'bold':
-        document.execCommand('bold');
-        break;
-      case 'underline':
-        document.execCommand('underline');
-        break;
-      default:
-        console.info(`unhandled action ${type}`);
-    }
-  }, []);
 
   return (
     <div
@@ -69,6 +66,9 @@ const InlineEditor = () => {
         defaultValue={'size'}
         style={{ fontSize: '12px' }}
         suffixIcon={null}
+        onChange={(value: any) => {
+          InlineEditorActions('size', value);
+        }}
       >
         {Array.from(Array(50).keys()).map((i) => (
           <Select.Option style={{ fontSize: '12px' }} value={i + 8}>
@@ -77,21 +77,42 @@ const InlineEditor = () => {
         ))}
       </CustomSelect>
 
-      <Button style={{ fontSize: '12px' }} size="small">
-        C
-      </Button>
-      <Button style={{ fontSize: '12px' }} size="small">
-        B
-      </Button>
-      <Button onClick={() => performAction('bold')} style={{ fontSize: '12px' }} size="small">
-        <strong>B</strong>
-      </Button>
-      <Button style={{ fontSize: '12px' }} size="small">
-        <i>I</i>
-      </Button>
-      <Button onClick={() => performAction('underline')} style={{ fontSize: '12px' }} size="small">
-        <u>U</u>
-      </Button>
+      <Popover
+        overlayClassName="inline-editor-popover-color-picker"
+        trigger="click"
+        placement="bottom"
+        content={<ColorPicker />}
+        destroyTooltipOnHide={true}
+      >
+        <Button icon={<FontColorsOutlined />} style={{ fontSize: '12px' }} size="small"></Button>
+      </Popover>
+      <Popover
+        overlayClassName="inline-editor-popover-color-picker"
+        trigger="click"
+        placement="bottom"
+        content={<ColorPicker />}
+        destroyTooltipOnHide={true}
+      >
+        <Button icon={<BgColorsOutlined />} style={{ fontSize: '12px' }} size="small"></Button>
+      </Popover>
+      <Button
+        icon={<BoldOutlined />}
+        onClick={() => InlineEditorActions('bold')}
+        style={{ fontSize: '12px' }}
+        size="small"
+      ></Button>
+      <Button
+        icon={<ItalicOutlined />}
+        onClick={() => InlineEditorActions('italics')}
+        style={{ fontSize: '12px' }}
+        size="small"
+      ></Button>
+      <Button
+        icon={<UnderlineOutlined />}
+        onClick={() => InlineEditorActions('underline')}
+        style={{ fontSize: '12px' }}
+        size="small"
+      ></Button>
     </div>
   );
 };
