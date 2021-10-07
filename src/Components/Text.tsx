@@ -20,6 +20,8 @@ export const Text = () => {
     tagName: 'mj-text',
     attributes: {
       ...assigned_default_values,
+      'padding-left': '0px',
+      'padding-right': '0px',
       'css-class': 'mjml-tag identifier-mj-text',
     },
     content: 'hello, customize me!',
