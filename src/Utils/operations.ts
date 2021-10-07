@@ -9,6 +9,7 @@ import {
 } from './closestParent';
 import { findElementInJson } from './findElementInMjmlJson';
 import { cleanMjmlJson } from './mjmlProcessor';
+import { insertAtPlaceholderIndicatorPosition, removePlaceholderBanner } from './removePlaceholders';
 
 interface AddProps {
   target: HTMLElement | null;
@@ -66,15 +67,7 @@ const Add = ({ target, droppedConfig, setMjmlJson, mjmlJson, uid, insert }: AddP
   let [item, path] = ObjectEquivalent;
   console.info('item in Object:', item, 'path to Object:', path);
 
-  // remove the empty placeholder-banner if present
-  if (item.children) {
-    item.children = item.children.filter((v: any) => {
-      if (v && v['attributes'] && v['attributes']['css-class']) {
-        return !v['attributes']['css-class'].includes('mj-placeholder');
-      }
-      return true;
-    });
-  }
+  item = removePlaceholderBanner(item);
 
   // insert the dropped config at the specified location
   if (insert && insert.index > -1) {
@@ -83,21 +76,8 @@ const Add = ({ target, droppedConfig, setMjmlJson, mjmlJson, uid, insert }: AddP
         item.children.splice(i, 0, droppedConfigWithUid);
       }
     }
-  }
-  // place the dropped config in the placeholder position, this only is needed for
-  //   items, which has children
-  else if (item.tagName !== 'mj-body' && item.children.length) {
-    for (var i = 0; i < item.children.length; i++) {
-      const child = item.children[i];
-      const cssClass = child.attributes['css-class'];
-      if (cssClass && cssClass.includes('placeitem-placeholder')) {
-        item.children[i] = droppedConfigWithUid;
-        continue;
-      }
-      item.children[i] = child;
-    }
   } else {
-    item.children.push(droppedConfigWithUid);
+    item = insertAtPlaceholderIndicatorPosition(item, droppedConfigWithUid);
   }
 
   let updated = _.set(mjmlJson, path.slice(1), item);
