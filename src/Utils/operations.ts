@@ -4,10 +4,8 @@ import { columnPlaceholder } from '../Components/Section';
 import {
   findClosestParent,
   findUniqueIdentifier,
-  generateUiqueIdForColumns,
   generateUniqueIdRecursively,
   getIndexOfElementInParent,
-  replaceGeneicTagWithUniqueId,
 } from './closestParent';
 import { findElementInJson } from './findElementInMjmlJson';
 import { cleanMjmlJson } from './mjmlProcessor';
@@ -51,28 +49,11 @@ const Add = ({ target, droppedConfig, setMjmlJson, mjmlJson, uid, insert }: AddP
     }
   }
 
-  let droppedConfigWithUid: any, classNameString: any;
   // if operation is clone, whole section and columns, can be cloned,
   //   thus regenerating ids for new elements is necessary,
   // todo: add operation got complex, refactor by seperating append, insert, copy operations
-  if (!insert) {
-    // if tag name is mj-section, generate uniqueId for all mj-column tags
-    if (droppedConfig.tagName === 'mj-section') {
-      droppedConfig = generateUiqueIdForColumns(droppedConfig, uid);
-    }
-
-    droppedConfigWithUid = _.cloneDeep(droppedConfig);
-    classNameString = droppedConfigWithUid['attributes']['css-class'];
-    if (classNameString) {
-      classNameString = replaceGeneicTagWithUniqueId(classNameString, uid());
-    }
-
-    // set the classnames with uniqueId generated in classnames
-    droppedConfigWithUid['attributes']['css-class'] = classNameString;
-  } else {
-    droppedConfigWithUid = _.cloneDeep(droppedConfig);
-    droppedConfigWithUid = generateUniqueIdRecursively(droppedConfigWithUid, uid);
-  }
+  let droppedConfigWithUid = _.cloneDeep(droppedConfig);
+  droppedConfigWithUid = generateUniqueIdRecursively(droppedConfigWithUid, uid);
 
   console.info('dropped config recreated with uniqueId', droppedConfigWithUid);
 

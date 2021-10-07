@@ -48,11 +48,13 @@ const replaceGeneicTagWithUniqueId = (classNames: string, uid: string) => {
       // checking if the element has already uniqueId,
       //   if it has, instead of appending uid to tag, need to replace it.
       const regexMatch = current.match(/-(\d+)/); // regex match number after '-'
+      const log = current;
       if (regexMatch) {
         current = current.replace(regexMatch[0], `-${uid}`);
       } else {
         current = ` ${current}-${uid}`;
       }
+      console.log(`generating-tag: ${log} -> ${current} `);
     }
     updatedClassNames += ` ${current}`;
   }
@@ -61,40 +63,25 @@ const replaceGeneicTagWithUniqueId = (classNames: string, uid: string) => {
 
 // section with different columns are stored in config without unqiueId's,
 //   replacing those with unqiueIds (only for mj-columns).
-const generateUiqueIdForColumns = (
-  children: any,
-  uidGenerator: () => string,
-  allElementsRecursive: boolean = false
-): any => {
-  if (!children) {
+const generateUniqueIdRecursively = (item: any, uidGenerator: () => string): any => {
+  if (!item) {
     return;
   }
 
-  for (var i = 0; children['children'] && i < children['children'].length; i++) {
-    children['children'][i] = generateUiqueIdForColumns(children['children'][i], uidGenerator, allElementsRecursive);
+  for (var i = 0; item['children'] && i < item['children'].length; i++) {
+    item['children'][i] = generateUniqueIdRecursively(item['children'][i], uidGenerator);
   }
 
-  // ignore the column specific restriction and process all the elements
-  if (!allElementsRecursive) {
-    if (children.tagName !== 'mj-column') {
-      return children;
-    }
-  }
-
-  let attr = children['attributes'];
+  let attr = item['attributes'];
   if (attr) {
     let css_class = attr['css-class'];
     css_class = replaceGeneicTagWithUniqueId(css_class, uidGenerator());
     attr['css-class'] = css_class;
   }
 
-  children['attributes'] = attr;
+  item['attributes'] = attr;
 
-  return children;
-};
-
-const generateUniqueIdRecursively = (item: any, uidGenerator: () => string) => {
-  return generateUiqueIdForColumns(item, uidGenerator, true);
+  return item;
 };
 
 const findIndexOfIdentifierInChildren = (children: [any], uniqueIdentifier: string) => {
@@ -183,8 +170,7 @@ export {
   findClosestParent,
   findUniqueIdentifier,
   replaceGeneicTagWithUniqueId,
-  generateUiqueIdForColumns,
+  generateUniqueIdRecursively,
   getIndexOfElementInColumn,
   getIndexOfElementInParent,
-  generateUniqueIdRecursively,
 };
