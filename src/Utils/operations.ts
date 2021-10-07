@@ -12,24 +12,15 @@ import { cleanMjmlJson } from './mjmlProcessor';
 import { insertAtPlaceholderIndicatorPosition, removePlaceholderBanner } from './removePlaceholders';
 
 interface AddProps {
-  target: HTMLElement | null;
+  target: HTMLElement;
   droppedConfig: any;
   mjmlJson: any;
   setMjmlJson: any;
   uid: () => string;
-  insert?: {
-    ParentUniqueClassIdentifier: string;
-    index: number;
-  };
 }
 
-const Add = ({ target, droppedConfig, setMjmlJson, mjmlJson, uid, insert }: AddProps) => {
-  let uniqueClassName = null;
-  if (target) {
-    uniqueClassName = findClosestParent(target);
-  } else if (insert) {
-    uniqueClassName = insert.ParentUniqueClassIdentifier;
-  }
+const Add = ({ target, droppedConfig, setMjmlJson, mjmlJson, uid }: AddProps) => {
+  let uniqueClassName = findClosestParent(target);
 
   if (!uniqueClassName) {
     const cleanedMjmlJson = cleanMjmlJson(mjmlJson);
@@ -39,24 +30,15 @@ const Add = ({ target, droppedConfig, setMjmlJson, mjmlJson, uid, insert }: AddP
 
   if (droppedConfig.tagName !== 'mj-section') {
     if (uniqueClassName === 'identifier-mj-body' || uniqueClassName === 'identifier-mj-section') {
-      // if the action performed is clone, allow it to be performed,
-      //   since only body can not be cloned
-      if (!insert && droppedConfig.tagName !== 'mj-body') {
-        const cleanedMjmlJson = cleanMjmlJson(mjmlJson);
-        setMjmlJson({ ...cleanedMjmlJson });
-        error('kindly place the item on column instead ');
-        return null;
-      }
+      const cleanedMjmlJson = cleanMjmlJson(mjmlJson);
+      setMjmlJson({ ...cleanedMjmlJson });
+      error('kindly place the item on column instead ');
+      return null;
     }
   }
 
-  // if operation is clone, whole section and columns, can be cloned,
-  //   thus regenerating ids for new elements is necessary,
-  // todo: add operation got complex, refactor by seperating append, insert, copy operations
   let droppedConfigWithUid = _.cloneDeep(droppedConfig);
   droppedConfigWithUid = generateUniqueIdRecursively(droppedConfigWithUid, uid);
-
-  console.info('dropped config recreated with uniqueId', droppedConfigWithUid);
 
   const ObjectEquivalent = findElementInJson(mjmlJson, uniqueClassName);
 
@@ -65,24 +47,67 @@ const Add = ({ target, droppedConfig, setMjmlJson, mjmlJson, uid, insert }: AddP
   }
 
   let [item, path] = ObjectEquivalent;
-  console.info('item in Object:', item, 'path to Object:', path);
+  console.info('operation add: item in Object:', item, 'path to Object:', path);
+
+  item = removePlaceholderBanner(item);
+
+  item = insertAtPlaceholderIndicatorPosition(item, droppedConfigWithUid);
+
+  let updated = _.set(mjmlJson, path.slice(1), item);
+  updated = cleanMjmlJson(updated);
+  setMjmlJson({ ...updated });
+};
+
+interface AddAtIndexProps {
+  droppedConfig: any;
+  mjmlJson: any;
+  setMjmlJson: any;
+  uid: () => string;
+  parentUniqueClassIdentifier: string;
+  index: number;
+}
+
+const AddAtIndex = ({
+  droppedConfig,
+  setMjmlJson,
+  mjmlJson,
+  uid,
+  parentUniqueClassIdentifier,
+  index,
+}: AddAtIndexProps) => {
+  let uniqueClassName = parentUniqueClassIdentifier;
+
+  if (!uniqueClassName) {
+    const cleanedMjmlJson = cleanMjmlJson(mjmlJson);
+    setMjmlJson({ ...cleanedMjmlJson });
+    return null;
+  }
+
+  let droppedConfigWithUid = _.cloneDeep(droppedConfig);
+  droppedConfigWithUid = generateUniqueIdRecursively(droppedConfigWithUid, uid);
+
+  const ObjectEquivalent = findElementInJson(mjmlJson, uniqueClassName);
+
+  if (!ObjectEquivalent) {
+    return null;
+  }
+
+  let [item, path] = ObjectEquivalent;
+  console.info('operation add: item in Object:', item, 'path to Object:', path);
 
   item = removePlaceholderBanner(item);
 
   // insert the dropped config at the specified location
-  if (insert && insert.index > -1) {
+  if (index > -1) {
     for (var i = 0; item && item.children && i < item.children.length; i++) {
-      if (i === insert.index) {
+      if (i === index) {
         item.children.splice(i, 0, droppedConfigWithUid);
       }
     }
-  } else {
-    item = insertAtPlaceholderIndicatorPosition(item, droppedConfigWithUid);
   }
 
   let updated = _.set(mjmlJson, path.slice(1), item);
   updated = cleanMjmlJson(updated);
-  console.info('updated:', updated);
   setMjmlJson({ ...updated });
 };
 
@@ -142,7 +167,7 @@ const Remove = ({ target, mjmlJson, setMjmlJson, setDelActive, setCopyActive, se
     setCopyActive(false);
     setMjmlJson({ ...updated });
   } else {
-    console.info('unable to delete the item');
+    console.info('operation remove: unable to delete the item');
   }
 
   setMjmlJson({ ...updated });
@@ -193,13 +218,13 @@ const Copy = ({ mjmlJson, setActive, setMjmlJson, setCopyActive, setDelActive, t
     setDelActive(false);
     setActive(null);
 
-    return Add({
-      target: null,
+    return AddAtIndex({
       droppedConfig: copyOfConfig,
       setMjmlJson,
       mjmlJson,
       uid: uidGenerator,
-      insert: { index, ParentUniqueClassIdentifier: parentUniqueIdentifier },
+      index,
+      parentUniqueClassIdentifier: parentUniqueIdentifier,
     });
   }
 };
