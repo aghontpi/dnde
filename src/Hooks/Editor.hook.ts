@@ -22,14 +22,13 @@ export const useEditorUpdater = () => {
   const [path, setPath] = useState<any>(null);
 
   useEffect(() => {
-    console.log('ae', activeElement, mjmlJson);
+    console.log('custom inline updater: ae,json->', activeElement, mjmlJson);
     if (activeElement && mjmlJson) {
       const uniqueIdentifer = findUniqueIdentifier(activeElement as HTMLElement, activeElement.classList);
       if (uniqueIdentifer) {
         const [, _path] = findElementInJson(mjmlJson, uniqueIdentifer);
         setPath(_path);
         const _item = _.get(mjmlJson, _path.slice(1));
-        console.log('ae', _item);
         if (_item) {
           setItem(_item);
         }

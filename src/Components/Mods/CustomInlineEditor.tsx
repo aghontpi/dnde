@@ -29,9 +29,9 @@ const InlineEditor = () => {
   const { active: activeElement }: { active: HTMLDivElement } = useHtmlWrapper();
   const [item, update] = useEditorUpdater();
 
-  const inputChange = useCallback(
+  const stateChangeCallback = useCallback(
     (e: any) => {
-      console.log('inputchange', e.target.innerHTML, item);
+      console.log(`custom Inline Editor: updating state callback`);
       if (item && item.content) {
         let updateToSend = _.cloneDeep(item);
         const html = e.target.innerHTML;
@@ -43,7 +43,7 @@ const InlineEditor = () => {
     [item]
   );
 
-  useContentEditableCallback(activeElement, inputChange, active);
+  useContentEditableCallback(activeElement, stateChangeCallback, active);
 
   return (
     <div
