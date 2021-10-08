@@ -112,7 +112,8 @@ const AddAtIndex = ({
 };
 
 interface RemoveProps {
-  target: HTMLElement;
+  target?: HTMLElement | undefined;
+  uniqueClassName?: string;
   mjmlJson: any;
   setMjmlJson: any;
   setDelActive: any;
@@ -120,8 +121,26 @@ interface RemoveProps {
   setActive: any;
 }
 
-const Remove = ({ target, mjmlJson, setMjmlJson, setDelActive, setCopyActive, setActive }: RemoveProps) => {
-  const uniqueClassName = findClosestParent(target);
+const Remove = ({
+  target,
+  uniqueClassName: ucn,
+  mjmlJson,
+  setMjmlJson,
+  setDelActive,
+  setCopyActive,
+  setActive,
+}: RemoveProps) => {
+  let uniqueClassName;
+  if (target) {
+    uniqueClassName = findClosestParent(target);
+  } else if (ucn) {
+    uniqueClassName = ucn;
+  } else {
+    console.info(`operation remove: either target/uniqueClassName must be provided 
+      to perform this operation
+    `);
+    return;
+  }
   if (!uniqueClassName) {
     return null;
   }
@@ -195,7 +214,8 @@ const UpdateValue = ({ visible, path, mjmlJson, setMjmlJson, attribute, value }:
   }
 };
 
-interface CopyProps extends RemoveProps {
+interface CopyProps extends Exclude<RemoveProps, 'uniqueClassName'> {
+  target: HTMLElement;
   uidGenerator: () => string;
 }
 

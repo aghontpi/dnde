@@ -22,19 +22,24 @@ export const useEditorUpdater = () => {
   const [path, setPath] = useState<any>(null);
 
   useEffect(() => {
-    console.log('custom inline updater: ae,json->', activeElement, mjmlJson);
+    console.log('editor value updater: ae->', activeElement);
     if (activeElement && mjmlJson) {
       const uniqueIdentifer = findUniqueIdentifier(activeElement as HTMLElement, activeElement.classList);
       if (uniqueIdentifer) {
-        const [, _path] = findElementInJson(mjmlJson, uniqueIdentifer);
-        setPath(_path);
-        const _item = _.get(mjmlJson, _path.slice(1));
-        if (_item) {
-          setItem(_item);
+        const find = findElementInJson(mjmlJson, uniqueIdentifer);
+        if (find) {
+          const [, _path] = find;
+          setPath(_path);
+          const _item = _.get(mjmlJson, _path.slice(1));
+          if (_item) {
+            setItem(_item);
+          }
+        } else {
+          console.log(`editor value updater: unable to find item in json, ${find}, identifier: ${uniqueIdentifer}`);
         }
       }
     }
-  }, [mjmlJson, activeElement]);
+  }, [activeElement]);
 
   const update = useCallback(
     (updatedValue: any) => {

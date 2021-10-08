@@ -4,12 +4,14 @@ import css from './Editor.module.scss';
 import Scrollbars from 'react-custom-scrollbars-2';
 import { htmlProcessor } from '../../Utils/htmlProcessor';
 import { Editor } from '../../Components/Mods/Editor';
-import { Add } from '../../Utils/operations';
+import { Add, Remove } from '../../Utils/operations';
 import { useDragAndDropUniqueId } from '../../Hooks/Drag.hook';
 import '../../Assets/Css/ckeditorOverride.css';
 import '../../Assets/Css/quillOverride.css';
 import { InlineEditor } from '../../Components/Mods/CustomInlineEditor';
 import styled from 'styled-components';
+import { useHtmlWrapper } from '../../Hooks/Htmlwrapper.hook';
+import { useCkeditor } from '../../Hooks/Ckeditor.hook';
 
 interface ViewProps {}
 
@@ -24,10 +26,27 @@ const DesignContainer = styled('div')`
 export const View = (props: ViewProps) => {
   const { mjmlJson, setMjmlJson } = useEditor();
   const { getId } = useDragAndDropUniqueId();
+  const { setActive } = useHtmlWrapper();
+  const { setDelActive, copy } = useCkeditor();
+  const { setCopyActive } = copy;
 
   const onDrop = (e: any) => {
     e.preventDefault();
-    const config = JSON.parse(e.dataTransfer.getData('config'));
+    let config = JSON.parse(e.dataTransfer.getData('config'));
+    if (config && config.mode && config.mode === 'move' && config['config']) {
+      // remove the item old position, before inserting in new position
+      Remove({
+        uniqueClassName: config.uniqueClassName,
+        mjmlJson,
+        setMjmlJson,
+        setActive,
+        setDelActive,
+        setCopyActive,
+      });
+      console.info(`operation move: onDrop -> removed previous instance 
+      of config :'${config.uniqueClassName}'`);
+    }
+
     Add({
       target: e.nativeEvent.target,
       droppedConfig: config,

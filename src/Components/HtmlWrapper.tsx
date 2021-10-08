@@ -7,6 +7,7 @@ import { useHtmlWrapper } from '../Hooks/Htmlwrapper.hook';
 import { useQuillEditor } from '../Hooks/Quill.hook';
 import { findClosestParent, findUniqueIdentifier } from '../Utils/closestParent';
 import { detectEmptyElement } from '../Utils/detectEmptyBody';
+import { findElementInJson } from '../Utils/findElementInMjmlJson';
 import { findColumnOfElement } from '../Utils/findElementsColumn';
 import { generateDropItemPlaceholder } from '../Utils/generateDropItemPlaceholder';
 
@@ -138,6 +139,20 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
     // console.log('on drag leave', e.currentTarget);
   };
 
+  const onDragStart = (e: any) => {
+    e.dataTransfer.dropEffect = 'copy';
+    const uniqueClassName = findClosestParent(e.target);
+    const find = findElementInJson(mjmlJson, uniqueClassName);
+    if (find) {
+      const [, path] = find;
+      let item = _.get(mjmlJson, path.slice(1));
+      item = { mode: 'move', uniqueClassName: uniqueClassName, config: _.cloneDeep(item) };
+      e.dataTransfer.setData('config', JSON.stringify(item));
+    } else {
+      console.info(`move items: drag unable to find the config to transfer ${uniqueClassName}`);
+    }
+  };
+
   const memoFind = useCallback((e: HTMLElement) => findColumnOfElement(e), []);
 
   const onDragOver = useCallback((e: any) => {
@@ -173,6 +188,10 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
           onMouseEnter: onHover,
           onMouseLeave: onHover,
           onDragOver: _.debounce(onDragOver, 150),
+          ondblclick: (e: any) => {
+            e.preventDefault();
+          },
+          onDragStart,
           draggable,
           ref: idRef,
           id: uniqueId.current,
