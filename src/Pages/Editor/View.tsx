@@ -45,6 +45,7 @@ export const View = (props: ViewProps) => {
       });
       console.info(`operation move: onDrop -> removed previous instance 
       of config :'${config.uniqueClassName}'`);
+      config = config['config'];
     }
 
     Add({
