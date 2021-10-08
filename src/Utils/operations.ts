@@ -239,7 +239,7 @@ const Copy = ({ mjmlJson, setActive, setMjmlJson, setCopyActive, setDelActive, t
     setActive(null);
 
     return AddAtIndex({
-      droppedConfig: copyOfConfig,
+      droppedConfig: _.cloneDeep(copyOfConfig),
       setMjmlJson,
       mjmlJson,
       uid: uidGenerator,
