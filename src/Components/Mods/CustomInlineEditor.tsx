@@ -1,10 +1,9 @@
 import { Button, Popover, Select } from 'antd';
 import _ from 'lodash';
-import { useCallback, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { useContentEditableCallback } from '../../Hooks/ContentEditable.hook';
 import { useCustomEditorPosition, useCustomEditorStatus } from '../../Hooks/CustomEditor.hook';
-import { useEditorUpdater } from '../../Hooks/Editor.hook';
+import { useEditor } from '../../Hooks/Editor.hook';
 import { useHtmlWrapper } from '../../Hooks/Htmlwrapper.hook';
 import {
   FontColorsOutlined,
@@ -15,6 +14,8 @@ import {
 } from '@ant-design/icons';
 import { InlineEditorActions } from '../../Utils/inlineEditorActions';
 import { ColorPicker } from '../ColorPicker';
+import { findClosestParent, findUniqueIdentifier } from '../../Utils/closestParent';
+import { findElementInJson } from '../../Utils/findElementInMjmlJson';
 
 const CustomSelect = styled(Select)`
   .ant-select-selection-item {
@@ -27,23 +28,29 @@ const InlineEditor = () => {
   const { x, y } = useCustomEditorPosition();
   const { active } = useCustomEditorStatus();
   const { active: activeElement }: { active: HTMLDivElement } = useHtmlWrapper();
-  const [item, update] = useEditorUpdater();
+  const { mjmlJson, setMjmlJson } = useEditor();
 
-  const stateChangeCallback = useCallback(
-    (e: any) => {
-      console.log(`custom Inline Editor: updating state callback`);
-      if (item && item.content) {
-        let updateToSend = _.cloneDeep(item);
-        const html = e.target.innerHTML;
-        updateToSend.content = html;
-        update(updateToSend);
+  useEffect(() => {
+    if (active && activeElement) {
+      const uniqueIdentifier = findUniqueIdentifier(activeElement, activeElement.classList);
+      if (uniqueIdentifier?.includes('mj-text')) {
+        let editor = activeElement.children[0];
+
+        const focusOutEvent = (e: any) => {
+          stateChangeCallback(editor, mjmlJson, setMjmlJson);
+        };
+        editor.addEventListener('focusout', focusOutEvent, false);
+        editor.classList.add('editor-active');
+        editor.setAttribute('contentEditable', 'true');
+        editor.setAttribute('spellcheck', 'false');
+
+        return () => {
+          console.log('custom editor: cleaning up dynamic attributes');
+          editor.removeEventListener('focusout', focusOutEvent, false);
+        };
       }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [item]
-  );
-
-  useContentEditableCallback(activeElement, stateChangeCallback, active);
+    }
+  }, [activeElement]);
 
   return (
     <div
@@ -115,6 +122,30 @@ const InlineEditor = () => {
       ></Button>
     </div>
   );
+};
+
+const stateChangeCallback = (item: any, mjmlJson: any, setMjmlJson: any) => {
+  console.log(`custom Inline Editor: updating state callback`);
+  const closestParent = findClosestParent(item);
+  if (!closestParent) {
+    return;
+  }
+  const uniqueIdentifier = closestParent;
+  if (uniqueIdentifier?.includes('mj-text')) {
+    const find = findElementInJson(mjmlJson, uniqueIdentifier);
+    if (find) {
+      const [, path] = find;
+      let itemJson = _.get(mjmlJson, path.slice(1));
+      if (itemJson) {
+        let updateToSend = _.cloneDeep(itemJson);
+        console.log('inline editor: updating', item);
+        const html = item.innerHTML;
+        updateToSend.content = html;
+        const updated = _.set(mjmlJson, path.slice(1), updateToSend);
+        setMjmlJson({ ...updated });
+      }
+    }
+  }
 };
 
 export { InlineEditor };
