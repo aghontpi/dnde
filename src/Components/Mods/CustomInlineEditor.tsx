@@ -22,6 +22,7 @@ const CustomSelect = styled(Select)`
     padding-right: 8px !important;
   }
 `;
+let r: any;
 
 const InlineEditor = () => {
   const ref = useRef(null);
@@ -34,23 +35,55 @@ const InlineEditor = () => {
     if (active && activeElement) {
       const uniqueIdentifier = findUniqueIdentifier(activeElement, activeElement.classList);
       if (uniqueIdentifier?.includes('mj-text')) {
-        let editor = activeElement.children[0];
+        let editor: any = activeElement.children[0];
 
-        const focusOutEvent = (e: any) => {
+        const Event = (e: any) => {
           stateChangeCallback(editor, mjmlJson, setMjmlJson);
+
+          e.stopPropagation();
+          e.preventDefault();
+          e.target.focus();
+          return false;
         };
-        editor.addEventListener('focusout', focusOutEvent, false);
+
+        const restoreSelection = () => {
+          let restoreSel = window.getSelection();
+          if (!restoreSel) {
+            return;
+          }
+          const temp = r;
+          restoreSel?.removeAllRanges();
+          restoreSel.addRange(r);
+          r = temp;
+          console.log('restored selection', r);
+        };
+
+        const onKeyUp = () => {
+          r = window.getSelection()?.getRangeAt(0);
+          console.log(r);
+        };
+
+        editor.addEventListener('focusout', Event, false);
+        editor.addEventListener('keyup', onKeyUp, false);
+        editor.addEventListener('click', onKeyUp, false);
+
         editor.classList.add('editor-active');
         editor.setAttribute('contentEditable', 'true');
         editor.setAttribute('spellcheck', 'false');
 
+        if (r) {
+          restoreSelection();
+        }
+
         return () => {
           console.log('custom editor: cleaning up dynamic attributes');
-          editor.removeEventListener('focusout', focusOutEvent, false);
+          editor.removeEventListener('focusout', Event, false);
+          editor.removeEventListener('keyup', onKeyUp, false);
+          editor.removeEventListener('click', onKeyUp, false);
         };
       }
     }
-  }, [activeElement]);
+  }, [activeElement, mjmlJson]);
 
   return (
     <div
@@ -74,12 +107,12 @@ const InlineEditor = () => {
         style={{ fontSize: '12px' }}
         suffixIcon={null}
         onChange={(value: any) => {
-          InlineEditorActions('size', value);
+          InlineEditorActions(null, 'size', value);
         }}
       >
-        {Array.from(Array(50).keys()).map((i) => (
-          <Select.Option style={{ fontSize: '12px' }} value={i + 8}>
-            {i + 8}
+        {Array.from(Array(7).keys()).map((i) => (
+          <Select.Option style={{ fontSize: '12px' }} value={i}>
+            {i}
           </Select.Option>
         ))}
       </CustomSelect>
@@ -104,19 +137,19 @@ const InlineEditor = () => {
       </Popover>
       <Button
         icon={<BoldOutlined />}
-        onClick={() => InlineEditorActions('bold')}
+        onClick={(e) => InlineEditorActions(e, 'bold')}
         style={{ fontSize: '12px' }}
         size="small"
       ></Button>
       <Button
         icon={<ItalicOutlined />}
-        onClick={() => InlineEditorActions('italics')}
+        onClick={(e) => InlineEditorActions(e, 'italics')}
         style={{ fontSize: '12px' }}
         size="small"
       ></Button>
       <Button
         icon={<UnderlineOutlined />}
-        onClick={() => InlineEditorActions('underline')}
+        onClick={(e) => InlineEditorActions(e, 'underline')}
         style={{ fontSize: '12px' }}
         size="small"
       ></Button>

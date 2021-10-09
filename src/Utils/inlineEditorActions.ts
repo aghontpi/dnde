@@ -1,4 +1,8 @@
-const InlineEditorActions = (type: string, extras = '') => {
+const InlineEditorActions = (e: any, type: string, extras = '') => {
+  if (e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
   switch (type) {
     case 'bold':
       document.execCommand('bold');
@@ -15,6 +19,7 @@ const InlineEditorActions = (type: string, extras = '') => {
     default:
       console.info(`unhandled action ${type}`);
   }
+  return false;
 };
 
 export { InlineEditorActions };
