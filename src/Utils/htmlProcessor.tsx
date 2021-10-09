@@ -5,13 +5,15 @@ import { WrapWithOutline } from './wrapWithOutline';
 
 const DEBUG = false;
 
+const domParser: any = new DOMParser();
+
 export const htmlProcessor = (html: string): ReactNode => {
   if (typeof html !== 'string') {
     console.error('htmlParser: html is not a string');
     return React.createElement('div', {}, 'errors: please check dev console') as ReactNode;
   }
 
-  let doc = new DOMParser().parseFromString(html, 'text/html');
+  let doc = domParser.parseFromString(html, 'text/html');
 
   if (doc === null) {
     console.error('htmlParser: doc is null, unable to process html');
