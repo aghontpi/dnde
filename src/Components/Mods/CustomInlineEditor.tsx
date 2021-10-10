@@ -1,6 +1,6 @@
 import { Button, Popover, Select } from 'antd';
 import _ from 'lodash';
-import { useEffect, useRef } from 'react';
+import React, { Children, cloneElement, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useCustomEditorPosition, useCustomEditorStatus } from '../../Hooks/CustomEditor.hook';
 import { useEditor } from '../../Hooks/Editor.hook';
@@ -30,6 +30,8 @@ const InlineEditor = () => {
   const { active } = useCustomEditorStatus();
   const { active: activeElement }: { active: HTMLDivElement } = useHtmlWrapper();
   const { mjmlJson, setMjmlJson } = useEditor();
+  const [fontSelection, setFontSelection] = useState<boolean>(false);
+  const selectionRef = useRef<any>(null);
 
   useEffect(() => {
     if (active && activeElement) {
@@ -69,8 +71,6 @@ const InlineEditor = () => {
         editor.setAttribute('contentEditable', 'true');
         editor.setAttribute('spellcheck', 'false');
 
-        ref.current.addEventListener('mousedown', onFocus);
-
         if (r) {
           restoreSelection();
         }
@@ -80,7 +80,6 @@ const InlineEditor = () => {
           editor.removeEventListener('focusout', Event, true);
           editor.removeEventListener('keyup', onKeyUp, false);
           editor.removeEventListener('click', onKeyUp, false);
-          document.removeEventListener('mousedown', onFocus);
         };
       }
     }
@@ -100,20 +99,51 @@ const InlineEditor = () => {
         transition: 'all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1)',
       }}
       ref={ref}
+      onMouseDown={onFocus}
+      onClick={onFocus}
+      onDoubleClick={onFocus}
     >
       <CustomSelect
         size="small"
+        ref={selectionRef}
         dropdownStyle={{ minWidth: '18px' }}
         defaultValue={'size'}
         style={{ fontSize: '12px' }}
+        getPopupContainer={(triggerNode: any) => {
+          triggerNode.addEventListener('focus', onFocus);
+          triggerNode.addEventListener('onmousedown', onFocus);
+          return triggerNode;
+        }}
+        dropdownRender={(original) => {
+          React.Children.map(original, (child: any) => {
+            return cloneElement(child, { onMouseDown: onFocus, onFocus });
+          });
+          return cloneElement(original, {
+            onMouseDown: onFocus,
+            onFocus,
+          });
+        }}
+        onMouseDown={onFocus}
+        onFocus={onFocus}
+        onClick={(e) => {
+          onFocus(e);
+          setFontSelection(!fontSelection);
+        }}
+        onMouseEnter={(e) => {
+          setFontSelection(true);
+        }}
+        onBlur={onFocus}
+        open={fontSelection}
         suffixIcon={null}
         onChange={(value: any) => {
           InlineEditorActions(null, 'size', value);
         }}
       >
         {Array.from(Array(7).keys()).map((i) => (
-          <Select.Option style={{ fontSize: '12px' }} value={i + 1}>
-            {i + 1}
+          <Select.Option onMouseDown={onFocus} onFocus={onFocus} style={{ fontSize: '12px' }} value={i + 1}>
+            <span onMouseDown={onFocus} onFocus={onFocus}>
+              {i + 1}
+            </span>
           </Select.Option>
         ))}
       </CustomSelect>
