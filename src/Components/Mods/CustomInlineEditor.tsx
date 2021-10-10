@@ -122,7 +122,13 @@ const InlineEditor = () => {
         overlayClassName="inline-editor-popover-color-picker"
         trigger="click"
         placement="bottom"
-        content={<ColorPicker />}
+        content={
+          <ColorPicker
+            handleChange={(color) => {
+              InlineEditorActions(null, 'fontColor', color);
+            }}
+          />
+        }
         destroyTooltipOnHide={true}
       >
         <Button icon={<FontColorsOutlined />} style={{ fontSize: '12px' }} size="small"></Button>
@@ -131,7 +137,13 @@ const InlineEditor = () => {
         overlayClassName="inline-editor-popover-color-picker"
         trigger="click"
         placement="bottom"
-        content={<ColorPicker />}
+        content={
+          <ColorPicker
+            handleChange={(color) => {
+              InlineEditorActions(null, 'color', color);
+            }}
+          />
+        }
         destroyTooltipOnHide={true}
       >
         <Button icon={<BgColorsOutlined />} style={{ fontSize: '12px' }} size="small"></Button>

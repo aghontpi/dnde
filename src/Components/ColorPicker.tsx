@@ -2,13 +2,17 @@ import styled from 'styled-components';
 import { ChromePicker } from 'react-color';
 import { useState } from 'react';
 
-export const ColorPicker = () => {
-  const [active, setActive] = useState(() => true);
+interface ColorPickerProps {
+  handleChange: (color: string) => void;
+}
+
+export const ColorPicker = ({ handleChange }: ColorPickerProps) => {
   const [color, setColor] = useState(() => '#ccc');
 
   const handleColorChange = (color: any) => {
     const hexCode = `${color.hex}${decimalToHex(color.rgb.a)}`;
     setColor(hexCode);
+    handleChange(`rgba(${color.rgb.r},${color.rgb.g},${color.rgb.b},${color.rgb.a})`);
   };
 
   return (
