@@ -127,6 +127,7 @@ const InlineEditor = () => {
             handleChange={(color) => {
               InlineEditorActions(null, 'fontColor', color);
             }}
+            mouseDown={false}
           />
         }
         destroyTooltipOnHide={true}
@@ -142,6 +143,7 @@ const InlineEditor = () => {
             handleChange={(color) => {
               InlineEditorActions(null, 'color', color);
             }}
+            mouseDown={false}
           />
         }
         destroyTooltipOnHide={true}

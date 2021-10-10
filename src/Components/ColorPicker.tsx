@@ -4,9 +4,10 @@ import { useState } from 'react';
 
 interface ColorPickerProps {
   handleChange: (color: string) => void;
+  mouseDown: boolean;
 }
 
-export const ColorPicker = ({ handleChange }: ColorPickerProps) => {
+export const ColorPicker = ({ handleChange, mouseDown }: ColorPickerProps) => {
   const [color, setColor] = useState(() => '#ccc');
 
   const handleColorChange = (color: any) => {
@@ -16,7 +17,15 @@ export const ColorPicker = ({ handleChange }: ColorPickerProps) => {
   };
 
   return (
-    <ColorPickerContainer color={color}>
+    <ColorPickerContainer
+      onMouseDown={(e) => {
+        if (!mouseDown) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }}
+      color={color}
+    >
       <div className="popover">
         <ChromePicker disableAlpha={false} color={color} onChange={(color: any) => handleColorChange(color)} />
       </div>
