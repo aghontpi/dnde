@@ -8,7 +8,7 @@ import { useQuillEditor } from '../Hooks/Quill.hook';
 import { findClosestParent, findUniqueIdentifier } from '../Utils/closestParent';
 import { detectEmptyElement } from '../Utils/detectEmptyBody';
 import { findElementInJson } from '../Utils/findElementInMjmlJson';
-import { findColumnOfElement } from '../Utils/findElementsColumn';
+import { findColumnOfElement } from '../Utils/findElementsParent';
 import { generateDropItemPlaceholder } from '../Utils/generateDropItemPlaceholder';
 
 interface HtmlWrapperProps {

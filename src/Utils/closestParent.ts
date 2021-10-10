@@ -1,5 +1,5 @@
 import { findElementInJson } from './findElementInMjmlJson';
-import { findColumnOfElement } from './findElementsColumn';
+import { findColumnOfElement } from './findElementsParent';
 
 const findClosestParent = (element: HTMLElement) => {
   const closest = element.closest('.mjml-tag');
