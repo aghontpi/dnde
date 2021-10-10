@@ -12,27 +12,54 @@ const borderRight = '1px solid rgb(85, 85, 85)';
 const ColumnSelector = () => {
   return (
     <>
-      <SectionTitle>
-        <p>2 Columns</p>
-      </SectionTitle>
-      <Image one={50} two={50} />
-      <Image one={40} two={60} />
-      <Image one={25} two={75} />
-      <Image one={60} two={40} />
-      <Image one={75} two={25} />
+      <div>
+        <SectionTitle>
+          <p>1 Columns</p>
+        </SectionTitle>
+        <Image one={50} />
+      </div>
+      <div style={{ marginTop: '16px' }}>
+        <SectionTitle>
+          <p>2 Columns</p>
+        </SectionTitle>
+        <Image one={50} two={50} />
+        <Image one={40} two={60} />
+        <Image one={25} two={75} />
+        <Image one={60} two={40} />
+        <Image one={75} two={25} />
+      </div>
+      <div style={{ marginTop: '16px' }}>
+        <SectionTitle>
+          <p>3 Columns</p>
+        </SectionTitle>
+        <Image one={50} two={50} three={50} />
+        <Image one={25} two={25} three={50} />
+        <Image one={25} two={50} three={25} />
+        <Image one={50} two={25} three={25} />
+      </div>
+      <div style={{ marginTop: '16px' }}>
+        <SectionTitle>
+          <p>4 Columns</p>
+        </SectionTitle>
+        <Image one={50} two={50} three={50} four={50} />
+      </div>
     </>
   );
 };
 
-const Image = ({ one, two }: { one: number; two: number }) => {
+const Image = ({ one, two, three, four }: { one: number; two?: number; three?: number; four?: number }) => {
   return (
     <>
       <Row style={{ marginBottom: '12px' }}></Row>
       <SectionImage>
         <div className="wrapper">
           <div className="border">
-            <div style={{ ...style, flexGrow: one, borderRight }}></div>
-            <div style={{ ...style, flexGrow: two }}></div>
+            <div style={{ ...style, flexGrow: one, borderRight: two ? borderRight : 'unset' }}></div>
+            {two ? <div style={{ ...style, flexGrow: two, borderRight: three ? borderRight : 'unset' }}></div> : null}
+            {three ? (
+              <div style={{ ...style, flexGrow: three, borderRight: four ? borderRight : 'unset' }}></div>
+            ) : null}
+            {four ? <div style={{ ...style, flexGrow: two }}></div> : null}
           </div>
         </div>
       </SectionImage>

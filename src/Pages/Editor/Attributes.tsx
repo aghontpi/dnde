@@ -12,16 +12,23 @@ import { InnerPadding } from '../../Components/Mods/InnerPadding';
 import { Link } from '../../Components/Mods/Link';
 import { Padding } from '../../Components/Mods/Paddings';
 import { Height, Width } from '../../Components/Mods/WidthHeight';
+import styled from 'styled-components';
 import css from './Editor.module.scss';
 import { Tabs } from 'antd';
 import { ColumnSelector } from '../../Components/ColumnSelector';
 
 const { TabPane } = Tabs;
 
+const CustomTabs = styled(Tabs)`
+  .ant-tabs-content {
+    height: 100%;
+  }
+`;
+
 export const Attributes = () => {
   return (
-    <Tabs defaultActiveKey="1" centered>
-      <TabPane tab="Attributes" style={{ height: '100vh' }} key="1">
+    <CustomTabs defaultActiveKey="1" centered style={{ height: '100%' }}>
+      <TabPane tab="Attributes" key="1">
         <Scrollbars style={{ height: '100%' }} autoHide={true}>
           <div className={css.mods}>
             <Width />
@@ -41,11 +48,13 @@ export const Attributes = () => {
           </div>
         </Scrollbars>
       </TabPane>
-      <TabPane tab="Columns" key="2">
-        <div className={css.columns}>
-          <ColumnSelector />
-        </div>
+      <TabPane tab="Column Layout" key="2">
+        <Scrollbars style={{ height: '100%' }} autoHide={true}>
+          <div className={css.columns}>
+            <ColumnSelector />
+          </div>
+        </Scrollbars>
       </TabPane>
-    </Tabs>
+    </CustomTabs>
   );
 };
