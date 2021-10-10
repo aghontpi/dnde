@@ -108,12 +108,9 @@ const converter = (element: HTMLElement, key = 0) => {
 
     if (child['nodeName'] === '#text') {
       if (child.textContent) {
-        // inline editor, whitespace characters are being trimmed.
-        // if whitespce is a problem in future, detect if text is related to
-        // inline editor and stop trimming if so.
-
-        // remove all new line characters
-        const content = child.textContent.replaceAll('\n', '');
+        // remove all new line characters & trim, problem with user's text content
+        //   is handled before this section in 'mj-text'
+        const content = child.textContent.replaceAll('\n', '').trim();
         if (content) {
           children.push(content);
         }
