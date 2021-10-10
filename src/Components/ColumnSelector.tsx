@@ -1,5 +1,14 @@
 import { Row } from 'antd';
+import _ from 'lodash';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useDragAndDropUniqueId } from '../Hooks/Drag.hook';
+import { useEditor } from '../Hooks/Editor.hook';
+import { useHtmlWrapper } from '../Hooks/Htmlwrapper.hook';
+import { generateUniqueIdRecursively } from '../Utils/closestParent';
+import { findElementInJson } from '../Utils/findElementInMjmlJson';
+import { findSectionOfElement } from '../Utils/findElementsParent';
+import { COLUMN } from './Section';
 
 const style = {
   display: 'flex',
@@ -10,48 +19,127 @@ const style = {
 const borderRight = '1px solid rgb(85, 85, 85)';
 
 const ColumnSelector = () => {
-  return (
+  const { active } = useHtmlWrapper();
+  const { mjmlJson, setMjmlJson } = useEditor();
+  const { getId } = useDragAndDropUniqueId();
+  const [visible, setVisible] = useState(false);
+  const [sectionIdentifier, setSectionIdentifier] = useState();
+
+  useEffect(() => {
+    if (active) {
+      const section = findSectionOfElement(active);
+      if (section) {
+        const [htmlElement, uniqueIdentifier] = section;
+        setVisible(true);
+        setSectionIdentifier(uniqueIdentifier);
+        return;
+      }
+    }
+    setVisible(false);
+  }, [active, visible]);
+
+  const handleClick = (changeTo: string[]) => {
+    if (visible && sectionIdentifier) {
+      const find = findElementInJson(mjmlJson, sectionIdentifier);
+      if (find) {
+        const [item, path] = find;
+        if (item && path && item.children && changeTo.length > 0) {
+          const existingLength = item.children.length;
+          const convertLength = changeTo.length;
+          if (convertLength < existingLength) {
+            // todo: implement getconfirmation, that user is about to delete a column
+          }
+          let newChildren = [];
+
+          // iterate over existing children
+          for (let i = 0; i < existingLength && i < convertLength; i++) {
+            let child = _.cloneDeep(item.children[i]);
+            if (child && child.attributes) {
+              // modify width attribute, add it to newChildren
+              child.attributes.width = changeTo[i];
+              newChildren.push(child);
+            }
+          }
+
+          //iterate over new children
+          for (let i = existingLength; i < convertLength; i++) {
+            let preProcessedColumn = generateUniqueIdRecursively(_.cloneDeep(COLUMN), getId);
+            preProcessedColumn.attributes.width = changeTo[i];
+            newChildren.push(preProcessedColumn);
+          }
+
+          // update children
+          const updatedItem = { ...item, children: newChildren };
+
+          //update json
+          console.log('column layout: ', updatedItem);
+
+          const updated = _.set(mjmlJson, path.slice(1), updatedItem);
+
+          if (updated) {
+            setMjmlJson({ ...updated });
+          }
+        }
+      }
+    }
+  };
+
+  return visible ? (
     <>
       <div>
         <SectionTitle>
           <p>1 Columns</p>
         </SectionTitle>
-        <Image one={50} />
+        <Image click={() => handleClick(['100%'])} one={100} />
       </div>
       <div style={{ marginTop: '16px' }}>
         <SectionTitle>
           <p>2 Columns</p>
         </SectionTitle>
-        <Image one={50} two={50} />
-        <Image one={40} two={60} />
-        <Image one={25} two={75} />
-        <Image one={60} two={40} />
-        <Image one={75} two={25} />
+        <Image click={() => handleClick(['50%', '50%'])} one={50} two={50} />
+        <Image click={() => handleClick(['39%', '59%'])} one={40} two={60} />
+        <Image click={() => handleClick(['25%', '75%'])} one={25} two={75} />
+        <Image click={() => handleClick(['60%', '40%'])} one={60} two={40} />
+        <Image click={() => handleClick(['75%', '25%'])} one={75} two={25} />
       </div>
       <div style={{ marginTop: '16px' }}>
         <SectionTitle>
           <p>3 Columns</p>
         </SectionTitle>
-        <Image one={50} two={50} three={50} />
-        <Image one={25} two={25} three={50} />
-        <Image one={25} two={50} three={25} />
-        <Image one={50} two={25} three={25} />
+        <Image click={() => handleClick(['33%', '33%', '33%'])} one={50} two={50} three={50} />
+        <Image click={() => handleClick(['25%', '25%', '50%'])} one={25} two={25} three={50} />
+        <Image click={() => handleClick(['25%', '50%', '25%'])} one={25} two={50} three={25} />
+        <Image click={() => handleClick(['50%', '25%', '25%'])} one={50} two={25} three={25} />
       </div>
       <div style={{ marginTop: '16px' }}>
         <SectionTitle>
           <p>4 Columns</p>
         </SectionTitle>
-        <Image one={50} two={50} three={50} four={50} />
+        <Image click={() => handleClick(['25%', '25%', '25%', '25%'])} one={50} two={50} three={50} four={50} />
       </div>
     </>
+  ) : (
+    <div style={{ textAlign: 'center' }}>Place some items on the page</div>
   );
 };
 
-const Image = ({ one, two, three, four }: { one: number; two?: number; three?: number; four?: number }) => {
+const Image = ({
+  click,
+  one,
+  two,
+  three,
+  four,
+}: {
+  click?: (e: any) => void;
+  one: number;
+  two?: number;
+  three?: number;
+  four?: number;
+}) => {
   return (
     <>
       <Row style={{ marginBottom: '12px' }}></Row>
-      <SectionImage>
+      <SectionImage onClick={click ? click : undefined}>
         <div className="wrapper">
           <div className="border">
             <div style={{ ...style, flexGrow: one, borderRight: two ? borderRight : 'unset' }}></div>
