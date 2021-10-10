@@ -14,6 +14,7 @@ import { Padding } from '../../Components/Mods/Paddings';
 import { Height, Width } from '../../Components/Mods/WidthHeight';
 import css from './Editor.module.scss';
 import { Tabs } from 'antd';
+import { ColumnSelector } from '../../Components/ColumnSelector';
 
 const { TabPane } = Tabs;
 
@@ -41,7 +42,9 @@ export const Attributes = () => {
         </Scrollbars>
       </TabPane>
       <TabPane tab="Columns" key="2">
-        tabcontent2
+        <div className={css.columns}>
+          <ColumnSelector />
+        </div>
       </TabPane>
     </Tabs>
   );
