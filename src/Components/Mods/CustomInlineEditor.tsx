@@ -25,7 +25,7 @@ const CustomSelect = styled(Select)`
 let r: any;
 
 const InlineEditor = () => {
-  const ref = useRef(null);
+  const ref = useRef<any>(null);
   const { x, y } = useCustomEditorPosition();
   const { active } = useCustomEditorStatus();
   const { active: activeElement }: { active: HTMLDivElement } = useHtmlWrapper();
@@ -55,15 +55,13 @@ const InlineEditor = () => {
           restoreSel?.removeAllRanges();
           restoreSel.addRange(r);
           r = temp;
-          console.log('restored selection', r);
         };
 
         const onKeyUp = () => {
           r = window.getSelection()?.getRangeAt(0);
-          console.log(r);
         };
 
-        editor.addEventListener('focusout', Event, false);
+        editor.addEventListener('focusout', Event, true);
         editor.addEventListener('keyup', onKeyUp, false);
         editor.addEventListener('click', onKeyUp, false);
 
@@ -71,15 +69,18 @@ const InlineEditor = () => {
         editor.setAttribute('contentEditable', 'true');
         editor.setAttribute('spellcheck', 'false');
 
+        ref.current.addEventListener('mousedown', onFocus);
+
         if (r) {
           restoreSelection();
         }
 
         return () => {
           console.log('custom editor: cleaning up dynamic attributes');
-          editor.removeEventListener('focusout', Event, false);
+          editor.removeEventListener('focusout', Event, true);
           editor.removeEventListener('keyup', onKeyUp, false);
           editor.removeEventListener('click', onKeyUp, false);
+          document.removeEventListener('mousedown', onFocus);
         };
       }
     }
@@ -111,8 +112,8 @@ const InlineEditor = () => {
         }}
       >
         {Array.from(Array(7).keys()).map((i) => (
-          <Select.Option style={{ fontSize: '12px' }} value={i}>
-            {i}
+          <Select.Option style={{ fontSize: '12px' }} value={i + 1}>
+            {i + 1}
           </Select.Option>
         ))}
       </CustomSelect>
@@ -179,6 +180,12 @@ const stateChangeCallback = (item: any, mjmlJson: any, setMjmlJson: any) => {
       }
     }
   }
+};
+
+const onFocus = (e: any) => {
+  e.preventDefault();
+  e.stopPropagation();
+  return false;
 };
 
 export { InlineEditor };
