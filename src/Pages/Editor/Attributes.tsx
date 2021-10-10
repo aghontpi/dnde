@@ -13,29 +13,36 @@ import { Link } from '../../Components/Mods/Link';
 import { Padding } from '../../Components/Mods/Paddings';
 import { Height, Width } from '../../Components/Mods/WidthHeight';
 import css from './Editor.module.scss';
+import { Tabs } from 'antd';
+
+const { TabPane } = Tabs;
 
 export const Attributes = () => {
   return (
-    <Scrollbars style={{ height: '100%' }} autoHide={true}>
-      <div className={css.heading}>
-        <span>Attributes</span>
-      </div>
-      <div className={css.mods}>
-        <Width />
-        <Height />
-        <Align />
-        <Content />
-        <FontSize />
-        <Padding />
-        <InnerPadding />
-        <ContainerBackground />
-        <Background />
-        <Border />
-        <CordinalBorder />
-        <BorderRadius />
-        <Link />
-        <Img />
-      </div>
-    </Scrollbars>
+    <Tabs defaultActiveKey="1" centered>
+      <TabPane tab="Attributes" style={{ height: '100vh' }} key="1">
+        <Scrollbars style={{ height: '100%' }} autoHide={true}>
+          <div className={css.mods}>
+            <Width />
+            <Height />
+            <Align />
+            <Content />
+            <FontSize />
+            <Padding />
+            <InnerPadding />
+            <ContainerBackground />
+            <Background />
+            <Border />
+            <CordinalBorder />
+            <BorderRadius />
+            <Link />
+            <Img />
+          </div>
+        </Scrollbars>
+      </TabPane>
+      <TabPane tab="Columns" key="2">
+        tabcontent2
+      </TabPane>
+    </Tabs>
   );
 };
