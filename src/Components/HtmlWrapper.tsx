@@ -188,9 +188,6 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
           onMouseEnter: onHover,
           onMouseLeave: onHover,
           onDragOver: _.debounce(onDragOver, 150),
-          ondblclick: (e: any) => {
-            e.preventDefault();
-          },
           onDragStart,
           draggable,
           ref: idRef,
