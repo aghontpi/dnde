@@ -45,7 +45,7 @@ export const columnPlaceholder = [
   },
 ];
 
-const COLUMN = {
+export const COLUMN = {
   tagName: 'mj-column',
   attributes: {
     'css-class': 'mjml-tag identifier-mj-column',
