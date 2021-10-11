@@ -25,11 +25,12 @@ export const Text = () => {
     tagName: 'mj-text',
     attributes: {
       ...{ ...assigned_default_values, 'font-family': `${assigned_default_values['font-family']}, ${ExtraFontNames}` },
+      align: 'left',
       'padding-left': '0px',
       'padding-right': '0px',
       'css-class': 'mjml-tag identifier-mj-text',
     },
-    content: 'hello, customize me!',
+    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque quis dolor auctor.',
     mutableProperties: properties,
     mutalbePropertiesWithDefaultValues: properties_with_default_values,
   };

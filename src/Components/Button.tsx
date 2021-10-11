@@ -24,7 +24,7 @@ export const Button = () => {
       'css-class': 'mjml-tag identifier-mj-button',
     },
     children: [],
-    content: 'Customize this button!',
+    content: 'button',
     mutableProperties: properties,
     mutalbePropertiesWithDefaultValues: properties_with_default_values,
   };
