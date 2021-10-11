@@ -16,6 +16,7 @@ import styled from 'styled-components';
 import css from './Editor.module.scss';
 import { Tabs } from 'antd';
 import { ColumnSelector } from '../../Components/ColumnSelector';
+import { FontFamily } from '../../Components/Mods/FontFamily';
 
 const { TabPane } = Tabs;
 
@@ -36,6 +37,7 @@ export const Attributes = () => {
             <Align />
             <Content />
             <FontSize />
+            <FontFamily />
             <Padding />
             <InnerPadding />
             <ContainerBackground />

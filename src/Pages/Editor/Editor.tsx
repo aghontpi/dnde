@@ -30,6 +30,7 @@ export const Editor = () => {
     const to_copy = JSON.stringify(mjmlJson);
     navigator.clipboard.writeText(to_copy);
     console.log('json', to_copy);
+    console.log('stat', mjmlJson);
 
     success('Copied to Clipboard & logged in devtools ');
   };
