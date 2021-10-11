@@ -1,6 +1,7 @@
 import { SyntheticEvent } from 'react';
 import { useEditor } from '../Hooks/Editor.hook';
 import { cleanMjmlJson } from '../Utils/mjmlProcessor';
+import { FONTS_CONFIG } from './Mods/FontConfig';
 import { UiWrapper } from './UiWrapper';
 
 export type DragEvent = SyntheticEvent & { dataTransfer: DataTransfer };
@@ -14,12 +15,16 @@ const properties_with_default_values = {"color": "#000000", "font-family": "Ubun
 // prettier-ignore
 const assigned_default_values  = {"color": "#000000", "font-family": "Ubuntu, Helvetica, Arial, sans-serif", "font-size": "13px", "line-height": "1", "letter-spacing": "none", "align": "center", "padding": "10px 25px"};
 
+// since use custom inline editor, custom fons wont be included, unless I add them to the font config
+
+const ExtraFontNames: string = FONTS_CONFIG.map((font) => font.name).join(', ');
+
 export const Text = () => {
   const { mjmlJson, setMjmlJson } = useEditor();
   const config = {
     tagName: 'mj-text',
     attributes: {
-      ...assigned_default_values,
+      ...{ ...assigned_default_values, 'font-family': `${assigned_default_values['font-family']}, ${ExtraFontNames}` },
       'padding-left': '0px',
       'padding-right': '0px',
       'css-class': 'mjml-tag identifier-mj-text',

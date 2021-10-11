@@ -16,6 +16,9 @@ import { InlineEditorActions } from '../../Utils/inlineEditorActions';
 import { ColorPicker } from '../ColorPicker';
 import { findClosestParent, findUniqueIdentifier } from '../../Utils/closestParent';
 import { findElementInJson } from '../../Utils/findElementInMjmlJson';
+import { FontFamily } from './FontFamily';
+import { FONTS_CONFIG } from './FontConfig';
+import { useFonts } from '../../Hooks/useFonts';
 
 const CustomSelect = styled(Select)`
   .ant-select-selection-item {
@@ -32,6 +35,8 @@ const InlineEditor = () => {
   const { mjmlJson, setMjmlJson } = useEditor();
   const [fontSelection, setFontSelection] = useState<boolean>(false);
   const selectionRef = useRef<any>(null);
+  const [fontlist] = useFonts();
+  const [fontFamily, setFontFamily] = useState(false);
 
   useEffect(() => {
     if (active && activeElement) {
@@ -198,6 +203,51 @@ const InlineEditor = () => {
         style={{ fontSize: '12px' }}
         size="small"
       ></Button>
+
+      <Select
+        size="small"
+        defaultValue={'Ubuntu'}
+        dropdownStyle={{ minWidth: '18px' }}
+        style={{ fontSize: '12px' }}
+        getPopupContainer={(triggerNode: any) => {
+          triggerNode.addEventListener('focus', onFocus);
+          triggerNode.addEventListener('onmousedown', onFocus);
+          return triggerNode;
+        }}
+        dropdownRender={(original) => {
+          React.Children.map(original, (child: any) => {
+            return cloneElement(child, { onMouseDown: onFocus, onFocus });
+          });
+          return cloneElement(original, {
+            onMouseDown: onFocus,
+            onFocus,
+          });
+        }}
+        onMouseDown={onFocus}
+        onFocus={onFocus}
+        onClick={(e) => {
+          onFocus(e);
+          setFontFamily(!fontFamily);
+        }}
+        onMouseEnter={(e) => {
+          setFontFamily(true);
+          onFocus(e);
+        }}
+        onBlur={onFocus}
+        open={fontFamily}
+        suffixIcon={null}
+        onChange={(value: any) => {
+          InlineEditorActions(null, 'fontFamily', value);
+        }}
+      >
+        {fontlist.map((font) => (
+          <Select.Option onMouseDown={onFocus} onFocus={onFocus} style={{ fontSize: '12px' }} value={font}>
+            <span onMouseDown={onFocus} onFocus={onFocus}>
+              {font}
+            </span>
+          </Select.Option>
+        ))}
+      </Select>
     </div>
   );
 };

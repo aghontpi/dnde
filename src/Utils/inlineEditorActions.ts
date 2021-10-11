@@ -20,9 +20,11 @@ const InlineEditorActions = (e: any, type: string, extras = '') => {
     case 'color':
       document.execCommand('backColor', false, extras);
       break;
-
     case 'fontColor':
       document.execCommand('foreColor', false, extras);
+      break;
+    case 'fontFamily':
+      document.execCommand('fontName', false, extras);
       break;
     default:
       console.info(`unhandled action ${type}`);
