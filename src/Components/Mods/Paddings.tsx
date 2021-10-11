@@ -35,6 +35,8 @@ const Padding = () => {
     [visible, path]
   );
 
+  //todo: optimize this function, move to useEffect, useState.
+  // its being called on every hover event.
   const getValue = (direction: string) => {
     let value = '';
     //todo: debug why removing active causes crash  getValue:{@mods/pad..tsx}
