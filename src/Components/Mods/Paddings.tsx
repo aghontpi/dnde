@@ -43,6 +43,9 @@ const Padding = () => {
     // move it to useeffect later
     if (path && visible && active) {
       let element = _.get(mjmlJson, path);
+      if (!element) {
+        return;
+      }
       value = element.attributes ? element.attributes[`padding-${direction}`] : null;
       if (!value) {
         value = element.attributes['padding'];
