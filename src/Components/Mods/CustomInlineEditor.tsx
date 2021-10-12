@@ -1,7 +1,6 @@
 import { Button, Popover, Select } from 'antd';
 import _ from 'lodash';
-import React, { Children, cloneElement, useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
+import { useEffect, useRef } from 'react';
 import { useCustomEditorPosition, useCustomEditorStatus } from '../../Hooks/CustomEditor.hook';
 import { useEditor } from '../../Hooks/Editor.hook';
 import { useHtmlWrapper } from '../../Hooks/Htmlwrapper.hook';
@@ -16,15 +15,8 @@ import { InlineEditorActions } from '../../Utils/inlineEditorActions';
 import { ColorPicker } from '../ColorPicker';
 import { findClosestParent, findUniqueIdentifier } from '../../Utils/closestParent';
 import { findElementInJson } from '../../Utils/findElementInMjmlJson';
-import { FontFamily } from './FontFamily';
-import { FONTS_CONFIG } from './FontConfig';
 import { useFonts } from '../../Hooks/useFonts';
 
-const CustomSelect = styled(Select)`
-  .ant-select-selection-item {
-    padding-right: 8px !important;
-  }
-`;
 let r: any;
 
 const InlineEditor = () => {
@@ -33,27 +25,25 @@ const InlineEditor = () => {
   const { active } = useCustomEditorStatus();
   const { active: activeElement }: { active: HTMLDivElement } = useHtmlWrapper();
   const { mjmlJson, setMjmlJson } = useEditor();
-  const [fontSelection, setFontSelection] = useState<boolean>(false);
-  const selectionRef = useRef<any>(null);
   const [fontlist] = useFonts();
-  const [fontFamily, setFontFamily] = useState(false);
 
-  const fontFamilyFef = useRef<any>(null);
-
+  // on mount, override the default behaviour of the antd dropdown select
   useEffect(() => {
-    if (selectionRef.current) {
+    if (ref.current) {
       const toolbar = document.querySelectorAll('#customtoolbar .ant-select-selector');
       if (toolbar) {
         toolbar.forEach((item) => {
-          item.addEventListener('click', onFocus);
+          console.log('attaching click event listener to container');
+          item.addEventListener('click', ResetEventBehaviour);
         });
         return () =>
           toolbar.forEach((item) => {
-            item.removeEventListener('click', onFocus);
+            console.log('removing click event listener to container');
+            item.removeEventListener('click', ResetEventBehaviour);
           });
       }
     }
-  }, [selectionRef.current]);
+  }, [ref]);
 
   useEffect(() => {
     if (active && activeElement) {
@@ -64,44 +54,44 @@ const InlineEditor = () => {
         const Event = (e: any) => {
           stateChangeCallback(editor, mjmlJson, setMjmlJson);
 
-          e.stopPropagation();
-          e.preventDefault();
-          e.target.focus();
-          return false;
+          // e.stopPropagation();
+          // e.preventDefault();
+          // e.target.focus();
+          // return false;
         };
 
-        const restoreSelection = () => {
-          let restoreSel = window.getSelection();
-          if (!restoreSel) {
-            return;
-          }
-          const temp = r;
-          restoreSel?.removeAllRanges();
-          restoreSel.addRange(r);
-          r = temp;
-        };
+        // const restoreSelection = () => {
+        //   let restoreSel = window.getSelection();
+        //   if (!restoreSel) {
+        //     return;
+        //   }
+        //   const temp = r;
+        //   restoreSel?.removeAllRanges();
+        //   restoreSel.addRange(r);
+        //   r = temp;
+        // };
 
-        const onKeyUp = () => {
-          r = window.getSelection()?.getRangeAt(0);
-        };
+        // const onKeyUp = () => {
+        //   r = window.getSelection()?.getRangeAt(0);
+        // };
 
         editor.addEventListener('focusout', Event, true);
-        editor.addEventListener('keyup', onKeyUp, false);
-        editor.addEventListener('click', onKeyUp, false);
+        // editor.addEventListener('keyup', onKeyUp, false);
+        // editor.addEventListener('click', onKeyUp, false);
 
         editor.classList.add('editor-active');
         editor.setAttribute('contentEditable', 'true');
         editor.setAttribute('spellcheck', 'false');
 
-        if (r) {
-          restoreSelection();
-        }
+        // if (r) {
+        //   restoreSelection();
+        // }
 
         return () => {
           console.log('custom editor: cleaning up dynamic attributes');
           editor.removeEventListener('focusout', Event, true);
-          editor.removeEventListener('keyup', onKeyUp, false);
-          editor.removeEventListener('click', onKeyUp, false);
+          // editor.removeEventListener('keyup', onKeyUp, false);
+          // editor.removeEventListener('click', onKeyUp, false);
         };
       }
     }
@@ -122,54 +112,30 @@ const InlineEditor = () => {
       }}
       id="customtoolbar"
       ref={ref}
-      onMouseDown={onFocus}
-      onClick={onFocus}
-      onDoubleClick={onFocus}
+      onMouseDown={ResetEventBehaviour}
     >
-      <CustomSelect
+      <Select
         size="small"
-        ref={selectionRef}
         dropdownStyle={{ minWidth: '18px' }}
-        defaultValue={'size'}
+        defaultValue={2}
         style={{ fontSize: '12px' }}
-        getPopupContainer={(triggerNode: any) => {
-          triggerNode.addEventListener('focus', onFocus);
-          triggerNode.addEventListener('onmousedown', onFocus);
-          return triggerNode;
-        }}
-        dropdownRender={(original) => {
-          React.Children.map(original, (child: any) => {
-            return cloneElement(child, { onMouseDown: onFocus, onFocus });
-          });
-          return cloneElement(original, {
-            onMouseDown: onFocus,
-            onFocus,
-          });
-        }}
-        // onMouseDown={onFocus}
-        // onFocus={onFocus}
-        // onClick={(e) => {
-        //   onFocus(e);
-        //   //   setFontSelection(!fontSelection);
-        // }}
-        onMouseEnter={(e) => {
-          //   setFontSelection(true);
-        }}
-        // onBlur={onFocus}
-        // open={fontSelection}
-        suffixIcon={null}
         onChange={(value: any) => {
           InlineEditorActions(null, 'size', value);
         }}
       >
         {Array.from(Array(7).keys()).map((i) => (
-          <Select.Option onMouseDown={onFocus} onFocus={onFocus} style={{ fontSize: '12px' }} value={i + 1}>
-            <span onMouseDown={onFocus} onFocus={onFocus}>
+          <Select.Option
+            onMouseDown={ResetEventBehaviour}
+            onFocus={ResetEventBehaviour}
+            style={{ fontSize: '12px' }}
+            value={i + 1}
+          >
+            <span onMouseDown={ResetEventBehaviour} onFocus={ResetEventBehaviour}>
               {i + 1}
             </span>
           </Select.Option>
         ))}
-      </CustomSelect>
+      </Select>
 
       <Popover
         overlayClassName="inline-editor-popover-color-picker"
@@ -227,41 +193,19 @@ const InlineEditor = () => {
         defaultValue={'Ubuntu'}
         dropdownStyle={{ minWidth: '18px' }}
         style={{ fontSize: '12px' }}
-        getPopupContainer={(triggerNode: any) => {
-          triggerNode.addEventListener('focus', onFocus);
-          triggerNode.addEventListener('onmousedown', onFocus);
-          return triggerNode;
-        }}
-        dropdownRender={(original) => {
-          React.Children.map(original, (child: any) => {
-            return cloneElement(child, { onMouseDown: onFocus, onFocus });
-          });
-          return cloneElement(original, {
-            onMouseDown: onFocus,
-            onFocus,
-          });
-        }}
-        ref={fontFamilyFef}
-        // onMouseDown={onFocus}
-        // onFocus={onFocus}
-        // onClick={(e) => {
-        //   onFocus(e);
-        //   //   setFontFamily(!fontFamily);
-        // }}
-        onMouseEnter={(e) => {
-          //   setFontFamily(true);
-          onFocus(e);
-        }}
-        // onBlur={onFocus}
-        // open={fontFamily}
-        suffixIcon={null}
         onChange={(value: any) => {
           InlineEditorActions(null, 'fontFamily', value);
         }}
+        onMouseDown={ResetEventBehaviour}
       >
         {fontlist.map((font) => (
-          <Select.Option onMouseDown={onFocus} onFocus={onFocus} style={{ fontSize: '12px' }} value={font}>
-            <span onMouseDown={onFocus} onFocus={onFocus}>
+          <Select.Option
+            onMouseDown={ResetEventBehaviour}
+            onFocus={ResetEventBehaviour}
+            style={{ fontSize: '12px' }}
+            value={font}
+          >
+            <span onMouseDown={ResetEventBehaviour} onFocus={ResetEventBehaviour}>
               {font}
             </span>
           </Select.Option>
@@ -295,7 +239,7 @@ const stateChangeCallback = (item: any, mjmlJson: any, setMjmlJson: any) => {
   }
 };
 
-const onFocus = (e: any) => {
+const ResetEventBehaviour = (e: any) => {
   e.preventDefault();
   e.stopPropagation();
   return false;
