@@ -38,6 +38,23 @@ const InlineEditor = () => {
   const [fontlist] = useFonts();
   const [fontFamily, setFontFamily] = useState(false);
 
+  const fontFamilyFef = useRef<any>(null);
+
+  useEffect(() => {
+    if (selectionRef.current) {
+      const toolbar = document.querySelectorAll('#customtoolbar .ant-select-selector');
+      if (toolbar) {
+        toolbar.forEach((item) => {
+          item.addEventListener('click', onFocus);
+        });
+        return () =>
+          toolbar.forEach((item) => {
+            item.removeEventListener('click', onFocus);
+          });
+      }
+    }
+  }, [selectionRef.current]);
+
   useEffect(() => {
     if (active && activeElement) {
       const uniqueIdentifier = findUniqueIdentifier(activeElement, activeElement.classList);
@@ -103,6 +120,7 @@ const InlineEditor = () => {
         backgroundColor: '#fff',
         transition: 'all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1)',
       }}
+      id="customtoolbar"
       ref={ref}
       onMouseDown={onFocus}
       onClick={onFocus}
@@ -128,17 +146,17 @@ const InlineEditor = () => {
             onFocus,
           });
         }}
-        onMouseDown={onFocus}
-        onFocus={onFocus}
-        onClick={(e) => {
-          onFocus(e);
-          setFontSelection(!fontSelection);
-        }}
+        // onMouseDown={onFocus}
+        // onFocus={onFocus}
+        // onClick={(e) => {
+        //   onFocus(e);
+        //   //   setFontSelection(!fontSelection);
+        // }}
         onMouseEnter={(e) => {
-          setFontSelection(true);
+          //   setFontSelection(true);
         }}
-        onBlur={onFocus}
-        open={fontSelection}
+        // onBlur={onFocus}
+        // open={fontSelection}
         suffixIcon={null}
         onChange={(value: any) => {
           InlineEditorActions(null, 'size', value);
@@ -223,18 +241,19 @@ const InlineEditor = () => {
             onFocus,
           });
         }}
-        onMouseDown={onFocus}
-        onFocus={onFocus}
-        onClick={(e) => {
-          onFocus(e);
-          setFontFamily(!fontFamily);
-        }}
+        ref={fontFamilyFef}
+        // onMouseDown={onFocus}
+        // onFocus={onFocus}
+        // onClick={(e) => {
+        //   onFocus(e);
+        //   //   setFontFamily(!fontFamily);
+        // }}
         onMouseEnter={(e) => {
-          setFontFamily(true);
+          //   setFontFamily(true);
           onFocus(e);
         }}
-        onBlur={onFocus}
-        open={fontFamily}
+        // onBlur={onFocus}
+        // open={fontFamily}
         suffixIcon={null}
         onChange={(value: any) => {
           InlineEditorActions(null, 'fontFamily', value);
