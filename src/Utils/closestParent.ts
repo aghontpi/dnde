@@ -31,6 +31,10 @@ const findUniqueIdentifier = (element: Element, classlist: DOMTokenList, identif
   return uniqueClassName;
 };
 
+const findUniqueIdentifierFromString = (classList: string) => {
+  return findUniqueIdentifier(null as unknown as Element, classList.split(' ') as unknown as DOMTokenList);
+};
+
 const replaceGeneicTagWithUniqueId = (classNames: string, uid: string) => {
   let updatedClassNames = '';
   if (typeof classNames !== 'string') {
@@ -169,6 +173,7 @@ const getIndexOfElementInParent = (node: HTMLElement, mjmlJson: any, uniqueIdent
 export {
   findClosestParent,
   findUniqueIdentifier,
+  findUniqueIdentifierFromString,
   replaceGeneicTagWithUniqueId,
   generateUniqueIdRecursively,
   getIndexOfElementInColumn,
