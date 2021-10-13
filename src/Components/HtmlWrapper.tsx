@@ -9,7 +9,10 @@ import { findClosestParent, findUniqueIdentifier } from '../Utils/closestParent'
 import { detectEmptyElement } from '../Utils/detectEmptyBody';
 import { findElementInJson } from '../Utils/findElementInMjmlJson';
 import { findColumnOfElement } from '../Utils/findElementsParent';
-import { generateDropItemPlaceholder } from '../Utils/generateDropItemPlaceholder';
+import {
+  generateDropItemPlaceholder,
+  genereateDropItemPlaceholderForColumn,
+} from '../Utils/generateDropItemPlaceholder';
 
 interface HtmlWrapperProps {
   // children: React.DOMElement<React.DOMAttributes<Element>, Element>;
@@ -161,7 +164,15 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
     const nearestTag = findClosestParent(currentTarget);
     // only show place item sign for column's children
     if (nearestTag?.includes('mj-column') || nearestTag?.includes('mj-section')) {
-      return;
+      console.log('::indicator: trigger->column');
+      if (nearestTag.includes('mj-column')) {
+        const madeChange = genereateDropItemPlaceholderForColumn({ mjmlJson, nearestTag, setMjmlJson });
+        if (madeChange === true) {
+          console.log('::indicator: trigger->column -> stopping further processing');
+          return;
+        }
+        console.log('::indicator: trigger->column -> no updates where done -> proceeding further processing');
+      }
     }
 
     let columnElement = memoFind(currentTarget);
@@ -169,7 +180,7 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
     if (columnElement) {
       [columnElement] = columnElement;
     }
-
+    console.log('::indicator: trigger->insideColumn');
     generateDropItemPlaceholder({
       mjmlJson,
       nearestTag,

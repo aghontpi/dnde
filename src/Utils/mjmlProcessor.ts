@@ -1,3 +1,5 @@
+import { columnPlaceholder } from '../Components/Section';
+
 const cleanMjmlJson = (mjmlJson: any, ignore: string = '') => {
   if (!mjmlJson) {
     return null;
@@ -27,6 +29,13 @@ const cleanMjmlJson = (mjmlJson: any, ignore: string = '') => {
       newChildren.push(result);
     }
   }
+
+  // if the children is column and its length is 0,
+  //  then add a placeholder to the column
+  if (mjmlJson && mjmlJson['tagName'] === 'mj-column' && newChildren.length === 0) {
+    newChildren.push(...columnPlaceholder);
+  }
+
   if (newChildren.length) {
     mjmlJson['children'] = newChildren;
   }
