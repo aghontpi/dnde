@@ -155,7 +155,8 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
 
   const memoFind = useCallback((e: HTMLElement) => findColumnOfElement(e), []);
 
-  const onDragOver = useCallback((e: any) => {
+  //todo: add removed perfomance optimization once functionality dev is complete.
+  const onDragOver = (e: any) => {
     const currentTarget = e.nativeEvent.target;
     const nearestTag = findClosestParent(currentTarget);
     // only show place item sign for column's children
@@ -177,7 +178,7 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
       setMjmlJson,
       event: e,
     });
-  }, []);
+  };
 
   return useMemo(
     () =>
