@@ -21,6 +21,7 @@
       flex-wrap: wrap;
       flex: 1;
       justify-content: space-between;
+      row-gap: 10px;
     }
 
     .mods,
@@ -30,10 +31,6 @@
       display: flex;
       flex-direction: column;
     }
-
-    // .mods > div {
-    //   padding-top: 20px;
-    // }
   }
 
   .bank {

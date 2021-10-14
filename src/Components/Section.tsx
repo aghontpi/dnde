@@ -3,6 +3,7 @@ import _, { floor } from 'lodash';
 import { Fragment, SyntheticEvent } from 'react';
 import styled from 'styled-components';
 import { findUniqueIdentifier } from '../Utils/closestParent';
+import { dragStart } from '../Utils/dragStart';
 
 export type DragEvent = SyntheticEvent & { dataTransfer: DataTransfer };
 
@@ -83,10 +84,8 @@ export const Section = () => {
         config = _.set(config, 'children', children);
       }
     }
-    e.dataTransfer.dropEffect = 'copy';
-    e.dataTransfer.setData('config', JSON.stringify(config));
+    dragStart(e as any, config);
   };
-  // access type, etc from comp nd set to context
 
   let dynamicRenderer = [1, 2, 3, 4, 5, 6].map((value, index) => {
     return (

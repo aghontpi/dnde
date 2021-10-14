@@ -1,5 +1,6 @@
 import { SyntheticEvent } from 'react';
 import { useEditor } from '../Hooks/Editor.hook';
+import { dragStart } from '../Utils/dragStart';
 import { cleanMjmlJson } from '../Utils/mjmlProcessor';
 import { UiWrapper } from './UiWrapper';
 
@@ -28,9 +29,7 @@ export const Divider = () => {
   };
 
   const onDragStart = (e: DragEvent) => {
-    e.dataTransfer.dropEffect = 'copy';
-    e.dataTransfer.setData('config', JSON.stringify(config));
-    console.log(e);
+    dragStart(e as any, config);
   };
   // access type, etc from comp nd set to context
 

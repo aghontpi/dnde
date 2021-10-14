@@ -38,6 +38,15 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
     getId();
   }, []);
 
+  // while move items in editor, hide these
+  useEffect(() => {
+    if (active === null) {
+      setCopyActive(false);
+      setDelActive(false);
+      setCustomEditorStatus(false);
+    }
+  }, [active]);
+
   useEffect(() => {
     if (idRef.current) {
       if (uiList && uiList.indexOf(idRef.current) === -1) {
@@ -143,13 +152,17 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
   };
 
   const onDragStart = (e: any) => {
-    e.dataTransfer.dropEffect = 'copy';
+    if (active) {
+      setActive(null);
+    }
+    e.dataTransfer.dropEffect = 'move';
     const uniqueClassName = findClosestParent(e.target);
     const find = findElementInJson(mjmlJson, uniqueClassName);
     if (find) {
       const [, path] = find;
       let item = _.get(mjmlJson, path.slice(1));
       item = { mode: 'move', uniqueClassName: uniqueClassName, config: _.cloneDeep(item) };
+      e.dataTransfer.setDragImage(e.target, -5, -5);
       e.dataTransfer.setData('config', JSON.stringify(item));
     } else {
       console.info(`move items: drag unable to find the config to transfer ${uniqueClassName}`);

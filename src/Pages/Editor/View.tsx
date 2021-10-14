@@ -12,6 +12,7 @@ import { InlineEditor } from '../../Components/Mods/CustomInlineEditor';
 import styled from 'styled-components';
 import { useHtmlWrapper } from '../../Hooks/Htmlwrapper.hook';
 import { useCkeditor } from '../../Hooks/Ckeditor.hook';
+import { useCallback, useEffect } from 'react';
 
 interface ViewProps {}
 
@@ -26,9 +27,22 @@ const DesignContainer = styled('div')`
 export const View = (props: ViewProps) => {
   const { mjmlJson, setMjmlJson } = useEditor();
   const { getId } = useDragAndDropUniqueId();
-  const { setActive } = useHtmlWrapper();
+  const { setActive, active } = useHtmlWrapper();
   const { setDelActive, copy } = useCkeditor();
   const { setCopyActive } = copy;
+  useEffect(() => {
+    console.log('::updated mjmlJson::', mjmlJson);
+  }, [mjmlJson]);
+
+  const onDragOver = useCallback(
+    (e: any) => {
+      if (active) {
+        setActive(null);
+      }
+      e.preventDefault();
+    },
+    [setActive, active]
+  );
 
   const onDrop = (e: any) => {
     e.preventDefault();
@@ -47,7 +61,6 @@ export const View = (props: ViewProps) => {
       of config :'${config.uniqueClassName}'`);
       config = config['config'];
     }
-
     Add({
       target: e.nativeEvent.target,
       droppedConfig: config,
@@ -70,8 +83,4 @@ export const View = (props: ViewProps) => {
       </DesignContainer>
     </Scrollbars>
   );
-};
-
-const onDragOver = (e: any) => {
-  e.preventDefault();
 };
