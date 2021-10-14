@@ -62,6 +62,7 @@ export const Section = () => {
     attributes: {
       ...assigned_default_values,
       'css-class': 'mjml-tag identifier-mj-section',
+      'border-radius': '0px',
       'background-color': '#fff',
       'text-align': 'center',
     },
