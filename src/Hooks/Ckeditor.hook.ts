@@ -18,6 +18,10 @@ export const useCkeditor = () => {
     delActive: boolean;
     setDelActive: (arg: boolean) => void;
     ckeditorInstance: any;
+    drag: {
+      isColumn: boolean;
+      setIsColumn: (arg: boolean) => void;
+    };
     copy: {
       copyActive: boolean;
       setCopyActive: (arg: boolean) => void;

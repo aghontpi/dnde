@@ -14,6 +14,7 @@ export const Ckeditor: FC = (props) => {
   const [copyActive, setCopyActive] = useState(false);
   const [copyX, setCopyX] = useState(0);
   const [copyY, setCopyY] = useState(0);
+  const [isColumn, setIsColumn] = useState(false);
 
   // should only be one instance, only manipulate the locations
   return (
@@ -30,6 +31,10 @@ export const Ckeditor: FC = (props) => {
         delY,
         setDelX,
         setDelY,
+        drag: {
+          isColumn,
+          setIsColumn,
+        },
         copy: {
           copyActive,
           setCopyActive,

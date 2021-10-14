@@ -23,7 +23,15 @@ interface HtmlWrapperProps {
 export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) => {
   const { setUIWrapperList, setActive, setActiveHover, active, activeHover, id, setId, getId, uiList } =
     useHtmlWrapper();
-  const { setX, setY, setDelActive, setDelX, setDelY, copy } = useCkeditor();
+  const {
+    setX,
+    setY,
+    setDelActive,
+    setDelX,
+    setDelY,
+    copy,
+    drag: { isColumn },
+  } = useCkeditor();
   const { setQuillActive, setQuillX, setQuillY } = useQuillEditor();
   const { mjmlJson, setMjmlJson } = useEditor();
   const { setX: customEditorSetX, setY: customEditorSetY } = useCustomEditorPosition();
@@ -129,7 +137,6 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
     [idRef, activeHover]
   );
   const draggable = activeHover === idRef.current;
-  const dropTarget = activeHover === idRef.current;
   const cursetStyle = useMemo(() => (activeHover === idRef.current ? 'pointer' : 'default'), [activeHover, idRef]);
   const outline = activeHover === idRef.current ? '2px dotted rgb(121, 202, 182)' : 'unset';
   const outlineClick = active === idRef.current ? '2px solid rgb(121, 202, 182)' : 'unset';
@@ -142,14 +149,6 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
   if (detectEmptyElement(originalNode, 'section')) {
     console.info('empty section detected');
   }
-
-  const onDragEnter = (e: any) => {
-    // console.log('on drag enter', e.currentTarget);
-  };
-
-  const onDragLeave = (e: any) => {
-    // console.log('on drag leave', e.currentTarget);
-  };
 
   const onDragStart = (e: any) => {
     if (active) {
@@ -173,6 +172,10 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
 
   //todo: add removed perfomance optimization once functionality dev is complete.
   const onDragOver = (e: any) => {
+    if (isColumn) {
+      // column & section can not be nested,
+      return;
+    }
     const currentTarget = e.nativeEvent.target;
     const nearestTag = findClosestParent(currentTarget);
     // only show place item sign for column's children

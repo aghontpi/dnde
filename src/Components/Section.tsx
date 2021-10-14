@@ -2,6 +2,7 @@ import { Row } from 'antd';
 import _, { floor } from 'lodash';
 import { Fragment, SyntheticEvent } from 'react';
 import styled from 'styled-components';
+import { useCkeditor } from '../Hooks/Ckeditor.hook';
 import { findUniqueIdentifier } from '../Utils/closestParent';
 import { dragStart } from '../Utils/dragStart';
 
@@ -69,6 +70,10 @@ export const Section = () => {
     mutableProperties: properties,
   };
 
+  const {
+    drag: { setIsColumn },
+  } = useCkeditor();
+
   const onDragStart = (e: DragEvent) => {
     const target = e.target as Element;
     const identifier = findUniqueIdentifier(target, target.classList, 'mj-columns');
@@ -85,6 +90,7 @@ export const Section = () => {
       }
     }
     dragStart(e as any, config);
+    setIsColumn(true);
   };
 
   let dynamicRenderer = [1, 2, 3, 4, 5, 6].map((value, index) => {

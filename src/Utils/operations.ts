@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import _ from 'lodash';
 import { error } from '../Components/Messages';
 import { columnPlaceholder } from '../Components/Section';
@@ -35,6 +36,15 @@ const Add = ({ target, droppedConfig, setMjmlJson, mjmlJson, uid }: AddProps) =>
       setMjmlJson({ ...cleanedMjmlJson });
       error('kindly place the item on column instead ');
       return null;
+    }
+  }
+
+  if (droppedConfig.tagName && droppedConfig.tagName === 'mj-section') {
+    if (uniqueClassName !== 'identifier-mj-body') {
+      const msg = 'Columns can not be nested! it will break mobile design';
+      message.info(msg);
+      console.log(`operation add: ${msg}`);
+      return;
     }
   }
 

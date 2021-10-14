@@ -31,7 +31,11 @@ export const View = (props: ViewProps) => {
   const { mjmlJson, setMjmlJson } = useEditor();
   const { getId } = useDragAndDropUniqueId();
   const { setActive, active } = useHtmlWrapper();
-  const { setDelActive, copy } = useCkeditor();
+  const {
+    setDelActive,
+    copy,
+    drag: { setIsColumn, isColumn },
+  } = useCkeditor();
   const { setCopyActive } = copy;
 
   useEffect(() => {
@@ -67,6 +71,10 @@ export const View = (props: ViewProps) => {
 
   const onDrop = (e: any) => {
     e.preventDefault();
+    if (isColumn) {
+      setIsColumn(false);
+    }
+    setIsColumn(false);
     let config = JSON.parse(e.dataTransfer.getData('config'));
     if (config && config.mode && config.mode === 'move' && config['config']) {
       // remove the item old position, before inserting in new position
