@@ -11,6 +11,7 @@ export const Content = () => {
   const { mjmlJson, setMjmlJson } = useEditor();
   const [value, setValue] = useState('');
   const [isReadOnly, setIsReadOnly] = useState<boolean | null>(null);
+  const [htmlBlock, setHtmlBlock] = useState(false);
 
   useEffect(() => {
     if (visible && path) {
@@ -20,10 +21,16 @@ export const Content = () => {
 
         // maintain read only state for some attributes
         if (item.tagName === 'mj-text') {
+          if (item.attributes && item.attributes['css-class'] && item.attributes['css-class'].includes('html-block')) {
+            setIsReadOnly(false);
+            setHtmlBlock(true);
+            return;
+          }
           setIsReadOnly(true);
         } else {
           setIsReadOnly(false);
         }
+        setHtmlBlock(false);
       }
     }
     // todo:  mjmlJson here creates two way dependency,
@@ -49,13 +56,17 @@ export const Content = () => {
 
   return visible ? (
     <Form.Item label="Content">
-      <Input.TextArea
-        disabled={isReadOnly ? isReadOnly : false}
-        readOnly={isReadOnly ? isReadOnly : false}
-        rows={3}
-        onChange={handleChange}
-        value={value}
-      />
+      {htmlBlock ? (
+        <Input.TextArea rows={28} onChange={handleChange} value={value} />
+      ) : (
+        <Input.TextArea
+          disabled={isReadOnly ? isReadOnly : false}
+          readOnly={isReadOnly ? isReadOnly : false}
+          rows={3}
+          onChange={handleChange}
+          value={value}
+        />
+      )}
     </Form.Item>
   ) : null;
 };

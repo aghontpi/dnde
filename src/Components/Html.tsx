@@ -9,27 +9,40 @@ export type DragEvent = SyntheticEvent & { dataTransfer: DataTransfer };
 export const Html = () => {
   const { mjmlJson, setMjmlJson } = useEditor();
   const config = {
-    tagName: 'mj-raw',
+    tagName: 'mj-text',
     attributes: {
-      'css-class': 'mjml-tag identifier-mj-raw',
-      height: '100px',
-      width: '100px',
+      'css-class': 'mjml-tag identifier-mj-html html-block',
+      padding: '0px',
     },
-    children: [],
-    content: `<table>
-    <tr>
-      <td>heading 1</td> 
-      <td>heading 2</td>
+    mutableProperties: ['font-family'],
+    content: `
+    <table border="1" style="width:100%; border-collapse:collapse">
+    <tr style="font-weight:bold">
+      <td>S. No</td> 
+      <td>Items</td>
+      <td>Quantity</td>
+      <td align="center">Price</td>
     </tr>
     <tr>
-      <td>data one</td>
-      <td>data two</td>
+      <td>1</td>
+      <td>egg</td>
+      <td>24</td>
+      <td align="center">$10.00</td>
     </tr>
     <tr>
-      <td>an one</td>
-      <td>an two</td>
+      <td>2</td>
+      <td>milk</td>
+      <td>5</td>
+      <td align="center">$8</td>
     </tr>
-    </table>`,
+    <tr>
+      <td>2</td>
+      <td>milk</td>
+      <td>3</td>
+      <td align="center">$6</td>
+    </tr>
+    </table>
+    `,
   };
 
   const onDragStart = (e: DragEvent) => {
