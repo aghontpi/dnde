@@ -55,12 +55,10 @@ class UndoRedo {
   }
 
   public isUndoEmpty() {
-    console.log('undoredo: empty check');
     return this.undo.length === 0;
   }
 
   public isRedoEmpty() {
-    console.log('undoredo: empty check');
     return this.redo.length === 0;
   }
 

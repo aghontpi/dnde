@@ -17,6 +17,8 @@ import css from './Editor.module.scss';
 import { Tabs } from 'antd';
 import { ColumnSelector } from '../../Components/ColumnSelector';
 import { FontFamily } from '../../Components/Mods/FontFamily';
+import { UNDOREDO } from '../../Utils/undoRedo';
+import { useEditor } from '../../Hooks/Editor.hook';
 
 const { TabPane } = Tabs;
 
@@ -27,11 +29,20 @@ const CustomTabs = styled(Tabs)`
 `;
 
 export const Attributes = () => {
+  const { mjmlJson } = useEditor();
   return (
     <CustomTabs defaultActiveKey="1" centered style={{ height: '100%' }}>
       <TabPane tab="Attributes" key="1">
         <Scrollbars style={{ height: '100%' }} autoHide={true}>
-          <div className={css.mods}>
+          <div
+            className={css.mods}
+            onMouseDown={(e) => {
+              UNDOREDO.newAction(mjmlJson);
+            }}
+            onBlur={(e) => {
+              UNDOREDO.newAction(mjmlJson);
+            }}
+          >
             <Width />
             <Height />
             <Align />

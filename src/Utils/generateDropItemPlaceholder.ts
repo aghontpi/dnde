@@ -130,7 +130,6 @@ const genereateDropItemPlaceholderForColumn = ({
         columnObj.children = newOrder;
         let parentSection = _.get(_.cloneDeep(cleanedMjmlJson), sectionPath);
         let columnChildrenNewOrder = [];
-        debugger;
         for (let i = 0; parentSection && parentSection.children && i < parentSection.children.length; i++) {
           const childColumn = parentSection['children'][i];
           const cssClass = childColumn.attributes && childColumn['attributes']['css-class'];
