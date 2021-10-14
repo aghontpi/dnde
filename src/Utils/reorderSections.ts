@@ -3,7 +3,7 @@ import { findUniqueIdentifierFromString } from './closestParent';
 import { findElementInJson } from './findElementInMjmlJson';
 import { UNDOREDO } from './undoRedo';
 
-const moveSectionUp = (className: string, mjmlJson: any, setMjmlJson: any) => {
+const moveSectionUp = (className: string, mjmlJson: any, setMjmlJson: any, directon = 'up') => {
   const uniqueClassName = findUniqueIdentifierFromString(className);
   if (uniqueClassName) {
     const child = findElementInJson(mjmlJson, uniqueClassName);
@@ -25,11 +25,22 @@ const moveSectionUp = (className: string, mjmlJson: any, setMjmlJson: any) => {
       if (indexOfItem !== -1) {
         for (let i = 0; parentItem.children.length > 1 && i < parentItem.children.length; i++) {
           const childSection = parentItem.children[i];
-          if (childSection) {
-            // moveup -> indexOfItem -1
+          if (childSection && directon === 'up') {
+            // moveup -> indexOfItem -1;
             if (i === indexOfItem - 1) {
               newOrder.push(childItem);
               newOrder.push(childSection);
+              i += 1;
+              continue;
+            }
+            newOrder.push(childSection);
+          }
+          if (childSection && directon === 'down') {
+            // movedown
+            if (i === indexOfItem) {
+              const nextChild = parentItem.children[i + 1];
+              newOrder.push(nextChild);
+              newOrder.push(childItem);
               i += 1;
               continue;
             }
@@ -48,6 +59,8 @@ const moveSectionUp = (className: string, mjmlJson: any, setMjmlJson: any) => {
   }
 };
 
-const moveSectionDown = (uniqueClassName: string) => {};
+const moveSectionDown = (uniqueClassName: string, mjmlJson: any, setMjmlJson: any) => {
+  return moveSectionUp(uniqueClassName, mjmlJson, setMjmlJson, 'down');
+};
 
 export { moveSectionUp, moveSectionDown };

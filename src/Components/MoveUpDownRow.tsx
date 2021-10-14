@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useEditor } from '../Hooks/Editor.hook';
 import { findUniqueIdentifierFromString } from '../Utils/closestParent';
 import { findElementInJson } from '../Utils/findElementInMjmlJson';
-import { moveSectionUp } from '../Utils/reorderSections';
+import { moveSectionDown, moveSectionUp } from '../Utils/reorderSections';
 import { ResetEventBehaviour } from './Mods/CustomInlineEditor';
 
 interface MoveUpDownProps {
@@ -67,6 +67,7 @@ const MoveUpDown = ({ className, idRef, active }: MoveUpDownProps) => {
 
   const MoveDown = (e: any) => {
     ResetEventBehaviour(e);
+    moveSectionDown(className, mjmlJson, setMjmlJson);
   };
 
   return (
