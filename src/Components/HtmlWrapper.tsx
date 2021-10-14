@@ -1,11 +1,9 @@
-import { OmitProps } from 'antd/lib/transfer/ListBody';
-import _, { floor } from 'lodash';
+import _ from 'lodash';
 import { createElement, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useCkeditor } from '../Hooks/Ckeditor.hook';
 import { useCustomEditorPosition, useCustomEditorStatus } from '../Hooks/CustomEditor.hook';
 import { useEditor } from '../Hooks/Editor.hook';
 import { useHtmlWrapper } from '../Hooks/Htmlwrapper.hook';
-import { useQuillEditor } from '../Hooks/Quill.hook';
 import { findClosestParent, findUniqueIdentifier } from '../Utils/closestParent';
 import { detectEmptyElement } from '../Utils/detectEmptyBody';
 import { findElementInJson } from '../Utils/findElementInMjmlJson';
@@ -14,6 +12,7 @@ import {
   generateDropItemPlaceholder,
   genereateDropItemPlaceholderForColumn,
 } from '../Utils/generateDropItemPlaceholder';
+import { setToolBars } from '../Utils/setToolbarPositions';
 import { MoveUpDown } from './MoveUpDownRow';
 
 interface HtmlWrapperProps {
@@ -26,21 +25,17 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
   const { setUIWrapperList, setActive, setActiveHover, active, activeHover, id, setId, getId, uiList } =
     useHtmlWrapper();
   const {
-    setX,
-    setY,
     setDelActive,
     setDelX,
     setDelY,
     copy,
     drag: { isColumn },
   } = useCkeditor();
-  const { setQuillActive, setQuillX, setQuillY } = useQuillEditor();
   const { mjmlJson, setMjmlJson } = useEditor();
   const { setX: customEditorSetX, setY: customEditorSetY } = useCustomEditorPosition();
   const { setActive: setCustomEditorStatus } = useCustomEditorStatus();
   const idRef = useRef(id);
   const uniqueId = useRef(id);
-  const [contentEditable, setContentEditable] = useState(false);
 
   const { setCopyX, setCopyActive, setCopyY } = copy;
 
@@ -71,51 +66,31 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
 
   const onHover = useMemo(
     () => (e: any) => {
-      // console.log(idRef.current, active, activeHover);
       setActiveHover(idRef.current);
     },
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [idRef]
   );
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
   const onClick = useMemo(
     () =>
       idRef.current === activeHover
         ? (e: any) => {
             setActive(idRef.current);
-            // console.log('onClick', e, idRef.current, active, activeHover);
-            console.log('clickevent', e);
             const clickTarget = e.target;
             const mjmlTarget = clickTarget.closest('.mjml-tag');
             if (mjmlTarget) {
               const pos = mjmlTarget.getBoundingClientRect();
 
-              // activate editor only for text elements, todo: extend for btn later
+              // activate editor only for text elements,
               const identifier = findUniqueIdentifier(mjmlTarget, mjmlTarget.classList);
               if (identifier?.includes('text')) {
                 const x = pos.left;
                 const y = pos.top - 38;
 
-                // ckeditor
-                // if (pos) {
-                //   setX(x);
-                //   setY(y);
-                // }
-
-                //quilleditor
-                // setQuillActive(true);
-                // setQuillX(x);
-                // setQuillY(y);
-
-                // customEditor
-
                 setCustomEditorStatus(true);
                 customEditorSetX(x);
                 customEditorSetY(y);
-                setContentEditable(true);
               } else {
-                // setQuillActive(false);
                 setCustomEditorStatus(false);
               }
 
@@ -123,16 +98,7 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
               setDelActive(true);
               setCopyActive(true);
 
-              const IconSize = 32;
-              const numberOfIcons = 2 * IconSize;
-              if (pos) {
-                setDelX(pos.right + 4);
-                const middle = floor((pos.bottom - pos.top) / 2) - numberOfIcons / 2;
-                setDelY(pos.top + middle);
-                setCopyX(pos.right + 4);
-                // below the delete icon, with a little offset
-                setCopyY(pos.top + middle + IconSize + 4);
-              }
+              setToolBars({ pos, delete: { setDelX, setDelY }, copy: { setCopyX, setCopyY } });
             }
           }
         : null,
