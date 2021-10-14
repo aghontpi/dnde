@@ -1,3 +1,4 @@
+import { OmitProps } from 'antd/lib/transfer/ListBody';
 import _, { floor } from 'lodash';
 import { createElement, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useCkeditor } from '../Hooks/Ckeditor.hook';
@@ -13,7 +14,7 @@ import {
   generateDropItemPlaceholder,
   genereateDropItemPlaceholderForColumn,
 } from '../Utils/generateDropItemPlaceholder';
-import { MoveDown, MoveUp } from './MoveUpDownRow';
+import { MoveUpDown } from './MoveUpDownRow';
 
 interface HtmlWrapperProps {
   // children: React.DOMElement<React.DOMAttributes<Element>, Element>;
@@ -234,25 +235,12 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
     [idRef, draggable, onHover, onClick, originalNode, outline, outlineClick, active, uniqueId, activeHover]
   );
 
+  // for sections show Indicators to show up and down.
   if (originalNode && originalNode.props.className.includes('mj-section')) {
     return (
-      <div onClick={() => {}}>
+      <div>
         {Element}
-        <div style={{ position: 'relative', visibility: active === idRef.current ? 'visible' : 'hidden' }}>
-          <div
-            style={{
-              position: 'absolute',
-              left: -38,
-              bottom: 0,
-              display: 'flex',
-              flexDirection: 'column',
-              rowGap: '4px',
-            }}
-          >
-            <MoveUp />
-            <MoveDown />
-          </div>
-        </div>
+        <MoveUpDown className={originalNode.props.className} idRef={idRef} active={active} />
       </div>
     );
   }

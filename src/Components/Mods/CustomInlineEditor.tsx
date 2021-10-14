@@ -239,7 +239,7 @@ const stateChangeCallback = (item: any, mjmlJson: any, setMjmlJson: any) => {
   }
 };
 
-const ResetEventBehaviour = (e: any) => {
+export const ResetEventBehaviour = (e: any) => {
   e.preventDefault();
   e.stopPropagation();
   return false;
