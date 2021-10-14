@@ -93,7 +93,7 @@ export const Section = () => {
     setIsColumn(true);
   };
 
-  let dynamicRenderer = [1, 2, 3, 4, 5, 6].map((value, index) => {
+  let dynamicRenderer = [1, 2, 3, 4].map((value, index) => {
     return (
       <Fragment key={value}>
         <SectionTitle key={value + index + 'title'}>
