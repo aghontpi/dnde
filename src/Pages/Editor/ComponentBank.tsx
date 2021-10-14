@@ -23,7 +23,7 @@ export const ComponentBank = () => {
       <Collapse
         expandIconPosition={'right'}
         bordered={false}
-        defaultActiveKey={['2']}
+        defaultActiveKey={['1', '2']}
         style={{ backgroundColor: 'rgb(255,255,255)' }}
         expandIcon={({ isActive }) => <CaretDownOutlined rotate={isActive ? 0 : 180} />}
       >
