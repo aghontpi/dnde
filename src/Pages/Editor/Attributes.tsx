@@ -19,6 +19,7 @@ import { ColumnSelector } from '../../Components/ColumnSelector';
 import { FontFamily } from '../../Components/Mods/FontFamily';
 import { UNDOREDO } from '../../Utils/undoRedo';
 import { useEditor } from '../../Hooks/Editor.hook';
+import { VerticalAlign } from '../../Components/Mods/VerticalAlign';
 
 const { TabPane } = Tabs;
 
@@ -46,6 +47,7 @@ export const Attributes = () => {
             <Width />
             <Height />
             <Align />
+            <VerticalAlign />
             <Content />
             <FontSize />
             <FontFamily />

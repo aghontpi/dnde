@@ -4,7 +4,7 @@ import AlignRightOutlined from '@ant-design/icons/lib/icons/AlignRightOutlined';
 import PicCenterOutlined from '@ant-design/icons/lib/icons/PicCenterOutlined';
 import { Button, Col, Form, Row, Tooltip } from 'antd';
 import _ from 'lodash';
-import { useValue, useVisibility } from '../../Hooks/Attribute.hook';
+import { useVisibility } from '../../Hooks/Attribute.hook';
 import { useEditor } from '../../Hooks/Editor.hook';
 import { useHtmlWrapper } from '../../Hooks/Htmlwrapper.hook';
 
