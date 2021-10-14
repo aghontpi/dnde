@@ -2,12 +2,15 @@ import { Row } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useCkeditor } from '../Hooks/Ckeditor.hook';
+import { useCustomEditorStatus } from '../Hooks/CustomEditor.hook';
 import { useDragAndDropUniqueId } from '../Hooks/Drag.hook';
 import { useEditor } from '../Hooks/Editor.hook';
 import { useHtmlWrapper } from '../Hooks/Htmlwrapper.hook';
 import { generateUniqueIdRecursively } from '../Utils/closestParent';
 import { findElementInJson } from '../Utils/findElementInMjmlJson';
 import { findSectionOfElement } from '../Utils/findElementsParent';
+import { UNDOREDO } from '../Utils/undoRedo';
 import { COLUMN } from './Section';
 
 const style = {
@@ -21,6 +24,11 @@ const borderRight = '1px solid rgb(85, 85, 85)';
 const ColumnSelector = () => {
   const { active } = useHtmlWrapper();
   const { mjmlJson, setMjmlJson } = useEditor();
+  const {
+    setDelActive,
+    copy: { setCopyActive },
+  } = useCkeditor();
+  const { setActive: setCustomEditorActive } = useCustomEditorStatus();
   const { getId } = useDragAndDropUniqueId();
   const [visible, setVisible] = useState(false);
   const [sectionIdentifier, setSectionIdentifier] = useState();
@@ -29,7 +37,7 @@ const ColumnSelector = () => {
     if (active) {
       const section = findSectionOfElement(active);
       if (section) {
-        const [htmlElement, uniqueIdentifier] = section;
+        const [, uniqueIdentifier] = section;
         setVisible(true);
         setSectionIdentifier(uniqueIdentifier);
         return;
@@ -77,6 +85,10 @@ const ColumnSelector = () => {
           const updated = _.set(mjmlJson, path.slice(1), updatedItem);
 
           if (updated) {
+            UNDOREDO.newAction(updated);
+            setDelActive(false);
+            setCopyActive(false);
+            setCustomEditorActive(false);
             setMjmlJson({ ...updated });
           }
         }

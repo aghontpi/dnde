@@ -10,6 +10,7 @@ import {
 import { findElementInJson } from './findElementInMjmlJson';
 import { cleanMjmlJson } from './mjmlProcessor';
 import { insertAtPlaceholderIndicatorPosition, removePlaceholderBanner } from './removePlaceholders';
+import { UNDOREDO } from './undoRedo';
 
 interface AddProps {
   target: HTMLElement;
@@ -40,7 +41,7 @@ const Add = ({ target, droppedConfig, setMjmlJson, mjmlJson, uid }: AddProps) =>
   let droppedConfigWithUid = _.cloneDeep(droppedConfig);
   droppedConfigWithUid = generateUniqueIdRecursively(droppedConfigWithUid, uid);
 
-  const ObjectEquivalent = findElementInJson(mjmlJson, uniqueClassName);
+  const ObjectEquivalent = findElementInJson(_.cloneDeep(mjmlJson), uniqueClassName);
 
   if (!ObjectEquivalent) {
     return null;
@@ -53,8 +54,13 @@ const Add = ({ target, droppedConfig, setMjmlJson, mjmlJson, uid }: AddProps) =>
 
   item = insertAtPlaceholderIndicatorPosition(item, droppedConfigWithUid);
 
+  if (UNDOREDO.isUndoEmpty()) {
+    UNDOREDO.newAction(mjmlJson);
+  }
+
   let updated = _.set(mjmlJson, path.slice(1), item);
   updated = cleanMjmlJson(updated);
+  UNDOREDO.newAction(updated);
   setMjmlJson({ ...updated });
 };
 
@@ -105,9 +111,10 @@ const AddAtIndex = ({
       }
     }
   }
-
   let updated = _.set(mjmlJson, path.slice(1), item);
   updated = cleanMjmlJson(updated);
+
+  UNDOREDO.newAction(updated);
   setMjmlJson({ ...updated });
 };
 
@@ -180,7 +187,7 @@ const Remove = ({
 
   setActive(null);
   const updated = _.set(mjmlJson, parent.slice(1), item);
-
+  UNDOREDO.newAction(updated);
   if (updated) {
     setDelActive(false);
     setCopyActive(false);
