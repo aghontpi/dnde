@@ -1,5 +1,6 @@
 import { createContext, FC, useState } from 'react';
 import { FONTS_CONFIG } from '../Components/Mods/FontConfig';
+import { HEADSTYLE } from '../Components/Mods/HeadStyle';
 
 export const EditorContext = createContext<any>(null);
 
@@ -11,6 +12,7 @@ const initialState = {
       attributes: {},
       children: [
         { tagName: 'mj-title', attributes: {}, children: [] },
+        { tagName: 'mj-style', content: HEADSTYLE },
         ...FONTS_CONFIG.map((font) => {
           return {
             tagName: 'mj-font',
