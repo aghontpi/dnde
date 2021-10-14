@@ -31,8 +31,9 @@ export const Content = () => {
     //   to infinite renders
   }, [visible, path, mjmlJson]);
 
-  useEffect(() => {
-    if (value) {
+  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    let value = e.currentTarget.value;
+    if (path && visible) {
       let element = _.get(mjmlJson, path);
       // while in middle of editing, if the element is removed.
       if (element) {
@@ -40,15 +41,9 @@ export const Content = () => {
           element[PROPERTY] = value;
           const updated = _.set(mjmlJson, path, element);
           setMjmlJson({ ...updated });
+          setValue(value);
         }
       }
-    }
-  }, [value]);
-
-  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    let value = e.currentTarget.value;
-    if (path && visible) {
-      setValue(value);
     }
   };
 

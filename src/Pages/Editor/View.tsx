@@ -12,7 +12,9 @@ import { InlineEditor } from '../../Components/Mods/CustomInlineEditor';
 import styled from 'styled-components';
 import { useHtmlWrapper } from '../../Hooks/Htmlwrapper.hook';
 import { useCkeditor } from '../../Hooks/Ckeditor.hook';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { UndoRedo } from '../../Components/UndoRedo';
+import _ from 'lodash';
 
 interface ViewProps {}
 
@@ -30,9 +32,46 @@ export const View = (props: ViewProps) => {
   const { setActive, active } = useHtmlWrapper();
   const { setDelActive, copy } = useCkeditor();
   const { setCopyActive } = copy;
+  const [undoRedo, setUndoRedo] = useState<{ undo: any[]; redo: any[] }>({ undo: [], redo: [] });
+
   useEffect(() => {
-    console.log('::updated mjmlJson::', mjmlJson);
+    const undo_len = undoRedo.undo.length;
+    const current = _.cloneDeep(mjmlJson);
+    if (undo_len > 0) {
+      const prev = undoRedo.undo[undo_len - 1];
+      if (!_.isMatch(prev, current)) {
+        setUndoRedo((prev) => {
+          return {
+            redo: [...prev.redo],
+            undo: [...prev.undo, current],
+          };
+        });
+      }
+    } else if (undo_len === 0) {
+      setUndoRedo((prev) => {
+        return {
+          redo: [...prev.redo],
+          undo: [...prev.undo, current],
+        };
+      });
+    }
+
+    console.log('::updated mjmlJson::', mjmlJson, undoRedo);
   }, [mjmlJson]);
+
+  const undoCallback = () => {
+    let undo_len = undoRedo.undo.length;
+    if (undo_len > 1) {
+      const undo = _.cloneDeep(undoRedo.undo[undo_len - 2]);
+      setUndoRedo((prev) => {
+        return {
+          undo: prev.undo.slice(0, -1),
+          redo: [...prev.redo, undo],
+        };
+      });
+      setMjmlJson({ ...undo });
+    }
+  };
 
   const onDragOver = useCallback(
     (e: any) => {
@@ -74,6 +113,7 @@ export const View = (props: ViewProps) => {
     <Scrollbars style={{ height: '100%' }}>
       <Editor />
       <InlineEditor />
+      <UndoRedo undoCallback={undoCallback} redoCallback={() => alert('redo')} />
       <DesignContainer
         className={`${css.viewHolder} mjml-wrapper mjml-tag identifier-mj-body`}
         onDrop={onDrop}
