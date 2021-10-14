@@ -13,6 +13,7 @@ import {
   generateDropItemPlaceholder,
   genereateDropItemPlaceholderForColumn,
 } from '../Utils/generateDropItemPlaceholder';
+import { MoveDown, MoveUp } from './MoveUpDownRow';
 
 interface HtmlWrapperProps {
   // children: React.DOMElement<React.DOMAttributes<Element>, Element>;
@@ -207,7 +208,7 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
     });
   };
 
-  return useMemo(
+  const Element = useMemo(
     () =>
       createElement(
         originalNode.nodeName as string,
@@ -232,4 +233,29 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
       ),
     [idRef, draggable, onHover, onClick, originalNode, outline, outlineClick, active, uniqueId, activeHover]
   );
+
+  if (originalNode && originalNode.props.className.includes('mj-section')) {
+    return (
+      <div onClick={() => {}}>
+        {Element}
+        <div style={{ position: 'relative', visibility: active === idRef.current ? 'visible' : 'hidden' }}>
+          <div
+            style={{
+              position: 'absolute',
+              left: -38,
+              bottom: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              rowGap: '4px',
+            }}
+          >
+            <MoveUp />
+            <MoveDown />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return Element;
 });
