@@ -51,7 +51,7 @@ export const COLUMN = {
   tagName: 'mj-column',
   attributes: {
     'css-class': 'mjml-tag identifier-mj-column',
-    padding: '10px 24px',
+    padding: '8px 16px',
   },
   children: [...columnPlaceholder],
   mutableProperties: properties_column,
