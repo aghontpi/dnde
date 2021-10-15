@@ -204,10 +204,17 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
   // for sections show Indicators to show up and down.
   if (originalNode && originalNode.props.className.includes('mj-section')) {
     return (
-      <div>
+      <>
         {Element}
         <MoveUpDown className={originalNode.props.className} idRef={idRef} active={active} />
-      </div>
+        <div style={{ position: 'relative' }}>
+          <div style={{ position: 'absolute', right: -2, bottom: -24 }}>
+            {active === idRef.current || activeHover === idRef.current ? (
+              <label style={{ padding: '4px 6px', background: 'cyan', color: 'white' }}>row</label>
+            ) : null}
+          </div>
+        </div>
+      </>
     );
   }
 
