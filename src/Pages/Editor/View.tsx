@@ -43,7 +43,7 @@ export const View = (props: ViewProps) => {
   }, [mjmlJson]);
 
   const undoCallback = () => {
-    const action = UNDOREDO.undoAction();
+    const action = UNDOREDO.undoAction(mjmlJson);
     if (action) {
       setMjmlJson({ ...action });
       setDelActive(false);
@@ -51,7 +51,7 @@ export const View = (props: ViewProps) => {
     }
   };
   const redoCallback = () => {
-    const action = UNDOREDO.redoAction();
+    const action = UNDOREDO.redoAction(mjmlJson);
     if (action) {
       setMjmlJson({ ...action });
       setDelActive(false);

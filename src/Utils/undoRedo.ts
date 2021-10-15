@@ -18,23 +18,33 @@ class UndoRedo {
     this.redo = [];
   }
 
-  public undoAction() {
+  public undoAction(current: any = false): any {
     if (this.undo.length < 1) {
       return false;
     }
 
     const itemToApply = this.copy(this.undo.pop());
     this.redo.push(itemToApply);
+
+    if (current && _.isEqual(itemToApply, current)) {
+      console.log('undoredo: undo action but view and current are same, proceeding one more step');
+      return this.undoAction(current);
+    }
+
     return itemToApply;
   }
 
-  public redoAction() {
+  public redoAction(current: any = false): any {
     if (this.redo.length < 1) {
       return false;
     }
 
     const itemToApply = this.copy(this.redo.pop());
     this.undo.push(itemToApply);
+    if (current && _.isEqual(itemToApply, current)) {
+      console.log('undoredo: redo action but view and current are same, proceeding one more step');
+      return this.redoAction(current);
+    }
     return itemToApply;
   }
 
