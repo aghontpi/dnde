@@ -20,6 +20,7 @@ import { FontFamily } from '../../Components/Mods/FontFamily';
 import { UNDOREDO } from '../../Utils/undoRedo';
 import { useEditor } from '../../Hooks/Editor.hook';
 import { VerticalAlign } from '../../Components/Mods/VerticalAlign';
+import { BackgroundImage } from '../../Components/Mods/BackgroundImage';
 
 const { TabPane } = Tabs;
 
@@ -55,6 +56,7 @@ export const Attributes = () => {
             <InnerPadding />
             <ContainerBackground />
             <Background />
+            <BackgroundImage />
             <Border />
             <CordinalBorder />
             <BorderRadius />
