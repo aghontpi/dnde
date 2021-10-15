@@ -85,6 +85,7 @@ export const View = (props: ViewProps) => {
         setActive,
         setDelActive,
         setCopyActive,
+        movement: true,
       });
       console.info(`operation move: onDrop -> removed previous instance 
       of config :'${config.uniqueClassName}'`);

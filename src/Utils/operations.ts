@@ -136,6 +136,7 @@ interface RemoveProps {
   setDelActive: any;
   setCopyActive: any;
   setActive: any;
+  movement?: boolean;
 }
 
 const Remove = ({
@@ -146,6 +147,7 @@ const Remove = ({
   setDelActive,
   setCopyActive,
   setActive,
+  movement,
 }: RemoveProps) => {
   let uniqueClassName;
   if (target) {
@@ -197,16 +199,20 @@ const Remove = ({
 
   setActive(null);
   const updated = _.set(mjmlJson, parent.slice(1), item);
-  UNDOREDO.newAction(updated);
   if (updated) {
     setDelActive(false);
     setCopyActive(false);
     setMjmlJson({ ...updated });
+    // for moving elements in editor,
+    //   the way it works is that the element is removed from the parent first,
+    //   then the placeholder is replaced with the element
+    //   for undo action dont need to show the process
+    if (!movement) {
+      UNDOREDO.newAction(updated);
+    }
   } else {
     console.info('operation remove: unable to delete the item');
   }
-
-  setMjmlJson({ ...updated });
 };
 
 interface UpdateValueProps {
