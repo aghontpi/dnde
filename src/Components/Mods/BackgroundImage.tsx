@@ -1,5 +1,5 @@
 import { Col, Form, Row, Input } from 'antd';
-import _, { set } from 'lodash';
+import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useVisibility } from '../../Hooks/Attribute.hook';
 import { useEditor } from '../../Hooks/Editor.hook';
@@ -24,15 +24,15 @@ const BackgroundImage = () => {
     if (mjmlJson) {
       if (urlVisibility) {
         const item = _.get(mjmlJson, urlPath);
-        setUrl(item.attributes[URL]);
+        item && setUrl(item.attributes[URL]);
       }
       if (sizeVisibility) {
         const item = _.get(mjmlJson, sizePath);
-        setSize(item.attributes[SIZE]);
+        item && setSize(item.attributes[SIZE]);
       }
       if (repeatVisiblity) {
         const item = _.get(mjmlJson, repeatPath);
-        setRepeat(item.attributes[REPEAT]);
+        item && setRepeat(item.attributes[REPEAT]);
       }
     }
   }, [active]);
