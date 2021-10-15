@@ -159,12 +159,22 @@ const converter = (element: HTMLElement, key = 0) => {
 
 const convertStyleStringToObject = (style: string) => {
   let styleObject: { [key: string]: string } = {};
-  let styleArray = style.split(';');
+
+  //  edgecase
+  //  "background:#ffffff url('background:#ffffff url('https://lh3.googleusercontent.com/-y_e1bS8pZSc/YKkCKwNrxgI/AAAAAAAADuY/l1ygemViAp8ZXd44mAvqypqg7zsTD2gIACLcBGAsYHQ/s1600/1621688872017805-1.png') center top / auto repeat;') center top / auto repeat;background-position:center top;background-repeat:repeat;background-size:auto;margin:0px auto;border-radius:0px;max-width:600px;"
+  // https://stackoverflow.com/a/9219386/6843092, with negative lookahead
+  let styleArray = style.split(/;+(?![^(]*\))/g);
+
   for (let i = 0; i < styleArray.length; i++) {
     if (styleArray[i] === '') {
       continue;
     }
-    let stylePair = styleArray[i].split(':');
+
+    // bug while parsing
+    // 'background:#ffffff url('https://...') center top / auto repeat;'
+    let [key, ..._value] = styleArray[i].split(':');
+
+    let stylePair = [key, _value.join(':')];
     let property = stylePair[0].trim();
     property = toCamelCase(property);
     let value = stylePair[1].trim();
