@@ -147,6 +147,12 @@ const converter = (element: HTMLElement, key = 0) => {
     nodeName = 'div';
   }
 
+  // remove href in link
+  if (nodeName === 'a') {
+    delete attributes['href'];
+    delete attributes['target'];
+  }
+
   // img tag should not have child param passed to it
   if (nodeName === 'img') {
     return React.createElement(nodeName, { key: key++, ...attributes }, null);

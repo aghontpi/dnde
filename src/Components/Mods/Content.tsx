@@ -3,6 +3,7 @@ import { Form, Input } from 'antd';
 import { useEditor } from '../../Hooks/Editor.hook';
 import { ChangeEvent, useEffect, useState } from 'react';
 import _ from 'lodash';
+import { useHtmlWrapper } from '../../Hooks/Htmlwrapper.hook';
 
 const PROPERTY = 'content';
 
@@ -12,12 +13,13 @@ export const Content = () => {
   const [value, setValue] = useState('');
   const [isReadOnly, setIsReadOnly] = useState<boolean | null>(null);
   const [htmlBlock, setHtmlBlock] = useState(false);
+  const { active } = useHtmlWrapper();
 
   useEffect(() => {
     if (visible && path) {
       let item = _.get(mjmlJson, path);
-      if (item && item.content) {
-        setValue(item.content);
+      if (item) {
+        setValue(item.content ? item.content : '');
 
         // maintain read only state for some attributes
         if (item.tagName === 'mj-text') {
@@ -36,10 +38,11 @@ export const Content = () => {
     // todo:  mjmlJson here creates two way dependency,
     //   remove it, and handle 'mj-text' differently, this is dangerous, as it could lead
     //   to infinite renders
-  }, [visible, path, mjmlJson]);
+  }, [active]);
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     let value = e.currentTarget.value;
+    setValue(value);
     if (path && visible) {
       let element = _.get(mjmlJson, path);
       // while in middle of editing, if the element is removed.
@@ -48,7 +51,6 @@ export const Content = () => {
           element[PROPERTY] = value;
           const updated = _.set(mjmlJson, path, element);
           setMjmlJson({ ...updated });
-          setValue(value);
         }
       }
     }

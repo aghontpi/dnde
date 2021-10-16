@@ -10,6 +10,7 @@ import { Spacer } from '../../Components/Spacer';
 import { Html } from '../../Components/Html';
 import { Divider } from '../../Components/Divider';
 import { Section } from '../../Components/Section';
+import { Social } from '../../Components/Social';
 
 const { Panel } = Collapse;
 
@@ -38,6 +39,7 @@ export const ComponentBank = () => {
             <Spacer />
             <Divider />
             <Html />
+            <Social />
           </div>
         </Panel>
       </Collapse>
