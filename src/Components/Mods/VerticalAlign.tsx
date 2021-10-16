@@ -11,8 +11,12 @@ import _ from 'lodash';
 
 const ATTRIBUTE = 'vertical-align';
 
-export const VerticalAlign = () => {
-  const [visible, path] = useVisibility({ attribute: ATTRIBUTE });
+interface VerticalAlignProps {
+  activePath?: string;
+}
+
+export const VerticalAlign = ({ activePath }: VerticalAlignProps) => {
+  const [visible, path] = useVisibility({ attribute: ATTRIBUTE, customPath: activePath });
   const { mjmlJson, setMjmlJson } = useEditor();
   const { active } = useHtmlWrapper();
 

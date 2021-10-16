@@ -21,6 +21,9 @@ import { UNDOREDO } from '../../Utils/undoRedo';
 import { useEditor } from '../../Hooks/Editor.hook';
 import { VerticalAlign } from '../../Components/Mods/VerticalAlign';
 import { BackgroundImage } from '../../Components/Mods/BackgroundImage';
+import { ColumnAttributes } from '../../Components/ColumnAttributes';
+import { useHtmlWrapper } from '../../Hooks/Htmlwrapper.hook';
+import { useEffect, useState } from 'react';
 
 const { TabPane } = Tabs;
 
@@ -32,8 +35,18 @@ const CustomTabs = styled(Tabs)`
 
 export const Attributes = () => {
   const { mjmlJson } = useEditor();
+  const { active } = useHtmlWrapper();
+  const [isColumn, setIsColumn] = useState(false);
+
+  useEffect(() => {
+    if (active && active.classList && active.className.includes('mj-column')) {
+      setIsColumn(true);
+    }
+    isColumn && setIsColumn(false);
+  }, [active]);
+
   return (
-    <CustomTabs defaultActiveKey="1" centered style={{ height: '100%' }}>
+    <CustomTabs defaultActiveKey="1" centered style={{ height: '100%' }} destroyInactiveTabPane={true}>
       <TabPane tab="Attributes" key="1">
         <Scrollbars style={{ height: '100%' }} autoHide={true}>
           <div
@@ -45,23 +58,31 @@ export const Attributes = () => {
               UNDOREDO.newAction(mjmlJson);
             }}
           >
-            <Width />
-            <Height />
-            <Align />
-            <VerticalAlign />
-            <Content />
-            <FontSize />
-            <FontFamily />
-            <Padding />
-            <InnerPadding />
-            <ContainerBackground />
-            <Background />
-            <BackgroundImage />
-            <Border />
-            <CordinalBorder />
-            <BorderRadius />
-            <Link />
-            <Img />
+            {isColumn ? (
+              <div style={{ textAlign: 'center' }}>
+                The selected Item is a Column, to modify properties <h2> check "Column Properties" Tab</h2>
+              </div>
+            ) : (
+              <>
+                <Width />
+                <Height />
+                <Align />
+                <VerticalAlign />
+                <Content />
+                <FontSize />
+                <FontFamily />
+                <Padding />
+                <InnerPadding />
+                <ContainerBackground />
+                <Background />
+                <BackgroundImage />
+                <Border />
+                <CordinalBorder />
+                <BorderRadius />
+                <Link />
+                <Img />
+              </>
+            )}
           </div>
         </Scrollbars>
       </TabPane>
@@ -70,6 +91,11 @@ export const Attributes = () => {
           <div className={css.columns}>
             <ColumnSelector />
           </div>
+        </Scrollbars>
+      </TabPane>
+      <TabPane tab="Column Properties" key="3">
+        <Scrollbars style={{ height: '100%' }} autoHide={true}>
+          <ColumnAttributes />
         </Scrollbars>
       </TabPane>
     </CustomTabs>

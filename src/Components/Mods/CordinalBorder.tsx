@@ -3,9 +3,12 @@ import { useEditor } from '../../Hooks/Editor.hook';
 import { Form, Input, Row, Col } from 'antd';
 import { useVisibility } from '../../Hooks/Attribute.hook';
 
-export const CordinalBorder = () => {
+interface CordinalBorderProps {
+  activePath?: string;
+}
+export const CordinalBorder = ({ activePath }: CordinalBorderProps) => {
   const { mjmlJson, setMjmlJson } = useEditor();
-  const [visible, path] = useVisibility({ attribute: 'border-top' });
+  const [visible, path] = useVisibility({ attribute: 'border-top', customPath: activePath });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, direction: string) => {
     if (visible && path && e.target.value) {

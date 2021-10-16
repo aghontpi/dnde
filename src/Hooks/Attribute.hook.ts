@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { findUniqueIdentifier } from '../Utils/closestParent';
 import { findElementInJson } from '../Utils/findElementInMjmlJson';
 import { useEditor } from './Editor.hook';
@@ -8,9 +8,10 @@ import { useHtmlWrapper } from './Htmlwrapper.hook';
 interface useVisibilityProps {
   attribute?: string;
   property?: string;
+  customPath?: string;
 }
 
-const useVisibility = ({ attribute, property }: useVisibilityProps): [boolean | null, string, any] => {
+const useVisibility = ({ attribute, property, customPath }: useVisibilityProps): [boolean | null, string, any] => {
   const [visible, setVisible] = useState<boolean | null>(false);
 
   const { active } = useHtmlWrapper();
@@ -24,6 +25,11 @@ const useVisibility = ({ attribute, property }: useVisibilityProps): [boolean | 
       const uniqueIdentifier = findUniqueIdentifier(active, active.classList);
       if (uniqueIdentifier) {
         let path = findElementInJson(mjmlJson, uniqueIdentifier);
+
+        if (customPath) {
+          path = [null, '.' + customPath];
+        }
+
         if (path) {
           const [, pathToElement] = path;
           if (pathToElement.length > 0) {

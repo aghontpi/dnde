@@ -5,8 +5,12 @@ import { useValue, useVisibility } from '../../Hooks/Attribute.hook';
 
 const ATTRIBUTE = 'border';
 
-export const Border = () => {
-  const [visible, path] = useVisibility({ attribute: ATTRIBUTE });
+interface BorderProps {
+  activePath?: string;
+}
+
+export const Border = ({ activePath }: BorderProps) => {
+  const [visible, path] = useVisibility({ attribute: ATTRIBUTE, customPath: activePath });
   const { mjmlJson, setMjmlJson } = useEditor();
   const { getValue } = useValue({ path, visible, attribute: ATTRIBUTE });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

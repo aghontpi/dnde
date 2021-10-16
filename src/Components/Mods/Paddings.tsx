@@ -1,17 +1,20 @@
 import { Form, Input, Row, Col } from 'antd';
 import _ from 'lodash';
-import { ChangeEvent, useEffect, useMemo, useState } from 'react';
+import { ChangeEvent, useMemo } from 'react';
 import { useVisibility } from '../../Hooks/Attribute.hook';
 import { useEditor } from '../../Hooks/Editor.hook';
-import { useHtmlWrapper } from '../../Hooks/Htmlwrapper.hook';
 
-const Padding = () => {
-  let [visible, path, active] = useVisibility({ attribute: 'padding' });
+interface PaddingProps {
+  activePath?: string;
+}
+
+const Padding = ({ activePath }: PaddingProps) => {
+  let [visible, path, active] = useVisibility({ attribute: 'padding', customPath: activePath });
   const { mjmlJson, setMjmlJson } = useEditor();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>, direction: string) => {
     if (e.currentTarget.value === '') {
-      e.currentTarget.value = '0px';
+      e.currentTarget.value = '0';
     }
     // if (!value.includes('px')) {
     //   e.currentTarget.value = `${value}px`;

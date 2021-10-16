@@ -7,18 +7,24 @@ import { useEffect, useState } from 'react';
 import { useVisibility } from '../../Hooks/Attribute.hook';
 
 const ATTRIBUTE = 'background-color';
+interface BackgroundProps {
+  activePath?: string;
+  label?: string;
+  overrideAttribute?: string;
+}
 
-export const Background = () => {
+export const Background = ({ activePath, label, overrideAttribute }: BackgroundProps) => {
+  const attribute = overrideAttribute || ATTRIBUTE;
   const { mjmlJson, setMjmlJson } = useEditor();
   const [active, setActive] = useState(() => false);
   const [color, setColor] = useState(() => '#ccc');
-  const [visible, path] = useVisibility({ attribute: ATTRIBUTE });
+  const [visible, path] = useVisibility({ attribute, customPath: activePath });
 
   useEffect(() => {
     if (visible && path) {
       const item = _.get(mjmlJson, path);
-      if (item && item.attributes && item.attributes[ATTRIBUTE]) {
-        setColor(item.attributes[ATTRIBUTE]);
+      if (item && item.attributes && item.attributes[attribute]) {
+        setColor(item.attributes[attribute]);
       }
     }
   }, [path, visible]);
@@ -28,7 +34,7 @@ export const Background = () => {
     setColor(hexCode);
     if (path && visible) {
       let element = _.get(mjmlJson, path);
-      element.attributes['background-color'] = hexCode;
+      element.attributes[attribute] = hexCode;
       let json = _.set(mjmlJson, path, element);
 
       setMjmlJson({ ...json });
@@ -39,7 +45,7 @@ export const Background = () => {
     <>
       <Row>
         <Col flex="auto">
-          <Form.Item label="Background"></Form.Item>
+          <Form.Item label={label ? label : 'Background'}></Form.Item>
         </Col>
 
         <ColorPicker color={color} flex="none">

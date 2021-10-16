@@ -5,9 +5,13 @@ import { useVisibility } from '../../Hooks/Attribute.hook';
 
 const ATTRIBUTE = 'border-radius';
 
-export const BorderRadius = () => {
+interface BorderRadiusProps {
+  activePath?: string;
+}
+
+export const BorderRadius = ({ activePath }: BorderRadiusProps) => {
   const { mjmlJson, setMjmlJson } = useEditor();
-  const [visible, path] = useVisibility({ attribute: ATTRIBUTE });
+  const [visible, path] = useVisibility({ attribute: ATTRIBUTE, customPath: activePath });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (visible && e.target.value) {

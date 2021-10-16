@@ -5,8 +5,13 @@ import { useValue, useVisibility } from '../../Hooks/Attribute.hook';
 
 const ATTRIBUTE = 'width';
 
-export const Width = () => {
-  const [visible, path] = useVisibility({ attribute: ATTRIBUTE });
+interface WidthHeightProps {
+  activePath?: string;
+}
+
+export const Width = ({ activePath }: WidthHeightProps) => {
+  const [visible, path] = useVisibility({ attribute: ATTRIBUTE, customPath: activePath });
+
   const { mjmlJson, setMjmlJson } = useEditor();
   const { getValue } = useValue({ path, visible, attribute: ATTRIBUTE });
 
