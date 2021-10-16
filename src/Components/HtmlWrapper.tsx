@@ -52,18 +52,6 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
     }
   }, [active]);
 
-  useEffect(() => {
-    if (idRef.current) {
-      if (uiList && uiList.indexOf(idRef.current) === -1) {
-        setUIWrapperList((prev: any) => {
-          let newFilter = prev.map((item: any) => item);
-          newFilter.push(idRef.current);
-          return newFilter;
-        });
-      }
-    }
-  }, [idRef, uiList]);
-
   const onHover = useMemo(
     () => (e: any) => {
       setActiveHover(idRef.current);
@@ -210,7 +198,7 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
         <div style={{ position: 'relative' }}>
           <div style={{ position: 'absolute', right: -2, bottom: -24 }}>
             {active === idRef.current || activeHover === idRef.current ? (
-              <label style={{ padding: '4px 6px', background: 'cyan', color: 'white' }}>row</label>
+              <label style={{ padding: '4px 6px', background: '#1890ff', color: 'white' }}>row</label>
             ) : null}
           </div>
         </div>
