@@ -36,10 +36,10 @@ export const Html = () => {
       <td align="center">$8</td>
     </tr>
     <tr>
-      <td>2</td>
-      <td>milk</td>
       <td>3</td>
-      <td align="center">$6</td>
+      <td>curd</td>
+      <td>8</td>
+      <td align="center">$8</td>
     </tr>
     </table>
     `,
@@ -48,7 +48,6 @@ export const Html = () => {
   const onDragStart = (e: DragEvent) => {
     dragStart(e as any, config);
   };
-  // access type, etc from comp nd set to context
 
   const onDragEnd = (e: DragEvent) => {
     const cleaned = cleanMjmlJson(mjmlJson);
