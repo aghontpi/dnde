@@ -8,7 +8,6 @@ const DEBUG = false;
 const domParser: any = new DOMParser();
 
 export const htmlProcessor = (html: string): ReactNode => {
-  console.log('::htmlrender');
   if (typeof html !== 'string') {
     console.error('htmlParser: html is not a string');
     return React.createElement('div', {}, 'errors: please check dev console') as ReactNode;

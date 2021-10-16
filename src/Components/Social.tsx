@@ -40,8 +40,8 @@ export const Social = () => {
           ...social_element_config.attributes,
           name: 'facebook-noshare',
           href: 'https://github.com/aghontpi',
+          src: 'https://dev.bluepie.in/assets/facebook.png',
         },
-        content: 'Facebook',
       },
 
       {
@@ -50,8 +50,8 @@ export const Social = () => {
           ...social_element_config.attributes,
           name: 'twitter-noshare',
           href: 'https://twitter.com/aghontpi',
+          src: 'https://dev.bluepie.in/assets/twitter.png',
         },
-        content: 'Twitter',
       },
 
       {
@@ -60,8 +60,8 @@ export const Social = () => {
           ...social_element_config.attributes,
           name: 'youtube-noshare',
           href: 'https://github.com/aghontpi',
+          src: 'https://dev.bluepie.in/assets/youtube.png',
         },
-        content: 'Youtube',
       },
 
       {
@@ -70,8 +70,8 @@ export const Social = () => {
           ...social_element_config.attributes,
           name: 'github',
           href: 'https://github.com/aghontpi',
+          src: 'https://dev.bluepie.in/assets/github.png',
         },
-        content: 'github',
       },
     ],
     mutableProperties: social_properties,
