@@ -23,6 +23,7 @@ export const Image = () => {
       ...assigned_default_values,
       'css-class': 'mjml-tag identifier-mj-image',
       width: 'auto',
+      padding: '0px',
       src: 'https://dev.bluepie.in/dnde.png',
     },
     children: [],
