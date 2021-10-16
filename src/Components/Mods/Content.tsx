@@ -35,10 +35,7 @@ export const Content = () => {
         setHtmlBlock(false);
       }
     }
-    // todo:  mjmlJson here creates two way dependency,
-    //   remove it, and handle 'mj-text' differently, this is dangerous, as it could lead
-    //   to infinite renders
-  }, [active]);
+  }, [visible, path]);
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     let value = e.currentTarget.value;
