@@ -2,13 +2,15 @@ import { View } from './View';
 import css from './Editor.module.scss';
 import { Attributes } from './Attributes';
 import { ComponentBank } from './ComponentBank';
-import { Button, PageHeader, Layout, Modal, Input, Tabs } from 'antd';
+import { Button, PageHeader, Layout, Modal, Input } from 'antd';
 import { success } from '../../Components/Messages';
 import mjml2html from 'mjml-browser';
 import { useEditor } from '../../Hooks/Editor.hook';
 import { sendMail } from '../../Utils/sendMail';
 import { useState } from 'react';
 import { Preview } from './Preview';
+import { exportJson } from '../../Utils/mjmlProcessor';
+import _ from 'lodash';
 const { Content } = Layout;
 const { confirm } = Modal;
 
@@ -27,7 +29,7 @@ export const Editor = () => {
 
   const copyJsonInClipBoard = (e: any) => {
     e.preventDefault();
-    const to_copy = JSON.stringify(mjmlJson);
+    const to_copy = JSON.stringify(exportJson(_.cloneDeep(mjmlJson)));
     navigator.clipboard.writeText(to_copy);
     console.log('json', to_copy);
     console.log('stat', mjmlJson);

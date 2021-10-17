@@ -1,6 +1,1 @@
-export const HEADSTYLE = `
-.htmlblock {
-
-}
-
-`;
+export const HEADSTYLE = '.htmlblock {}';

@@ -2,6 +2,7 @@ import { createContext, FC, useState } from 'react';
 import { useParams } from 'react-router';
 import { FONTS_CONFIG } from '../Components/Mods/FontConfig';
 import { HEADSTYLE } from '../Components/Mods/HeadStyle';
+import { importJson } from '../Utils/mjmlProcessor';
 
 export const EditorContext = createContext<any>(null);
 
@@ -43,6 +44,10 @@ export const EDContext: FC = (props) => {
     state = initialState;
   } else {
     // initiate api and fetch the template id
+    // const parsedJson = JSON.parse(
+    //   //json
+    // );
+    // state = importJson(parsedJson);
   }
 
   const [mjmlJson, setMjmlJson] = useState<any>(state);
