@@ -1,4 +1,5 @@
 import { columnPlaceholder } from '../Components/Section';
+import { Base64 } from '../Lib/base64';
 import { generateUniqueIdRecursively } from './closestParent';
 
 const cleanMjmlJson = (mjmlJson: any, ignore: string = '') => {
@@ -73,7 +74,7 @@ const exportJson = (input: any, build: any = {}) => {
 
   if (input['content']) {
     // input['content'] = input['content'].replace(/"/g, '\\"');
-    input['content'] = btoa(input['content']);
+    input['content'] = Base64.encode(input['content']);
   }
 
   let children: any = [];
@@ -98,7 +99,7 @@ function replaceContent(input: any) {
   }
 
   if (input['content']) {
-    input['content'] = atob(input['content']);
+    input['content'] = Base64.decode(input['content']);
   }
 
   let children: any = [];
