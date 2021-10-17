@@ -1,4 +1,4 @@
-import { Preview } from './Preview';
+import { NewItem, Preview } from './Preview';
 import './List.scss';
 
 const Items = [
@@ -21,6 +21,7 @@ const List = () => {
     <div className="template">
       <div className="header">header</div>
       <div className="template-list">
+        <NewItem />
         {Items.map((item, key) => {
           return <Preview key={key} image={item.preview} />;
         })}

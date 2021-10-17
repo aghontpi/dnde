@@ -1,5 +1,7 @@
 import { Button } from 'antd';
 import styled from 'styled-components';
+import { PlusOutlined } from '@ant-design/icons';
+import newTemplate from '../../Assets/Images/new_template.svg';
 
 interface PreviewProps {
   image: string;
@@ -35,6 +37,11 @@ const PreviewContainer = styled.div`
     }
   }
 
+  .hoverItem.alwaysActive {
+    display: flex;
+    background: unset;
+  }
+
   &:hover {
     box-shadow: rgb(0 0 0 / 15%) 0px 5px 20px;
     .hoverItem {
@@ -42,10 +49,43 @@ const PreviewContainer = styled.div`
     }
   }
 
-  img {
+  img,
+  .newTemplate {
     max-width: 280px;
   }
+  .newTemplate {
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 120px;
+  }
+
+  .btn-choose {
+    padding: 8px 16px;
+    text-transform: capitalize;
+  }
 `;
+
+export const NewItem = () => {
+  return (
+    <PreviewContainer>
+      <div className="newTemplate">
+        <PlusOutlined style={{ fontSize: '40px' }} />
+      </div>
+      <div className="hoverItem alwaysActive">
+        <div className="content">
+          <Button size="large" type="primary" className="btn-choose">
+            New Template
+          </Button>
+        </div>
+      </div>
+      <div>
+        <img src={newTemplate} alt="img new template" />
+      </div>
+    </PreviewContainer>
+  );
+};
 
 const Preview = ({ image }: PreviewProps) => {
   return (
@@ -53,7 +93,9 @@ const Preview = ({ image }: PreviewProps) => {
       <img src={image} alt="preview" />
       <div className="hoverItem">
         <div className="content">
-          <Button type="primary">choose</Button>
+          <Button size="large" type="primary" className="btn-choose">
+            choose
+          </Button>
         </div>
       </div>
     </PreviewContainer>
