@@ -46,6 +46,7 @@ export const View = (props: ViewProps) => {
     const action = UNDOREDO.undoAction(mjmlJson);
     if (action) {
       setMjmlJson({ ...action });
+      setActive(null);
       setDelActive(false);
       setCopyActive(false);
     }
@@ -53,6 +54,7 @@ export const View = (props: ViewProps) => {
   const redoCallback = () => {
     const action = UNDOREDO.redoAction(mjmlJson);
     if (action) {
+      setActive(null);
       setMjmlJson({ ...action });
       setDelActive(false);
       setCopyActive(false);
