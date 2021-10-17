@@ -2,6 +2,7 @@ import { Button } from 'antd';
 import styled from 'styled-components';
 import { PlusOutlined } from '@ant-design/icons';
 import newTemplate from '../../Assets/Images/new_template.svg';
+import { useHistory } from 'react-router';
 
 interface PreviewProps {
   image: string;
@@ -68,6 +69,10 @@ const PreviewContainer = styled.div`
 `;
 
 export const NewItem = () => {
+  const history = useHistory();
+  const onClick = () => {
+    history.push(`template/new`);
+  };
   return (
     <PreviewContainer>
       <div className="newTemplate">
@@ -75,7 +80,7 @@ export const NewItem = () => {
       </div>
       <div className="hoverItem alwaysActive">
         <div className="content">
-          <Button size="large" type="primary" className="btn-choose">
+          <Button onClick={onClick} size="large" type="primary" className="btn-choose">
             New Template
           </Button>
         </div>

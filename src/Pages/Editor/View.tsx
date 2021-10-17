@@ -100,6 +100,8 @@ export const View = (props: ViewProps) => {
     });
   };
 
+  console.log(mjmlJson);
+
   return (
     <Scrollbars style={{ height: '100%' }}>
       <Editor />
@@ -110,7 +112,7 @@ export const View = (props: ViewProps) => {
         onDrop={onDrop}
         onDragOver={onDragOver}
       >
-        {htmlProcessor(mjml2html(mjmlJson).html)}
+        {mjmlJson && htmlProcessor(mjml2html(mjmlJson).html)}
       </DesignContainer>
     </Scrollbars>
   );

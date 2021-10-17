@@ -6,7 +6,7 @@ const Routing = () => {
   return (
     <Switch>
       <Route exact path="/list" component={List} />
-      <Route exact path="/template" component={Editor} />
+      <Route path="/template/:templateId" component={Editor} />
       <Route path="*">
         <Redirect to="/list" />
       </Route>
