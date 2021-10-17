@@ -35,7 +35,7 @@ const BackgroundImage = () => {
         item && setRepeat(item.attributes[REPEAT]);
       }
     }
-  }, [active]);
+  }, [urlVisibility, sizeVisibility, repeatVisiblity]);
 
   if (urlVisibility === false && sizeVisibility === false && repeatVisiblity === false) {
     return null;
