@@ -77,6 +77,9 @@ export const Attributes = () => {
                 <Background />
                 <BackgroundImage />
                 <Border />
+                <Border label="Border Width" attribute_name="border-width" />
+                <Border label="Border Style" attribute_name="border-style" />
+                <Background label="Border Color" overrideAttribute="border-color" />
                 <CordinalBorder />
                 <BorderRadius />
                 <Link />
