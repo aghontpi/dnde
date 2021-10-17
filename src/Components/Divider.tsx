@@ -21,6 +21,7 @@ export const Divider = () => {
     tagName: 'mj-divider',
     attributes: {
       ...assigned_default_values,
+      padding: '0px',
       'css-class': 'mjml-tag identifier-mj-divider',
     },
     children: [],
