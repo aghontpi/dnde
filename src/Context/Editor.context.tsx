@@ -1,4 +1,4 @@
-import { createContext, FC, useState } from 'react';
+import { createContext, FC, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { FONTS_CONFIG } from '../Components/Mods/FontConfig';
 import { HEADSTYLE } from '../Components/Mods/HeadStyle';
@@ -40,20 +40,21 @@ const initialState = {
 export const EDContext: FC = (props) => {
   const { templateId }: { templateId: string | undefined } = useParams();
   const { getId } = useDragAndDropUniqueId();
-  let state;
+  const [mjmlJson, setMjmlJson] = useState<any>(null);
 
-  if (templateId === 'new' || typeof templateId === 'undefined') {
-    state = initialState;
-  } else {
-    // initiate api and fetch the template id
-    // const parsedJson = JSON.parse(
-    //   //json
-    // );
-  }
+  useEffect(() => {
+    if (templateId === 'new' || typeof templateId === 'undefined') {
+      // setMjmlJson(initialState);
 
-  state = importJson(JSON.parse(shopify), getId);
+      setMjmlJson(importJson(JSON.parse(shopify), getId));
+    } else {
+      // initiate api and fetch the template id
+      // const parsedJson = JSON.parse(
+      //   //json
+      // );
+    }
+  }, []);
 
-  const [mjmlJson, setMjmlJson] = useState<any>(state);
   const [attributes, setAttributes] = useState<any>({});
 
   return (
