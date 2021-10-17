@@ -4,14 +4,17 @@ import Pages from './Pages';
 import './App.css';
 import 'antd/dist/antd.css';
 import 'quill/dist/quill.snow.css';
+import { StoreProvider } from './Store/store';
 
 function App() {
   return (
-    <BrowserRouter>
-      <div className="my-app">
-        <Pages />
-      </div>
-    </BrowserRouter>
+    <StoreProvider>
+      <BrowserRouter>
+        <div className="my-app">
+          <Pages />
+        </div>
+      </BrowserRouter>
+    </StoreProvider>
   );
 }
 
