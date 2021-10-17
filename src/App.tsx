@@ -1,14 +1,17 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import Pages from './Pages';
 import './App.css';
 import 'antd/dist/antd.css';
 import 'quill/dist/quill.snow.css';
-import Editor from './Pages/Editor/';
 
 function App() {
   return (
-    <div className="my-app">
-      <Editor />
-    </div>
+    <BrowserRouter>
+      <div className="my-app">
+        <Pages />
+      </div>
+    </BrowserRouter>
   );
 }
 
