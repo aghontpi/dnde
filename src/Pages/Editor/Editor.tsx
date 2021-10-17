@@ -23,7 +23,6 @@ export const Editor = () => {
     const html = mjml2html(mjmlJson).html;
     navigator.clipboard.writeText(html);
     console.log('html', html);
-
     success('Copied to clipboard & logged in devtools ');
   };
 
