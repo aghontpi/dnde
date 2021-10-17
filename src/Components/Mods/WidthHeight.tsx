@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { useEditor } from '../../Hooks/Editor.hook';
 import { Form, Input } from 'antd';
 import { useValue, useVisibility } from '../../Hooks/Attribute.hook';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 const ATTRIBUTE = 'width';
 
@@ -18,8 +18,10 @@ export const Width = ({ activePath }: WidthHeightProps) => {
   const { getValue } = useValue({ path, visible, attribute: ATTRIBUTE });
 
   useEffect(() => {
-    setValue(getValue());
-  }, []);
+    if (visible) {
+      setValue(getValue());
+    }
+  }, [visible]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
@@ -56,8 +58,10 @@ export const Height = () => {
   const [value, setValue] = useState('');
 
   useEffect(() => {
-    setValue(getValue());
-  }, []);
+    if (visible) {
+      setValue(getValue());
+    }
+  }, [visible]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
