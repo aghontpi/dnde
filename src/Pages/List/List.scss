@@ -1,0 +1,17 @@
+.template {
+  display: flex;
+  padding: 16px 40px;
+  flex: 1;
+  flex-direction: column;
+  height: 100%;
+  .header {
+    flex: 1;
+    display: flex;
+  }
+  &-list {
+    flex: 4;
+    display: flex;
+    row-gap: 20px;
+    gap: 32px;
+  }
+}
