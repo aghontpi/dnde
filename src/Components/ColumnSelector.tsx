@@ -119,6 +119,7 @@ const ColumnSelector = () => {
           <p>3 Columns</p>
         </SectionTitle>
         <Image click={() => handleClick(['33%', '33%', '33%'])} one={50} two={50} three={50} />
+        <Image click={() => handleClick(['47.5%', '5%', '47.5%'])} one={47.5} two={5} three={47.5} />
         <Image click={() => handleClick(['25%', '25%', '50%'])} one={25} two={25} three={50} />
         <Image click={() => handleClick(['25%', '50%', '25%'])} one={25} two={50} three={25} />
         <Image click={() => handleClick(['50%', '25%', '25%'])} one={50} two={25} three={25} />
