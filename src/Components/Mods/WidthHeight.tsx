@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { useEditor } from '../../Hooks/Editor.hook';
 import { Form, Input } from 'antd';
 import { useValue, useVisibility } from '../../Hooks/Attribute.hook';
+import { useEffect, useState } from 'react';
 
 const ATTRIBUTE = 'width';
 
@@ -13,9 +14,18 @@ export const Width = ({ activePath }: WidthHeightProps) => {
   const [visible, path] = useVisibility({ attribute: ATTRIBUTE, customPath: activePath });
 
   const { mjmlJson, setMjmlJson } = useEditor();
+  const [value, setValue] = useState<string>('');
   const { getValue } = useValue({ path, visible, attribute: ATTRIBUTE });
 
+  useEffect(() => {
+    setValue(getValue());
+  }, []);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+    if (e.target.value === '' || e.target.value === '%') {
+      e.target.value = '0';
+    }
     if (visible && path && e.target.value) {
       let json = {};
       let element = _.get(mjmlJson, path);
@@ -32,7 +42,7 @@ export const Width = ({ activePath }: WidthHeightProps) => {
 
   return visible ? (
     <Form.Item label="Width">
-      <Input onChange={handleChange} value={getValue()} onKeyDown={onKeyDown} />
+      <Input onChange={handleChange} value={value} onKeyDown={onKeyDown} />
     </Form.Item>
   ) : null;
 };
@@ -43,8 +53,17 @@ export const Height = () => {
   const [visible, path] = useVisibility({ attribute: ATTRIBUTE_HEIGHT });
   const { mjmlJson, setMjmlJson } = useEditor();
   const { getValue } = useValue({ path, visible, attribute: ATTRIBUTE_HEIGHT });
+  const [value, setValue] = useState('');
+
+  useEffect(() => {
+    setValue(getValue());
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+    if (e.target.value === '' || e.target.value === '%') {
+      e.target.value = '';
+    }
     if (visible && path && e.target.value) {
       let json = {};
       let element = _.get(mjmlJson, path);
@@ -61,7 +80,7 @@ export const Height = () => {
 
   return visible ? (
     <Form.Item label="Height">
-      <Input onChange={handleChange} value={getValue()} onKeyDown={onKeyDown} />
+      <Input onChange={handleChange} value={value} onKeyDown={onKeyDown} />
     </Form.Item>
   ) : null;
 };
