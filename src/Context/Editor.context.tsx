@@ -2,6 +2,8 @@ import { createContext, FC, useState } from 'react';
 import { useParams } from 'react-router';
 import { FONTS_CONFIG } from '../Components/Mods/FontConfig';
 import { HEADSTYLE } from '../Components/Mods/HeadStyle';
+import { shopify } from '../exportJsonExamples/shopify';
+import { useDragAndDropUniqueId } from '../Hooks/Drag.hook';
 import { importJson } from '../Utils/mjmlProcessor';
 
 export const EditorContext = createContext<any>(null);
@@ -37,7 +39,7 @@ const initialState = {
 
 export const EDContext: FC = (props) => {
   const { templateId }: { templateId: string | undefined } = useParams();
-
+  const { getId } = useDragAndDropUniqueId();
   let state;
 
   if (templateId === 'new' || typeof templateId === 'undefined') {
@@ -47,8 +49,9 @@ export const EDContext: FC = (props) => {
     // const parsedJson = JSON.parse(
     //   //json
     // );
-    // state = importJson(parsedJson);
   }
+
+  state = importJson(JSON.parse(shopify), getId);
 
   const [mjmlJson, setMjmlJson] = useState<any>(state);
   const [attributes, setAttributes] = useState<any>({});

@@ -1,4 +1,5 @@
 import { columnPlaceholder } from '../Components/Section';
+import { generateUniqueIdRecursively } from './closestParent';
 
 const cleanMjmlJson = (mjmlJson: any, ignore: string = '') => {
   if (!mjmlJson) {
@@ -91,7 +92,7 @@ const exportJson = (input: any, build: any = {}) => {
   return input;
 };
 
-const importJson = (input: any) => {
+function replaceContent(input: any) {
   if (!input) {
     return;
   }
@@ -103,7 +104,7 @@ const importJson = (input: any) => {
   let children: any = [];
   for (let i = 0; input['children'] && i < input['children'].length; i++) {
     const child = input['children'][i];
-    const _ = importJson(child);
+    const _ = replaceContent(child);
     if (_) {
       children.push(_);
     }
@@ -114,6 +115,11 @@ const importJson = (input: any) => {
   }
 
   return input;
+}
+
+const importJson = (input: any, idGenerator: () => string) => {
+  const regeneratedIdJson = generateUniqueIdRecursively(input, idGenerator);
+  return replaceContent(regeneratedIdJson);
 };
 
 export { cleanMjmlJson, exportJson, importJson };
