@@ -166,7 +166,7 @@ const getIndexOfElementInParent = (node: HTMLElement, mjmlJson: any, uniqueIdent
     }
   }
 
-  const parentIdentifier = findUniqueIdentifier(parent, parent.classList);
+  const parentIdentifier = parent && parent.classList ? findUniqueIdentifier(parent, parent.classList) : null;
   return [index, parentIdentifier];
 };
 

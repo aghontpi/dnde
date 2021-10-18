@@ -251,6 +251,9 @@ const Copy = ({ mjmlJson, setActive, setMjmlJson, setCopyActive, setDelActive, t
     const _ = getIndexOfElementInParent(target, mjmlJson, uniqueIdentifier);
     if (_ && typeof _[0] === 'number' && typeof _[1] === 'string') {
       [index, parentUniqueIdentifier] = _;
+    } else {
+      message.error('Unable to copy element');
+      return;
     }
   }
 
