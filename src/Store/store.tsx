@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { FC } from 'react';
+import { DndeApi } from '../Api/api';
 import { templateListReducer } from './list';
 
 import { Provider } from 'react-redux';
 
 const store = configureStore({
-  reducer: { templateList: templateListReducer },
+  reducer: { [DndeApi.reducerPath]: DndeApi.reducer, templateList: templateListReducer },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(DndeApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

@@ -55,11 +55,11 @@ const PreviewContainer = styled.div`
     max-width: 280px;
   }
   .newTemplate {
-    height: 300px;
+    height: 255px;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-bottom: 120px;
+    padding-bottom: 60px;
   }
 
   .btn-choose {
@@ -95,7 +95,7 @@ export const NewItem = () => {
 const Preview = ({ image }: PreviewProps) => {
   return (
     <PreviewContainer>
-      <img src={image} alt="preview" />
+      <img height="350px" src={image} alt="preview" />
       <div className="hoverItem">
         <div className="content">
           <Button size="large" type="primary" className="btn-choose">

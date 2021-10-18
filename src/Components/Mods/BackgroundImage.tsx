@@ -18,7 +18,6 @@ const BackgroundImage = () => {
   const [urlVisibility, urlPath] = useVisibility({ attribute: URL });
   const [sizeVisibility, sizePath] = useVisibility({ attribute: SIZE });
   const [repeatVisiblity, repeatPath] = useVisibility({ attribute: REPEAT });
-  const { active } = useHtmlWrapper();
 
   useEffect(() => {
     if (mjmlJson) {

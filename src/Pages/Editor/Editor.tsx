@@ -11,6 +11,7 @@ import { useState } from 'react';
 import { Preview } from './Preview';
 import { exportJson } from '../../Utils/mjmlProcessor';
 import _ from 'lodash';
+import { generatePreview } from '../../Utils/previewGenerator';
 const { Content } = Layout;
 const { confirm } = Modal;
 
@@ -23,7 +24,15 @@ export const Editor = () => {
     const html = mjml2html(mjmlJson).html;
     navigator.clipboard.writeText(html);
     console.log('html', html);
+    generatePreview(html);
     success('Copied to clipboard & logged in devtools ');
+  };
+
+  const copyPreviewImage = async (e: any) => {
+    e.preventDefault();
+    const html = mjml2html(mjmlJson).html;
+    navigator.clipboard.writeText(await generatePreview(html));
+    success('Preview Image Copied to clipboard');
   };
 
   const copyJsonInClipBoard = (e: any) => {
@@ -53,6 +62,9 @@ export const Editor = () => {
           extra={[
             <>
               <SendTestMail key="4" />
+              <Button key="5" onClick={copyPreviewImage}>
+                Copy Preview Image
+              </Button>
               <Button key="3" onClick={() => setPreview(true)}>
                 Preview
               </Button>
