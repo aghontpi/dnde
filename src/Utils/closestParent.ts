@@ -98,51 +98,13 @@ const findIndexOfIdentifierInChildren = (children: [any], uniqueIdentifier: stri
   return -1;
 };
 
-// node/parenetUniqueIdentifier is used, one of the two can be passed
-const getIndexOfElementInColumn = (
-  mjmlJson: any,
-  node: HTMLElement | null,
-  parentUniqueIdentifier: string = '',
-  uniqueIdentifier: string
-) => {
-  let columnIdentifier = null;
-  let index = -1;
-  if (node) {
-    columnIdentifier = findColumnOfElement(node);
-    if (columnIdentifier) {
-      [, columnIdentifier] = columnIdentifier;
-    }
-  } else if (parentUniqueIdentifier !== '') {
-    columnIdentifier = parentUniqueIdentifier;
-  }
-
-  let columnInJson = findElementInJson(mjmlJson, columnIdentifier);
-
-  // finding index of the element in the column, column has children,
-  //   facts we can use to search: a column can not have nested columns,
-  if (columnInJson) {
-    [columnInJson] = columnInJson;
-    index = findIndexOfIdentifierInChildren(columnInJson.children, uniqueIdentifier);
-  }
-
-  return index;
-};
-
-// todo: refractor getIndexOfElementInParent
 const getIndexOfElementInParent = (node: HTMLElement, mjmlJson: any, uniqueIdentifier: string) => {
   let index = -1;
-  let parent = findColumnOfElement(node);
-
-  // within column
-  if (parent) {
-    [parent] = parent;
-  } else {
-    // outside column bounday
-    parent = node.closest('.mjml-tag');
+  let parent = node.closest('.mjml-tag');
+  // closest can be he same node, so go to parent
+  if (parent === node) {
+    parent = node.parentElement;
   }
-
-  // first check in columns, if it can be identified
-  index = getIndexOfElementInColumn(mjmlJson, node, '', uniqueIdentifier);
 
   // element must be outside of column
   while (index === -1 && parent) {
@@ -159,8 +121,10 @@ const getIndexOfElementInParent = (node: HTMLElement, mjmlJson: any, uniqueIdent
     }
 
     const next_parent = parent.closest('.mjml-tag');
-    if (next_parent === parent) {
-      parent = parent.parentElement.closest('.mjml-tag');
+    if (next_parent && next_parent === parent) {
+      if (parent.parentElement) {
+        parent = parent.parentElement.closest('.mjml-tag');
+      }
     } else {
       parent = next_parent;
     }
@@ -176,6 +140,5 @@ export {
   findUniqueIdentifierFromString,
   replaceGeneicTagWithUniqueId,
   generateUniqueIdRecursively,
-  getIndexOfElementInColumn,
   getIndexOfElementInParent,
 };
