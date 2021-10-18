@@ -6,6 +6,7 @@ import { useHistory } from 'react-router';
 
 interface PreviewProps {
   image: string;
+  id: string;
 }
 
 const PreviewContainer = styled.div`
@@ -92,13 +93,17 @@ export const NewItem = () => {
   );
 };
 
-const Preview = ({ image }: PreviewProps) => {
+const Preview = ({ image, id }: PreviewProps) => {
+  const history = useHistory();
+  const onClick = () => {
+    history.push(`template/${id}`);
+  };
   return (
     <PreviewContainer>
       <img height="350px" src={image} alt="preview" />
       <div className="hoverItem">
         <div className="content">
-          <Button size="large" type="primary" className="btn-choose">
+          <Button onClick={onClick} size="large" type="primary" className="btn-choose">
             choose
           </Button>
         </div>

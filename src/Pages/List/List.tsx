@@ -18,7 +18,7 @@ const List = () => {
         <NewItem />
         {isSuccess && data
           ? data.response.map((item, key) => {
-              return <Preview key={key} image={item.preview} />;
+              return <Preview key={key} id={item.docRef} image={item.preview} />;
             })
           : null}
       </div>
