@@ -72,6 +72,11 @@ class UndoRedo {
     return this.redo.length === 0;
   }
 
+  public reset() {
+    this.undo = [];
+    this.redo = [];
+  }
+
   public print() {
     console.log('undoredo: ', this.undo, this.redo);
   }

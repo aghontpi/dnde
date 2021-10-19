@@ -7,17 +7,23 @@ import { success } from '../../Components/Messages';
 import mjml2html from 'mjml-browser';
 import { useEditor } from '../../Hooks/Editor.hook';
 import { sendMail } from '../../Utils/sendMail';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Preview } from './Preview';
 import { exportJson } from '../../Utils/mjmlProcessor';
 import _ from 'lodash';
 import { generatePreview } from '../../Utils/previewGenerator';
+import { UNDOREDO } from '../../Utils/undoRedo';
 const { Content } = Layout;
 const { confirm } = Modal;
 
 export const Editor = () => {
   const { mjmlJson } = useEditor();
   const [preview, setPreview] = useState(false);
+
+  useEffect(() => {
+    // reset undo redo actions on each new load
+    UNDOREDO.reset();
+  }, []);
 
   const copyHTMLAsClipBoard = (e: any) => {
     e.preventDefault();
