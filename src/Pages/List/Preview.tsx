@@ -3,9 +3,11 @@ import styled from 'styled-components';
 import { PlusOutlined } from '@ant-design/icons';
 import newTemplate from '../../Assets/Images/new_template.svg';
 import { useHistory } from 'react-router';
+import { ReactNode } from 'react';
 
 interface PreviewProps {
-  image: string;
+  image?: string;
+  skeleton?: ReactNode;
   id: string;
 }
 
@@ -56,7 +58,8 @@ const PreviewContainer = styled.div`
     max-width: 280px;
   }
   .newTemplate {
-    height: 255px;
+    max-height: 500px;
+    min-height: 250px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -93,14 +96,18 @@ export const NewItem = () => {
   );
 };
 
-const Preview = ({ image, id }: PreviewProps) => {
+const Preview = ({ image, id, skeleton }: PreviewProps) => {
   const history = useHistory();
   const onClick = () => {
     history.push(`template/${id}`);
   };
   return (
     <PreviewContainer>
-      <img height="350px" src={image} alt="preview" />
+      {skeleton ? (
+        <div style={{ height: '350px', maxWidth: '280px', padding: '24px 24px' }}>{skeleton}</div>
+      ) : (
+        <img height="350px" src={image} alt="preview" />
+      )}
       <div className="hoverItem">
         <div className="content">
           <Button onClick={onClick} size="large" type="primary" className="btn-choose">

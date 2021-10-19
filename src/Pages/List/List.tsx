@@ -1,7 +1,7 @@
 import { NewItem, Preview } from './Preview';
 import './List.scss';
 import { useGetTemplatesQuery } from '../../Api/api';
-import { Col, Row } from 'antd';
+import { Col, Row, Skeleton } from 'antd';
 import Scrollbars from 'react-custom-scrollbars-2';
 import { GithubFilled } from '@ant-design/icons';
 
@@ -30,11 +30,11 @@ const List = () => {
           </Col>
           <Col style={{ paddingTop: '24px' }} span={24}>
             <Row align="middle" justify="center">
-              <Col className="info" span={10} style={{ textAlign: 'center' }}>
+              <Col className="info" md={24} lg={10} style={{ textAlign: 'center' }}>
                 <a target="_blank" href="https://github.com/aghontpi/dnde">
                   <span>
-                    All features are optimised for mails, flexible through import/export, with responsive design for all
-                    devices.
+                    All features are optimised for mails, work flexibly through import/export, with responsive design
+                    for all devices.
                   </span>
                   <br />
                   <span>
@@ -46,14 +46,43 @@ const List = () => {
           </Col>
         </Row>
 
-        <div className="template-list">
-          <NewItem />
+        <Row className="choose-template" align="middle" justify="center">
+          <Col>
+            <span className="title">Choose a template, to get started.</span>
+          </Col>
+        </Row>
+
+        <Row justify="center" className="template-list" gutter={[0, 56]}>
+          <Col lg={6}>
+            <NewItem />
+          </Col>
+          {isLoading &&
+            [1, 2].map((item, key) => {
+              return (
+                <Col lg={6}>
+                  <Preview
+                    key={key}
+                    id={'8x93dummy'}
+                    skeleton={
+                      <>
+                        <Skeleton active={true} />
+                        <Skeleton active={true} />
+                      </>
+                    }
+                  />
+                </Col>
+              );
+            })}
           {isSuccess && data
             ? data.response.map((item, key) => {
-                return <Preview key={key} id={item.docRef} image={item.preview} />;
+                return (
+                  <Col lg={6}>
+                    <Preview key={key} id={item.docRef} image={item.preview} />
+                  </Col>
+                );
               })
             : null}
-        </div>
+        </Row>
       </div>
     </Scrollbars>
   );

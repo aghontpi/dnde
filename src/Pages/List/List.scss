@@ -5,12 +5,12 @@
   .header {
     flex: 1;
     display: flex;
-    background: linear-gradient(90deg, #cf70f6 0%, #1f56ac 100%);
+    background: linear-gradient(90deg, #70f6ef 0%, #1f56ac 100%);
     padding: 0;
     color: #fff;
     padding: 64px 24px;
     .title {
-      font-size: 3rem;
+      font-size: 5rem;
       font-weight: bold;
     }
     .subtitle {
@@ -51,5 +51,14 @@
     &:hover {
       color: unset;
     }
+  }
+}
+
+.choose-template {
+  margin: 56px 24px;
+  .title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #363636;
   }
 }
