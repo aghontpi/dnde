@@ -12,7 +12,7 @@ import { InlineEditor } from '../../Components/Mods/CustomInlineEditor';
 import styled from 'styled-components';
 import { useHtmlWrapper } from '../../Hooks/Htmlwrapper.hook';
 import { useCkeditor } from '../../Hooks/Ckeditor.hook';
-import { useCallback, useEffect } from 'react';
+import { memo, useCallback, useEffect } from 'react';
 import { UndoRedo } from '../../Components/UndoRedo';
 import _ from 'lodash';
 import { UNDOREDO } from '../../Utils/undoRedo';
@@ -74,10 +74,7 @@ export const View = (props: ViewProps) => {
 
   const onDrop = (e: any) => {
     e.preventDefault();
-    if (isColumn) {
-      setIsColumn(false);
-    }
-    setIsColumn(false);
+    isColumn && setIsColumn(false);
     let config = JSON.parse(e.dataTransfer.getData('config'));
     if (config && config.mode && config.mode === 'move' && config['config']) {
       // remove the item old position, before inserting in new position
@@ -113,8 +110,12 @@ export const View = (props: ViewProps) => {
         onDrop={onDrop}
         onDragOver={onDragOver}
       >
-        {mjmlJson && htmlProcessor(mjml2html(mjmlJson).html)}
+        <MjmlProcessor mjml={mjmlJson} isColumn={isColumn} />
       </DesignContainer>
     </Scrollbars>
   );
 };
+
+const MjmlProcessor = memo(({ mjml, isColumn }: { mjml: any; isColumn: boolean }) => {
+  return mjml && htmlProcessor(mjml2html(mjml).html);
+});
