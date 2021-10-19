@@ -1,10 +1,10 @@
 import { message } from 'antd';
+import _ from 'lodash';
 import { createContext, FC, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { useLazyGetTemplateQuery } from '../Api/api';
 import { FONTS_CONFIG } from '../Components/Mods/FontConfig';
 import { HEADSTYLE } from '../Components/Mods/HeadStyle';
-import { shopify } from '../exportJsonExamples/shopify';
 import { useDragAndDropUniqueId } from '../Hooks/Drag.hook';
 import { importJson } from '../Utils/mjmlProcessor';
 
@@ -49,7 +49,7 @@ export const EDContext: FC = (props) => {
 
   useEffect(() => {
     if (templateId === 'new' || typeof templateId === 'undefined') {
-      setMjmlJson(initialState);
+      setMjmlJson(_.cloneDeep(initialState));
     } else {
       if (templateId) {
         message.loading({ content: 'Fetching Template...', key: LOADING_KEY, duration: 0 });
@@ -64,8 +64,11 @@ export const EDContext: FC = (props) => {
     } else if (isSuccess && !data) {
       message.error('Template is empty', 2);
     }
-    if (isSuccess || isError) {
+    if (isSuccess) {
       message.destroy(LOADING_KEY);
+    }
+    if (isError) {
+      message.info('Network error, template not fetched.', 2);
     }
   }, [isError, isLoading, isSuccess, data]);
 
