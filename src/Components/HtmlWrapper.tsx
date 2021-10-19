@@ -63,6 +63,10 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
     () =>
       idRef.current === activeHover
         ? (e: any) => {
+            // text element with links in editor mode, should not trigger clicks
+            if (e && e.target && e.target.tagName === 'A') {
+              e.preventDefault();
+            }
             setActive(idRef.current);
             const clickTarget = e.target;
             const mjmlTarget = clickTarget.closest('.mjml-tag');
