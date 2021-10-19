@@ -5,6 +5,8 @@ import { Col, Form, Row } from 'antd';
 import { ChromePicker } from 'react-color';
 import { useEffect, useState } from 'react';
 import { useVisibility } from '../../Hooks/Attribute.hook';
+import { logger } from '../../Utils/logger';
+import { useHtmlWrapper } from '../../Hooks/Htmlwrapper.hook';
 
 const ATTRIBUTE = 'background-color';
 interface BackgroundProps {
@@ -27,6 +29,7 @@ export const Background = ({ activePath, label, overrideAttribute }: BackgroundP
         setColor(item.attributes[attribute]);
       }
     }
+    logger.log('background reloading,', path, visible);
   }, [path, visible]);
 
   const handleColorChange = (color: any) => {

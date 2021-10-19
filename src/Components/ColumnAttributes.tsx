@@ -14,6 +14,7 @@ import { Border } from './Mods/Border';
 import { CordinalBorder } from './Mods/CordinalBorder';
 import { BorderRadius } from './Mods/BorderRadius';
 import Scrollbars from 'react-custom-scrollbars-2';
+import _ from 'lodash';
 
 const { TabPane } = Tabs;
 const CustomTabs = styled(Tabs)`
@@ -52,20 +53,15 @@ const ColumnAttributes = () => {
           path = path.slice(1);
 
           if (item && item.children && item.children.length > 0) {
-            // this exists to make sure to not tigger rerender, on properties changes,
-            //   but will trigger rerender when the number of columns change on the fly (ie. used clone operation)
-            if (columns.length === item.children.length) {
-              return;
-            }
-
             let _columns = [];
             for (var i = 0; i < item.children.length; i++) {
               if (item.children[i].tagName === 'mj-column') {
                 _columns.push(`${path}.children[${i}]`);
               }
             }
-
-            setActiveColumns(_columns);
+            if (!_.isEqual(columns, _columns)) {
+              setActiveColumns(_columns);
+            }
           }
         }
       }
