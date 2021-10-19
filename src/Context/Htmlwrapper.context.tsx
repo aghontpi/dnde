@@ -1,4 +1,5 @@
 import { createContext, FC, memo, useContext, useEffect, useRef, useState } from 'react';
+import { logger } from '../Utils/logger';
 
 export const HtmlContext = createContext<any>(null);
 
@@ -15,7 +16,7 @@ export const HtmlContextProvider: FC = memo((props) => {
 
   const getId = () => {
     setId(id + 1);
-    console.log('getId', id);
+    logger.log('getId', id);
   };
 
   //todo: fn remove id from the uiWrapperList, if possible upgrade list to map
@@ -34,7 +35,7 @@ export const HtmlContextProvider: FC = memo((props) => {
         getId,
       }}
     >
-      <div>{<>{console.log('uiContextRerendering', ref.current++)} </>}</div>
+      <div>{<>{logger.log('uiContextRerendering', ref.current++)} </>}</div>
       {props.children}
     </HtmlContext.Provider>
   );

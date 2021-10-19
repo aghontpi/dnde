@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { findUniqueIdentifier, findUniqueIdentifierFromString } from './closestParent';
 import { closeToTopOrBottom, isEventWithTargetElement } from './eventElementRelation';
 import { findElementInJson } from './findElementInMjmlJson';
+import { logger } from './logger';
 import { cleanMjmlJson } from './mjmlProcessor';
 
 interface generateDropItemPlacehodlerProps {
@@ -36,7 +37,7 @@ const generateDropItemPlaceholder = ({
             let newOrder = [];
             for (var i = 0; parentObj && parentObj.children && i < parentObj.children.length; i++) {
               let childItem = parentObj['children'][i];
-              console.log(childItem);
+              logger.log(childItem);
               const cssClass = childItem.attributes && childItem['attributes']['css-class'];
               // if there is existing placeholders, removing them
               if (cssClass && cssClass.includes('placeitem-placeholder')) {
@@ -65,17 +66,17 @@ const generateDropItemPlaceholder = ({
               if (uniqueColumnIdentifier) {
                 const cleaned = cleanMjmlJson(updated, uniqueColumnIdentifier);
                 if (!_.isEqual(mjmlJson, cleaned)) {
-                  console.log('::update::', mjmlJson, cleaned);
+                  logger.log('::update::', mjmlJson, cleaned);
                   setMjmlJson({ ...cleaned });
                 } else {
-                  console.log('::update:: -> but elements are the same, not triggering rerender');
+                  logger.log('::update:: -> but elements are the same, not triggering rerender');
                 }
               } else {
                 if (!_.isEqual(mjmlJson, updated)) {
-                  console.log('::update::', mjmlJson, updated);
+                  logger.log('::update::', mjmlJson, updated);
                   setMjmlJson({ ...updated });
                 } else {
-                  console.log('::update:: -> but elements are the same, not triggering rerender');
+                  logger.log('::update:: -> but elements are the same, not triggering rerender');
                 }
               }
             }
@@ -95,7 +96,7 @@ const genereateDropItemPlaceholderForColumn = ({
     let find = findElementInJson(mjmlJson, nearestTag);
     if (find) {
       const cleanedMjmlJson = cleanMjmlJson(_.cloneDeep(mjmlJson));
-      console.log('::beforechange::', mjmlJson, cleanedMjmlJson);
+      logger.log('::beforechange::', mjmlJson, cleanedMjmlJson);
       const [, path]: [any, string] = find;
       let columnObj = _.get(_.cloneDeep(cleanedMjmlJson), path.slice(1));
       let newOrder = [];
@@ -145,10 +146,10 @@ const genereateDropItemPlaceholderForColumn = ({
         parentSection.children = columnChildrenNewOrder;
         const updated = _.set(cleanedMjmlJson, sectionPath, parentSection);
         if (!_.isEqual(mjmlJson, updated)) {
-          console.log('::update::', cleanedMjmlJson, updated);
+          logger.log('::update::', cleanedMjmlJson, updated);
           setMjmlJson({ ...updated });
         } else {
-          console.log('::update:: -> but elements are the same, not triggering rerender');
+          logger.log('::update:: -> but elements are the same, not triggering rerender');
         }
         return true;
       }

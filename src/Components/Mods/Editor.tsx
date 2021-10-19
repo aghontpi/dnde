@@ -15,6 +15,7 @@ import _ from 'lodash';
 import CopyFilled from '@ant-design/icons/lib/icons/CopyFilled';
 import DeleteFilled from '@ant-design/icons/lib/icons/DeleteFilled';
 import { useUniqueIdGenerator } from '../../Hooks/Drag.hook';
+import { logger } from '../../Utils/logger';
 
 export const Editor = () => {
   const { ref, isActive, x, y, delActive, delX, delY, setDelActive, copy } = useCkeditor();
@@ -30,7 +31,7 @@ export const Editor = () => {
       const identifier = findUniqueIdentifier(active, active.classList);
       quillEditor.on('text-change', () => {
         const change = quillEditor.container.firstChild.innerHTML;
-        console.log(change);
+        logger.log(change);
         if (identifier) {
           let position = findElementInJson(mjmlJson, identifier);
           if (position) {

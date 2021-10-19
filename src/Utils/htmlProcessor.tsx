@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import { HtmlWrapper } from '../Components/HtmlWrapper';
+import { logger } from './logger';
 import possibleStandardNames from './reactPropertyNames';
 import { WrapWithOutline } from './wrapWithOutline';
 
@@ -9,14 +10,14 @@ const domParser: any = new DOMParser();
 
 export const htmlProcessor = (html: string): ReactNode => {
   if (typeof html !== 'string') {
-    console.error('htmlParser: html is not a string');
+    logger.error('htmlParser: html is not a string');
     return React.createElement('div', {}, 'errors: please check dev console') as ReactNode;
   }
 
   let doc = domParser.parseFromString(html, 'text/html');
 
   if (doc === null) {
-    console.error('htmlParser: doc is null, unable to process html');
+    logger.error('htmlParser: doc is null, unable to process html');
     return React.createElement('p', {}, 'errors: please check dev console') as ReactNode;
   }
   return converter(doc as unknown as HTMLElement, 1);
@@ -82,7 +83,7 @@ const converter = (element: HTMLElement, key = 0) => {
       reactName = toCamelCase(attribute.name);
       const msg = `htmlParser: ${attribute.name} is not found in possible attributes,
       using ${reactName} instead.`;
-      DEBUG && console.error(msg, element);
+      DEBUG && logger.error(msg, element);
     }
 
     let value = attribute.name === 'style' ? convertStyleStringToObject(attribute.value) : attribute.value.trim();
@@ -127,7 +128,7 @@ const converter = (element: HTMLElement, key = 0) => {
     }
   }
   if (element.classList && element.classList.contains('mjml-tag')) {
-    DEBUG && console.info(`identified mjml-tag for : ${nodeName}, with attributes: ${JSON.stringify(attributes)}`);
+    DEBUG && logger.info(`identified mjml-tag for : ${nodeName}, with attributes: ${JSON.stringify(attributes)}`);
     // const ReactNode = React.createElement(nodeName, { key: key++, ...attributes }, children);
     const original = { nodeName, props: { ...attributes }, children };
 

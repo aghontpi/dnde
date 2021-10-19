@@ -3,6 +3,7 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import { EditorContext } from '../Context/Editor.context';
 import { findUniqueIdentifier } from '../Utils/closestParent';
 import { findElementInJson } from '../Utils/findElementInMjmlJson';
+import { logger } from '../Utils/logger';
 import { useHtmlWrapper } from './Htmlwrapper.hook';
 
 export const useEditor = () => {
@@ -22,7 +23,7 @@ export const useEditorUpdater = () => {
   const [path, setPath] = useState<any>(null);
 
   useEffect(() => {
-    console.log('editor value updater: ae->', activeElement);
+    logger.log('editor value updater: ae->', activeElement);
     if (activeElement && mjmlJson) {
       const uniqueIdentifer = findUniqueIdentifier(activeElement as HTMLElement, activeElement.classList);
       if (uniqueIdentifer) {
@@ -35,7 +36,7 @@ export const useEditorUpdater = () => {
             setItem(_item);
           }
         } else {
-          console.log(`editor value updater: unable to find item in json, ${find}, identifier: ${uniqueIdentifer}`);
+          logger.log(`editor value updater: unable to find item in json, ${find}, identifier: ${uniqueIdentifer}`);
         }
       }
     }

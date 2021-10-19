@@ -13,6 +13,7 @@ import { exportJson } from '../../Utils/mjmlProcessor';
 import _ from 'lodash';
 import { generatePreview } from '../../Utils/previewGenerator';
 import { UNDOREDO } from '../../Utils/undoRedo';
+import { logger } from '../../Utils/logger';
 const { Content } = Layout;
 const { confirm } = Modal;
 
@@ -37,7 +38,7 @@ export const Editor = () => {
     e.preventDefault();
     const html = mjml2html(mjmlJson).html;
     navigator.clipboard.writeText(html);
-    console.log('html', html);
+    logger.log('html', html);
     generatePreview(html);
     success('Copied to clipboard & logged in devtools ');
   };
@@ -53,8 +54,7 @@ export const Editor = () => {
     e.preventDefault();
     const to_copy = JSON.stringify(exportJson(_.cloneDeep(mjmlJson)));
     navigator.clipboard.writeText(to_copy);
-    console.log('json', to_copy);
-    console.log('stat', mjmlJson);
+    logger.log('json', to_copy);
 
     success('Copied to Clipboard & logged in devtools ');
   };

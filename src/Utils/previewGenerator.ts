@@ -1,4 +1,5 @@
 import html2canvas from 'html2canvas';
+import { logger } from './logger';
 
 const generatePreview = async (htmlString: string) => {
   const doc = new DOMParser().parseFromString(htmlString, 'text/html');
@@ -21,7 +22,7 @@ const generatePreview = async (htmlString: string) => {
     y: previewElementPosition.y,
   });
   previewElement.remove();
-  console.log('::preview', base64Image.toDataURL('image/png', 0.5));
+  logger.log('::preview', base64Image.toDataURL('image/png', 0.5));
   const base64String = await base64Image.toDataURL('image/png', 0.6);
   return base64String;
 };

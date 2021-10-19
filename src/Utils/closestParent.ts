@@ -1,19 +1,20 @@
 import { findElementInJson } from './findElementInMjmlJson';
 import { findColumnOfElement } from './findElementsParent';
+import { logger } from './logger';
 
 const findClosestParent = (element: HTMLElement) => {
   const closest = element.closest('.mjml-tag');
   let uniqueClassName = null;
 
   if (!closest) {
-    console.info('unable to find closest');
+    logger.info('unable to find closest');
     return uniqueClassName;
   }
 
   uniqueClassName = findUniqueIdentifier(closest, closest.classList);
 
   if (!uniqueClassName) {
-    console.info('unable to find identifier');
+    logger.info('unable to find identifier');
   }
 
   return uniqueClassName;
@@ -38,9 +39,7 @@ const findUniqueIdentifierFromString = (classList: string) => {
 const replaceGeneicTagWithUniqueId = (classNames: string, uid: string) => {
   let updatedClassNames = '';
   if (typeof classNames !== 'string') {
-    console.log(
-      `classNames should be string while generating uniqueIdentifier, but found ${typeof classNames} instead`
-    );
+    logger.log(`classNames should be string while generating uniqueIdentifier, but found ${typeof classNames} instead`);
     return null;
   }
   let classNamesArr = classNames.split(' ');
@@ -58,7 +57,7 @@ const replaceGeneicTagWithUniqueId = (classNames: string, uid: string) => {
       } else {
         current = ` ${current}-${uid}`;
       }
-      console.log(`generating-tag: ${log} -> ${current} `);
+      logger.log(`generating-tag: ${log} -> ${current} `);
     }
     updatedClassNames += ` ${current}`;
   }

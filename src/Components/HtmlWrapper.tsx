@@ -12,6 +12,7 @@ import {
   generateDropItemPlaceholder,
   genereateDropItemPlaceholderForColumn,
 } from '../Utils/generateDropItemPlaceholder';
+import { logger } from '../Utils/logger';
 import { setToolBars } from '../Utils/setToolbarPositions';
 import { MoveUpDown } from './MoveUpDownRow';
 
@@ -103,11 +104,11 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
 
   // detect empty body
   if (detectEmptyElement(originalNode, 'body')) {
-    console.info('empty body detected');
+    logger.info('empty body detected');
   }
   // detect empty section
   if (detectEmptyElement(originalNode, 'section')) {
-    console.info('empty section detected');
+    logger.info('empty section detected');
   }
 
   const onDragStart = (e: any) => {
@@ -124,7 +125,7 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
       e.dataTransfer.setDragImage(e.target, -5, -5);
       e.dataTransfer.setData('config', JSON.stringify(item));
     } else {
-      console.info(`move items: drag unable to find the config to transfer ${uniqueClassName}`);
+      logger.info(`move items: drag unable to find the config to transfer ${uniqueClassName}`);
     }
   };
 
@@ -140,14 +141,14 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
     const nearestTag = findClosestParent(currentTarget);
     // only show place item sign for column's children
     if (nearestTag?.includes('mj-column') || nearestTag?.includes('mj-section')) {
-      console.log('::indicator: trigger->column');
+      logger.log('::indicator: trigger->column');
       if (nearestTag.includes('mj-column')) {
         const madeChange = genereateDropItemPlaceholderForColumn({ mjmlJson, nearestTag, setMjmlJson });
         if (madeChange === true) {
-          console.log('::indicator: trigger->column -> stopping further processing');
+          logger.log('::indicator: trigger->column -> stopping further processing');
           return;
         }
-        console.log('::indicator: trigger->column -> no updates where done -> proceeding further processing');
+        logger.log('::indicator: trigger->column -> no updates where done -> proceeding further processing');
       }
     }
 
@@ -156,7 +157,7 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
     if (columnElement) {
       [columnElement] = columnElement;
     }
-    console.log('::indicator: trigger->insideColumn');
+    logger.log('::indicator: trigger->insideColumn');
     generateDropItemPlaceholder({
       mjmlJson,
       nearestTag,

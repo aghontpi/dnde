@@ -1,3 +1,5 @@
+import { logger } from './logger';
+
 const htmlSerializer = (div: HTMLElement, json: any): any => {
   if (div === undefined || div.tagName === undefined) {
     return;
@@ -16,7 +18,7 @@ const htmlSerializer = (div: HTMLElement, json: any): any => {
     });
     json['attributes'] = attributes;
   } else {
-    console.log('not attributes present for ===>', div);
+    logger.log('not attributes present for ===>', div);
   }
 
   let children: Object[] = [];

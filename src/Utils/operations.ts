@@ -9,6 +9,7 @@ import {
   getIndexOfElementInParent,
 } from './closestParent';
 import { findElementInJson } from './findElementInMjmlJson';
+import { logger } from './logger';
 import { cleanMjmlJson } from './mjmlProcessor';
 import { insertAtPlaceholderIndicatorPosition, removePlaceholderBanner } from './removePlaceholders';
 import { UNDOREDO } from './undoRedo';
@@ -43,7 +44,7 @@ const Add = ({ target, droppedConfig, setMjmlJson, mjmlJson, uid }: AddProps) =>
     if (uniqueClassName !== 'identifier-mj-body') {
       const msg = 'Columns can not be nested! it will break mobile design';
       message.info(msg);
-      console.log(`operation add: ${msg}`);
+      logger.log(`operation add: ${msg}`);
       return;
     }
   }
@@ -58,14 +59,14 @@ const Add = ({ target, droppedConfig, setMjmlJson, mjmlJson, uid }: AddProps) =>
   }
 
   let [item, path] = ObjectEquivalent;
-  console.info('operation add: item in Object:', item, 'path to Object:', path);
+  logger.info('operation add: item in Object:', item, 'path to Object:', path);
 
   item = removePlaceholderBanner(item);
 
   item = insertAtPlaceholderIndicatorPosition(item, droppedConfigWithUid);
 
   if (UNDOREDO.isUndoEmpty()) {
-    UNDOREDO.newAction(mjmlJson);
+    UNDOREDO.newAction(cleanMjmlJson(_.cloneDeep(mjmlJson)));
   }
 
   let updated = _.set(mjmlJson, path.slice(1), item);
@@ -109,7 +110,7 @@ const AddAtIndex = ({
   }
 
   let [item, path] = ObjectEquivalent;
-  console.info('operation add: item in Object:', item, 'path to Object:', path);
+  logger.info('operation add: item in Object:', item, 'path to Object:', path);
 
   item = removePlaceholderBanner(item);
 
@@ -155,7 +156,7 @@ const Remove = ({
   } else if (ucn) {
     uniqueClassName = ucn;
   } else {
-    console.info(`operation remove: either target/uniqueClassName must be provided 
+    logger.info(`operation remove: either target/uniqueClassName must be provided 
       to perform this operation
     `);
     return;
@@ -211,7 +212,7 @@ const Remove = ({
       UNDOREDO.newAction(updated);
     }
   } else {
-    console.info('operation remove: unable to delete the item');
+    logger.info('operation remove: unable to delete the item');
   }
 };
 

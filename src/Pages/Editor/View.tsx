@@ -16,6 +16,7 @@ import { useCallback, useEffect } from 'react';
 import { UndoRedo } from '../../Components/UndoRedo';
 import _ from 'lodash';
 import { UNDOREDO } from '../../Utils/undoRedo';
+import { logger } from '../../Utils/logger';
 
 interface ViewProps {}
 
@@ -89,7 +90,7 @@ export const View = (props: ViewProps) => {
         setCopyActive,
         movement: true,
       });
-      console.info(`operation move: onDrop -> removed previous instance 
+      logger.info(`operation move: onDrop -> removed previous instance 
       of config :'${config.uniqueClassName}'`);
       config = config['config'];
     }
@@ -101,8 +102,6 @@ export const View = (props: ViewProps) => {
       uid: getId,
     });
   };
-
-  console.log(mjmlJson);
 
   return (
     <Scrollbars style={{ height: '100%' }}>

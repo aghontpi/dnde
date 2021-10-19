@@ -3,6 +3,7 @@ import _ from 'lodash';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useVisibility } from '../../Hooks/Attribute.hook';
 import { useEditor } from '../../Hooks/Editor.hook';
+import { logger } from '../../Utils/logger';
 import { UpdateValue } from '../../Utils/operations';
 
 const ATTRIBUTE = 'inner-padding';
@@ -27,7 +28,7 @@ const InnerPadding = () => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.currentTarget.value;
-    console.log('inner padding value', value);
+    logger.log('inner padding value', value);
     if (path && visible) {
       setValue(value);
     }

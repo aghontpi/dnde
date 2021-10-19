@@ -1,4 +1,5 @@
 import { message } from 'antd';
+import { logger } from './logger';
 const sgMail = require('@sendgrid/mail');
 
 const sendMail = (to: string, html: string) => {
@@ -13,12 +14,12 @@ const sendMail = (to: string, html: string) => {
   sgMail
     .send(msg)
     .then(() => {
-      console.log('Email sent');
+      logger.log('Email sent');
       message.loading('sending mail...', 2).then(() => message.success('mail sent!'));
     })
     .catch((error: any) => {
       message.error('error sending mail');
-      console.error(error);
+      logger.error(error);
     });
 };
 

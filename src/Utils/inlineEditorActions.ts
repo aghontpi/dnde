@@ -1,9 +1,11 @@
+import { logger } from './logger';
+
 const InlineEditorActions = (e: any, type: string, extras = '') => {
   if (e) {
     e.preventDefault();
     e.stopPropagation();
   }
-  console.log('editor action:', type, extras);
+  logger.log('editor action:', type, extras);
   switch (type) {
     case 'bold':
       document.execCommand('bold');
@@ -27,7 +29,7 @@ const InlineEditorActions = (e: any, type: string, extras = '') => {
       document.execCommand('fontName', false, extras);
       break;
     default:
-      console.info(`unhandled action ${type}`);
+      logger.info(`unhandled action ${type}`);
   }
   return false;
 };

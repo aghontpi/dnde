@@ -6,6 +6,7 @@ import { ChromePicker } from 'react-color';
 import { useEffect, useState } from 'react';
 import { useHtmlWrapper } from '../../Hooks/Htmlwrapper.hook';
 import { useVisibility } from '../../Hooks/Attribute.hook';
+import { logger } from '../../Utils/logger';
 
 const ATTRIBUTE = 'container-background-color';
 
@@ -26,7 +27,7 @@ export const ContainerBackground = () => {
           }
         }
       } catch (e) {
-        console.info('got exception, hiding background mod', e);
+        logger.info('got exception, hiding background mod', e);
       }
     }
   }, [clicked]);

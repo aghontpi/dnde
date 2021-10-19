@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { logger } from './logger';
 
 class UndoRedo {
   undo: any[];
@@ -11,7 +12,7 @@ class UndoRedo {
 
   public newAction(action: any) {
     if (this.undo.length > 0 && _.isEqual(action, this.peekUndo())) {
-      console.log('undoredo: prev action and new action are same, not performing action');
+      logger.log('undoredo: prev action and new action are same, not performing action');
       return;
     }
     this.undo.push(this.copy(action));
@@ -27,7 +28,7 @@ class UndoRedo {
     this.redo.push(itemToApply);
 
     if (current && _.isEqual(itemToApply, current)) {
-      console.log('undoredo: undo action but view and current are same, proceeding one more step');
+      logger.log('undoredo: undo action but view and current are same, proceeding one more step');
       return this.undoAction(current);
     }
 
@@ -42,7 +43,7 @@ class UndoRedo {
     const itemToApply = this.copy(this.redo.pop());
     this.undo.push(itemToApply);
     if (current && _.isEqual(itemToApply, current)) {
-      console.log('undoredo: redo action but view and current are same, proceeding one more step');
+      logger.log('undoredo: redo action but view and current are same, proceeding one more step');
       return this.redoAction(current);
     }
     return itemToApply;
@@ -78,7 +79,7 @@ class UndoRedo {
   }
 
   public print() {
-    console.log('undoredo: ', this.undo, this.redo);
+    logger.log('undoredo: ', this.undo, this.redo);
   }
 
   private copy(item: any) {

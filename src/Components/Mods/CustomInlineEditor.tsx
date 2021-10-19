@@ -17,6 +17,7 @@ import { ColorPicker } from '../ColorPicker';
 import { findClosestParent, findUniqueIdentifier } from '../../Utils/closestParent';
 import { findElementInJson } from '../../Utils/findElementInMjmlJson';
 import { useFonts } from '../../Hooks/useFonts';
+import { logger } from '../../Utils/logger';
 
 let r: any;
 
@@ -45,12 +46,12 @@ const InlineEditor = () => {
       const toolbar = document.querySelectorAll('#customtoolbar .ant-select-selector');
       if (toolbar) {
         toolbar.forEach((item) => {
-          console.log('attaching click event listener to container');
+          logger.log('attaching click event listener to container');
           item.addEventListener('click', ResetEventBehaviour);
         });
         return () =>
           toolbar.forEach((item) => {
-            console.log('removing click event listener to container');
+            logger.log('removing click event listener to container');
             item.removeEventListener('click', ResetEventBehaviour);
           });
       }
@@ -88,7 +89,7 @@ const InlineEditor = () => {
         }
 
         return () => {
-          console.log('custom editor: cleaning up dynamic attributes');
+          logger.log('custom editor: cleaning up dynamic attributes');
           editor.removeEventListener('focusout', Event, true);
           editor.removeEventListener('keyup', onKeyUp, false);
           editor.removeEventListener('click', onKeyUp, false);
@@ -281,7 +282,7 @@ const LinkItem = ({ setLinkCallback }: LinkItemProps) => {
 };
 
 const stateChangeCallback = (item: any, mjmlJson: any, setMjmlJson: any) => {
-  console.log(`custom Inline Editor: updating state callback`);
+  logger.log(`custom Inline Editor: updating state callback`);
   const closestParent = findClosestParent(item);
   if (!closestParent) {
     return;
@@ -294,7 +295,7 @@ const stateChangeCallback = (item: any, mjmlJson: any, setMjmlJson: any) => {
       let itemJson = _.get(mjmlJson, path.slice(1));
       if (itemJson) {
         let updateToSend = _.cloneDeep(itemJson);
-        console.log('inline editor: updating', item);
+        logger.log('inline editor: updating', item);
         const html = item.innerHTML;
         updateToSend.content = html;
         const updated = _.set(mjmlJson, path.slice(1), updateToSend);
@@ -305,17 +306,17 @@ const stateChangeCallback = (item: any, mjmlJson: any, setMjmlJson: any) => {
 };
 
 export const ResetEventBehaviour = (e: any) => {
-  console.log('::reset', e.target);
+  logger.log('::reset', e.target);
   if (
     e.target &&
     e.target.tagName === 'INPUT' &&
     e.target.className &&
     e.target.className.includes('inline-editor-link')
   ) {
-    console.log('::reset, returning');
+    logger.log('::reset, returning');
     return;
   }
-  console.log('::reset->reset behaviour', e.target);
+  logger.log('::reset->reset behaviour', e.target);
   e.preventDefault();
   e.stopPropagation();
   return false;

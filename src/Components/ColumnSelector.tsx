@@ -10,6 +10,7 @@ import { useHtmlWrapper } from '../Hooks/Htmlwrapper.hook';
 import { generateUniqueIdRecursively } from '../Utils/closestParent';
 import { findElementInJson } from '../Utils/findElementInMjmlJson';
 import { findSectionOfElement } from '../Utils/findElementsParent';
+import { logger } from '../Utils/logger';
 import { UNDOREDO } from '../Utils/undoRedo';
 import { COLUMN } from './Section';
 
@@ -80,7 +81,7 @@ const ColumnSelector = () => {
           const updatedItem = { ...item, children: newChildren };
 
           //update json
-          console.log('column layout: ', updatedItem);
+          logger.log('column layout: ', updatedItem);
 
           const updated = _.set(mjmlJson, path.slice(1), updatedItem);
 
