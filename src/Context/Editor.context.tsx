@@ -53,7 +53,7 @@ export const EDContext: FC = (props) => {
   const [trigger, { data, isError, isLoading, isSuccess }] = useLazyGetTemplateQuery();
 
   useEffect(() => {
-    // if app crashed, restoring from the local state.
+    // if app crashed/ user left while editing, restoring from local
     const actions = localStorage.getItem('actions');
 
     async function restoreFromLocalStorage() {
@@ -94,7 +94,11 @@ export const EDContext: FC = (props) => {
 
   useEffect(() => {
     if (isSuccess && data) {
-      setMjmlJson(importJson(JSON.parse(data.response.data), getId));
+      try {
+        setMjmlJson(importJson(JSON.parse(data.response.data), getId));
+      } catch (e) {
+        message.error('Unable to load template', 3);
+      }
     } else if (isSuccess && !data) {
       message.error('Template is empty', 2);
     }
