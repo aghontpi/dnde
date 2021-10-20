@@ -25,6 +25,7 @@ const PreviewContainer = styled.div`
   transition: all 0.2s ease 0s;
   position: relative;
   text-align: center;
+  margin: 0 auto;
 
   .hoverItem {
     display: none;
@@ -105,7 +106,7 @@ const Preview = ({ image, id, skeleton }: PreviewProps) => {
   return (
     <PreviewContainer>
       {skeleton ? (
-        <div style={{ height: '350px', maxWidth: '280px', padding: '24px 24px' }}>{skeleton}</div>
+        <div style={{ height: '350px', minWidth: '280px', maxWidth: '280px', padding: '24px 24px' }}>{skeleton}</div>
       ) : (
         <img height="350px" src={image} alt="preview" />
       )}

@@ -21,7 +21,7 @@ const List = () => {
           </Col>
           <Col span={24}>
             <Row align="middle" justify="center">
-              <Col>
+              <Col style={{ textAlign: 'center' }}>
                 <span className="subtitle">
                   Drag and Drop Editor tailored for <b>Mails</b>
                 </span>
@@ -52,20 +52,18 @@ const List = () => {
             <span className="title">Choose a template and get started.</span>
           </Col>
           <Col span={16}>
-            <span className="subtitle">
-              All templates are redesigned in dnde, by keeping the original mail as reference.
-            </span>
+            <span className="subtitle">All templates are redesigned in dnde, using original mail as reference.</span>
           </Col>
         </Row>
 
-        <Row justify="center" className="template-list" gutter={[0, 56]}>
+        <Row justify="center" className="template-list" gutter={[0, 40]}>
           <Col lg={6}>
             <NewItem />
           </Col>
           {isLoading &&
             [1, 2].map((item, key) => {
               return (
-                <Col lg={6}>
+                <Col xs={24} md={12} lg={6} style={{ textAlign: 'center' }}>
                   <Preview
                     key={key}
                     id={'8x93dummy'}
