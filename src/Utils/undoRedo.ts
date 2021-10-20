@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { logger } from './logger';
 
 class UndoRedo {
-  undo: any[];
+  public undo: any[];
   redo: any[];
 
   constructor() {
@@ -16,6 +16,7 @@ class UndoRedo {
       return;
     }
     this.undo.push(this.copy(action));
+    this.storeToLocalStorage();
     this.redo = [];
   }
 
@@ -80,6 +81,17 @@ class UndoRedo {
 
   public print() {
     logger.log('undoredo: ', this.undo, this.redo);
+  }
+
+  private storeToLocalStorage() {
+    try {
+      localStorage.setItem('actions', JSON.stringify(this.undo));
+    } catch (e) {
+      logger.log('undoredo: error storing to local storage');
+      logger.log('undoredo: it is possible this occured due to storage limit in localStorage,truncating undo');
+      this.undo = [this.undo[this.undo.length - 1]];
+      localStorage.setItem('actions', JSON.stringify(this.undo));
+    }
   }
 
   private copy(item: any) {

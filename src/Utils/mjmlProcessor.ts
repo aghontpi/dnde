@@ -1,4 +1,6 @@
+import _ from 'lodash';
 import { columnPlaceholder } from '../Components/Section';
+import { PageHeaderItems } from '../Context/Editor.context';
 import { Base64 } from '../Lib/base64';
 import { generateUniqueIdRecursively } from './closestParent';
 
@@ -118,9 +120,22 @@ function replaceContent(input: any) {
   return input;
 }
 
-const importJson = (input: any, idGenerator: () => string) => {
-  const regeneratedIdJson = generateUniqueIdRecursively(input, idGenerator);
-  return replaceContent(regeneratedIdJson);
+const importJson = (input: any, idGenerator: () => string, rawContent: boolean = false) => {
+  let regeneratedIdJson = generateUniqueIdRecursively(input, idGenerator);
+
+  // remove existing header items nd create new header items.
+  // remove fonts and inject the new fonts later.
+  if (
+    regeneratedIdJson &&
+    regeneratedIdJson.tagName &&
+    regeneratedIdJson.tagName === 'mjml' &&
+    regeneratedIdJson.children &&
+    regeneratedIdJson.children.length > 1
+  ) {
+    regeneratedIdJson.children[0].children = _.cloneDeep(PageHeaderItems);
+  }
+
+  return rawContent ? regeneratedIdJson : replaceContent(regeneratedIdJson);
 };
 
 export { cleanMjmlJson, exportJson, importJson };

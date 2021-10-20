@@ -26,14 +26,6 @@ export const Editor = () => {
     UNDOREDO.reset();
   }, []);
 
-  useEffect(() => {
-    if (mjmlJson) {
-      if (UNDOREDO.isUndoEmpty() && UNDOREDO.isRedoEmpty()) {
-        UNDOREDO.newAction(mjmlJson);
-      }
-    }
-  }, [mjmlJson]);
-
   const copyHTMLAsClipBoard = (e: any) => {
     e.preventDefault();
     const html = mjml2html(mjmlJson).html;

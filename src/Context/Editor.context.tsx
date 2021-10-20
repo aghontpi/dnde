@@ -1,4 +1,4 @@
-import { message } from 'antd';
+import { message, Modal } from 'antd';
 import _ from 'lodash';
 import { createContext, FC, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
@@ -7,8 +7,25 @@ import { FONTS_CONFIG } from '../Components/Mods/FontConfig';
 import { HEADSTYLE } from '../Components/Mods/HeadStyle';
 import { useDragAndDropUniqueId } from '../Hooks/Drag.hook';
 import { importJson } from '../Utils/mjmlProcessor';
+import { UNDOREDO } from '../Utils/undoRedo';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { config } from 'process';
 
 export const EditorContext = createContext<any>(null);
+
+export const PageHeaderItems = [
+  { tagName: 'mj-title', attributes: {}, children: [] },
+  { tagName: 'mj-style', content: HEADSTYLE },
+  ...FONTS_CONFIG.map((font) => {
+    return {
+      tagName: 'mj-font',
+      attributes: {
+        name: font.name,
+        href: font.value,
+      },
+    };
+  }),
+];
 
 const initialState = {
   tagName: 'mjml',
@@ -16,19 +33,7 @@ const initialState = {
     {
       tagName: 'mj-head',
       attributes: {},
-      children: [
-        { tagName: 'mj-title', attributes: {}, children: [] },
-        { tagName: 'mj-style', content: HEADSTYLE },
-        ...FONTS_CONFIG.map((font) => {
-          return {
-            tagName: 'mj-font',
-            attributes: {
-              name: font.name,
-              href: font.value,
-            },
-          };
-        }),
-      ],
+      children: PageHeaderItems,
     },
     {
       tagName: 'mj-body',
@@ -48,14 +53,43 @@ export const EDContext: FC = (props) => {
   const [trigger, { data, isError, isLoading, isSuccess }] = useLazyGetTemplateQuery();
 
   useEffect(() => {
-    if (templateId === 'new' || typeof templateId === 'undefined') {
-      setMjmlJson(_.cloneDeep(initialState));
-    } else {
-      if (templateId) {
-        message.loading({ content: 'Fetching Template...', key: LOADING_KEY, duration: 0 });
-        trigger({ id: templateId });
+    // if app crashed, restoring from the local state.
+    const actions = localStorage.getItem('actions');
+
+    async function restoreFromLocalStorage() {
+      let result = false;
+      if (actions) {
+        result = await modalConfirmLoadLocalState(
+          () => {
+            const parsed = JSON.parse(actions);
+            const processed = importJson(parsed[parsed.length - 1], getId, true);
+            UNDOREDO.undo = parsed;
+            setMjmlJson(processed);
+          },
+          () => {
+            setMjmlJson(_.cloneDeep(initialState));
+            UNDOREDO.newAction(_.cloneDeep(initialState));
+            localStorage.removeItem('actions');
+          }
+        );
       }
+      return result;
     }
+
+    restoreFromLocalStorage().then((isRestored) => {
+      if (isRestored) {
+        return;
+      } else {
+        if (templateId === 'new' || typeof templateId === 'undefined') {
+          setMjmlJson(_.cloneDeep(initialState));
+        } else {
+          if (templateId) {
+            message.loading({ content: 'Fetching Template...', key: LOADING_KEY, duration: 0 });
+            trigger({ id: templateId });
+          }
+        }
+      }
+    });
   }, []);
 
   useEffect(() => {
@@ -86,4 +120,24 @@ export const EDContext: FC = (props) => {
       {props.children}
     </EditorContext.Provider>
   );
+};
+
+const modalConfirmLoadLocalState = async (okCallback: () => void, cancelCallback: () => void) => {
+  return new Promise<boolean>((resolve, reject) => {
+    Modal.confirm({
+      title: 'Confirm',
+      icon: <ExclamationCircleOutlined />,
+      content: 'local save found do you want to load it?',
+      okText: 'restore',
+      cancelText: 'delete',
+      onOk: () => {
+        okCallback();
+        resolve(true);
+      },
+      onCancel: () => {
+        cancelCallback();
+        resolve(false);
+      },
+    });
+  });
 };
