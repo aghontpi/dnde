@@ -2,7 +2,7 @@ import { View } from './View';
 import css from './Editor.module.scss';
 import { Attributes } from './Attributes';
 import { ComponentBank } from './ComponentBank';
-import { Button, PageHeader, Layout, Modal, Input } from 'antd';
+import { Button, PageHeader, Layout, Modal, Input, Row, Col } from 'antd';
 import { success } from '../../Components/Messages';
 import mjml2html from 'mjml-browser';
 import { useEditor } from '../../Hooks/Editor.hook';
@@ -52,53 +52,59 @@ export const Editor = () => {
   };
 
   return (
-    <>
-      <Preview
-        visible={preview}
-        visibleChange={(flag) => setPreview(flag)}
-        inframeContent={preview ? mjml2html(mjmlJson).html : ''}
-      />
-      <Layout style={{ height: '100%' }}>
-        <PageHeader
-          ghost={false}
-          onBack={() => window.history.back()}
-          title="dnde"
-          subTitle=""
-          style={{ borderBottom: '1px solid #e8e8e8' }}
-          extra={[
-            <>
-              <SendTestMail key="4" />
+    <Row style={{ height: '100%', width: '100%' }} justify="center">
+      <Col lg={24} xl={0}>
+        <div style={{ textAlign: 'center', padding: '40px', paddingTop: '10%' }}>
+          <h3>Sorry, You need a device with a larger screen to perform editing, atleast '{'>'}=1200px'</h3>
+        </div>
+      </Col>
+      <Col xs={0} xl={24}>
+        <Preview
+          visible={preview}
+          visibleChange={(flag) => setPreview(flag)}
+          inframeContent={preview ? mjml2html(mjmlJson).html : ''}
+        />
+        <Layout style={{ height: '100%' }}>
+          <PageHeader
+            ghost={false}
+            onBack={() => window.history.back()}
+            title="dnde"
+            subTitle=""
+            style={{ borderBottom: '1px solid #e8e8e8' }}
+            extra={[
+              <>
+                {/* <SendTestMail key="4" />
               <Button key="5" onClick={copyPreviewImage}>
                 Copy Preview Image
-              </Button>
-              <Button key="3" onClick={() => setPreview(true)}>
-                Preview
-              </Button>
-              <Button key="2" onClick={copyHTMLAsClipBoard}>
-                Copy as html
-              </Button>
-              <Button key="1" onClick={copyJsonInClipBoard}>
-                Copy as json
-              </Button>
-              ,
-            </>,
-          ]}
-        ></PageHeader>
-        <Content>
-          <div className={css.editor}>
-            <div className={css.bank}>
-              <ComponentBank />
+              </Button> */}
+                <Button key="3" onClick={() => setPreview(true)}>
+                  Preview
+                </Button>
+                <Button key="2" onClick={copyHTMLAsClipBoard}>
+                  Copy as html
+                </Button>
+                <Button key="1" onClick={copyJsonInClipBoard}>
+                  Copy as json
+                </Button>
+              </>,
+            ]}
+          ></PageHeader>
+          <Content>
+            <div className={css.editor}>
+              <div className={css.bank}>
+                <ComponentBank />
+              </div>
+              <div className={css.view}>
+                <View />
+              </div>
+              <div className={css.attributes}>
+                <Attributes />
+              </div>
             </div>
-            <div className={css.view}>
-              <View />
-            </div>
-            <div className={css.attributes}>
-              <Attributes />
-            </div>
-          </div>
-        </Content>
-      </Layout>
-    </>
+          </Content>
+        </Layout>
+      </Col>
+    </Row>
   );
 };
 
