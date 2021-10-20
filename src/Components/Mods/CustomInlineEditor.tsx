@@ -18,6 +18,7 @@ import { findClosestParent, findUniqueIdentifier } from '../../Utils/closestPare
 import { findElementInJson } from '../../Utils/findElementInMjmlJson';
 import { useFonts } from '../../Hooks/useFonts';
 import { logger } from '../../Utils/logger';
+import { addHttps } from './Link';
 
 let r: any;
 
@@ -252,11 +253,10 @@ const LinkItem = ({ setLinkCallback }: LinkItemProps) => {
             onClick={() => {
               setActive(false);
               restoreSelection();
-              // document.execCommand('createLink', false, 'https://google.com');
               document.execCommand(
                 'insertHTML',
                 false,
-                '<a href="' + link + '" target="_blank">' + document.getSelection() + '</a>'
+                '<a href="' + addHttps(link) + '" target="_blank">' + document.getSelection() + '</a>'
               );
             }}
           >
