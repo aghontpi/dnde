@@ -31,14 +31,15 @@ const List = () => {
           <Col style={{ paddingTop: '24px' }} span={24}>
             <Row align="middle" justify="center">
               <Col className="info" md={24} lg={10} style={{ textAlign: 'center' }}>
+                <span>
+                  All features are optimised for mails, work flexibly through import/export, with responsive design for
+                  all devices.
+                </span>
+                <br />
+
                 <a target="_blank" href="https://github.com/aghontpi/dnde">
                   <span>
-                    All features are optimised for mails, work flexibly through import/export, with responsive design
-                    for all devices.
-                  </span>
-                  <br />
-                  <span>
-                    Source on Github <GithubFilled style={{ position: 'relative', top: '4px', fontSize: '32px' }} />
+                    Check it on Github <GithubFilled style={{ position: 'relative', top: '4px', fontSize: '32px' }} />
                   </span>
                 </a>
               </Col>
@@ -46,9 +47,14 @@ const List = () => {
           </Col>
         </Row>
 
-        <Row className="choose-template" align="middle" justify="center">
-          <Col>
-            <span className="title">Choose a template, to get started.</span>
+        <Row className="choose-template" align="middle" gutter={[0, 8]} justify="center">
+          <Col span={16}>
+            <span className="title">Choose a template and get started.</span>
+          </Col>
+          <Col span={16}>
+            <span className="subtitle">
+              All templates are redesigned in dnde, by keeping the original mail as reference.
+            </span>
           </Col>
         </Row>
 

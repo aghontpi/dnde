@@ -26,7 +26,7 @@
   }
 
   .info {
-    padding: 10px 16px;
+    padding: 16px 16px;
     z-index: 100;
     span {
       line-height: 1.5;
@@ -56,9 +56,18 @@
 
 .choose-template {
   margin: 56px 24px;
+  .ant-col {
+    text-align: center;
+  }
   .title {
     font-size: 1.5rem;
     font-weight: bold;
     color: #363636;
+  }
+  .subtitle {
+    opacity: 0.5;
+    font-size: 1.2rem;
+    line-height: 1.5;
+    color: #4a4a4a;
   }
 }
