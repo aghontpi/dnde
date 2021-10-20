@@ -99,7 +99,7 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
   );
   const draggable = activeHover === idRef.current;
   const cursetStyle = useMemo(() => (activeHover === idRef.current ? 'pointer' : 'default'), [activeHover, idRef]);
-  const outline = activeHover === idRef.current ? '2px dotted rgb(121, 202, 182)' : 'unset';
+  const outline = activeHover === idRef.current ? '2px dashed rgb(121, 202, 182)' : 'unset';
   const outlineClick = active === idRef.current ? '2px solid rgb(121, 202, 182)' : 'unset';
 
   // detect empty body
