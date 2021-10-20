@@ -2,7 +2,7 @@ import { Button } from 'antd';
 import styled from 'styled-components';
 import { PlusOutlined } from '@ant-design/icons';
 import newTemplate from '../../Assets/Images/new_template.svg';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation, useRouteMatch } from 'react-router';
 import { ReactNode } from 'react';
 
 interface PreviewProps {
@@ -76,9 +76,11 @@ const PreviewContainer = styled.div`
 
 export const NewItem = () => {
   const history = useHistory();
+  const { path } = useRouteMatch();
   const onClick = () => {
-    history.push(`template/new`);
+    history.push(`${path}/template/new`);
   };
+
   return (
     <PreviewContainer>
       <div className="newTemplate">
@@ -100,8 +102,9 @@ export const NewItem = () => {
 
 const Preview = ({ image, id, skeleton }: PreviewProps) => {
   const history = useHistory();
+  const { path } = useRouteMatch();
   const onClick = () => {
-    history.push(`template/${id}`);
+    history.push(`${path}/template/${id}`);
   };
   return (
     <PreviewContainer>
