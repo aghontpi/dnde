@@ -5,10 +5,10 @@ import Editor from './Editor';
 const Routing = () => {
   return (
     <Switch>
-      <Route exact path="/list" component={List} />
+      <Route exact path={['', '/list']} component={List} />
       <Route path="/template/:templateId" component={Editor} />
       <Route path="*">
-        <Redirect to="/list" />
+        <Redirect to="/" />
       </Route>
     </Switch>
   );
