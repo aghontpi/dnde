@@ -31,7 +31,6 @@ export const Editor = () => {
     const html = mjml2html(mjmlJson).html;
     navigator.clipboard.writeText(html);
     logger.log('html', html);
-    generatePreview(html);
     success('Copied to clipboard & logged in devtools ');
   };
 
