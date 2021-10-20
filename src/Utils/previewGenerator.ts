@@ -11,11 +11,14 @@ const generatePreview = async (htmlString: string) => {
   document.body.appendChild(previewElement);
   const previewElementPosition = previewElement.getBoundingClientRect();
   const base64Image = await html2canvas(previewElement.getElementsByTagName('html')[0] as unknown as HTMLElement, {
+    logging: true,
     removeContainer: true,
-    allowTaint: true,
+    allowTaint: false,
     useCORS: true,
     backgroundColor: null,
     scale: 0.3,
+    scrollX: 0,
+    scrollY: -window.scrollY,
     width: previewElementPosition.width,
     height: document.getElementsByClassName('mjml-wrapper')[0].getBoundingClientRect().height - 200,
     x: previewElementPosition.x,
