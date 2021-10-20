@@ -24,6 +24,7 @@ const PreviewContainer = styled.div`
   margin-bottom: 25px;
   transition: all 0.2s ease 0s;
   position: relative;
+  text-align: center;
 
   .hoverItem {
     display: none;
