@@ -1,12 +1,12 @@
 const logger = {
   log: (...args: any) => {
-    console.log(args);
+    console.log(...args);
   },
   error: (...args: any) => {
-    console.error(args);
+    console.error(...args);
   },
   info: (...args: any) => {
-    console.info(args);
+    console.info(...args);
   },
 };
 
