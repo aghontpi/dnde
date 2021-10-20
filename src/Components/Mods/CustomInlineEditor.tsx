@@ -62,7 +62,7 @@ const InlineEditor = () => {
     if (active && activeElement) {
       const uniqueIdentifier = findUniqueIdentifier(activeElement, activeElement.classList);
       if (uniqueIdentifier?.includes('mj-text')) {
-        let editor: any = activeElement.children[0];
+        let editor: any = activeElement.children[0].children[0];
 
         const Event = (e: any) => {
           stateChangeCallback(editor, mjmlJson, setMjmlJson);

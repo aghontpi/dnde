@@ -173,12 +173,24 @@ export const Editor = () => {
         </div>
       </div> */}
       <Delete
-        style={{ display: delActive ? 'block' : 'none', position: 'fixed', left: `${delX}px`, top: `${delY}px` }}
+        style={{
+          zIndex: 200,
+          display: delActive ? 'block' : 'none',
+          position: 'fixed',
+          left: `${delX}px`,
+          top: `${delY}px`,
+        }}
         deleteConfirm={deleteConfirm}
       />
       <Copy
         onClick={copyAction}
-        style={{ display: copyActive ? 'block' : 'none', position: 'fixed', left: `${copyX}px`, top: `${copyY}px` }}
+        style={{
+          zIndex: 200,
+          display: copyActive ? 'block' : 'none',
+          position: 'fixed',
+          left: `${copyX}px`,
+          top: `${copyY}px`,
+        }}
       />
     </>
   );

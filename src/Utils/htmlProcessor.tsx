@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { createElement, ReactNode } from 'react';
 import { HtmlWrapper } from '../Components/HtmlWrapper';
 import { logger } from './logger';
 import possibleStandardNames from './reactPropertyNames';
@@ -99,7 +99,11 @@ const converter = (element: HTMLElement, key = 0) => {
     // if element is mj-text, we edit it with customInlineEditor by making div 'contentEditable' true.
     //  do not handle children in react.
 
-    const original = { nodeName, props: { ...attributes, dangerouslySetInnerHTML: { __html: element.innerHTML } } };
+    const original = {
+      nodeName,
+      props: { ...attributes },
+      children: [createElement('span', { dangerouslySetInnerHTML: { __html: element.innerHTML } })],
+    };
 
     return <HtmlWrapper uniqueKey={key++} originalNode={original} />;
   }
