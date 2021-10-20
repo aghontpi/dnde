@@ -37,7 +37,7 @@ const useVisibility = ({ attribute, property, customPath }: useVisibilityProps):
           }
           if (attribute) {
             const item = _.get(mjmlJson, pathToElement.slice(1));
-            if (item.mutableProperties && item.mutableProperties.includes(attribute)) {
+            if (item && item.mutableProperties && item.mutableProperties.includes(attribute)) {
               setVisible(true);
               return;
             }
