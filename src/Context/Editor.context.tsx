@@ -63,7 +63,7 @@ export const EDContext: FC = (props) => {
           () => {
             const parsed = JSON.parse(actions);
             const processed = importJson(parsed[parsed.length - 1], getId, true);
-            UNDOREDO.undo = parsed;
+            UNDOREDO.newAction(_.cloneDeep(processed));
             setMjmlJson(processed);
           },
           () => {
@@ -81,6 +81,7 @@ export const EDContext: FC = (props) => {
         return;
       } else {
         if (templateId === 'new' || typeof templateId === 'undefined') {
+          UNDOREDO.newAction(_.cloneDeep(initialState));
           setMjmlJson(_.cloneDeep(initialState));
         } else {
           if (templateId) {
@@ -95,7 +96,9 @@ export const EDContext: FC = (props) => {
   useEffect(() => {
     if (isSuccess && data) {
       try {
-        setMjmlJson(importJson(JSON.parse(data.response.data), getId));
+        const processedJson = importJson(JSON.parse(data.response.data), getId);
+        setMjmlJson(processedJson);
+        UNDOREDO.newAction(_.cloneDeep(processedJson));
       } catch (e) {
         message.error('Unable to load template', 3);
       }
@@ -133,7 +136,7 @@ const modalConfirmLoadLocalState = async (okCallback: () => void, cancelCallback
       icon: <ExclamationCircleOutlined />,
       content: 'local save found do you want to load it?',
       okText: 'restore',
-      cancelText: 'delete',
+      cancelText: 'cancel',
       onOk: () => {
         okCallback();
         resolve(true);
