@@ -24,6 +24,7 @@ import { BackgroundImage } from '../../Components/Mods/BackgroundImage';
 import { ColumnAttributes } from '../../Components/ColumnAttributes';
 import { useHtmlWrapper } from '../../Hooks/Htmlwrapper.hook';
 import { useEffect, useState } from 'react';
+import { LineHeight } from '../../Components/Mods/LineHeight';
 
 const { TabPane } = Tabs;
 
@@ -69,6 +70,7 @@ export const Attributes = () => {
                 <Align />
                 <VerticalAlign />
                 <Content />
+                <LineHeight />
                 <FontSize />
                 <FontFamily />
                 <Padding />
