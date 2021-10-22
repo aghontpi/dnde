@@ -56,6 +56,7 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
 
   const onHover = useMemo(
     () => (e: any) => {
+      e.stopPropagation();
       setActiveHover(idRef.current);
     },
     [idRef]
@@ -207,9 +208,8 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
     originalNode.nodeName as string,
     {
       ...originalNode.props,
-      onMouseEnter: onHover,
-      onMouseLeave: onHover,
       onDragOver: _.debounce(onDragOver, 150),
+      onMouseOver: onHover,
       onDragStart,
       draggable,
       ref: idRef,
