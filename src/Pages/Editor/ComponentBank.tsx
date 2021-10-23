@@ -22,6 +22,9 @@ const Header = ({ title }: { title: string }) => {
 export const ComponentBank = () => {
   return (
     <Scrollbars style={{ height: '100%' }} autoHide={true}>
+      {/* <div style={{ padding: '8px', textAlign: 'center', fontSize: '16px', fontWeight: 'bold' }}>
+        <span>Components</span>
+      </div> */}
       {/* <Collapse
         expandIconPosition={'right'}
         bordered={false}

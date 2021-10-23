@@ -15,7 +15,7 @@ const SectionV2 = () => {
   };
   return (
     <div onDragStart={onDragStart} draggable={true}>
-      <UiWrapper background="unset" label="Section" />
+      <UiWrapper background="section" label="Section" />
     </div>
   );
 };
