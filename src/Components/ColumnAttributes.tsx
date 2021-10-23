@@ -62,13 +62,15 @@ const ColumnAttributes = () => {
             if (!_.isEqual(columns, _columns)) {
               setActiveColumns(_columns);
             }
+            return;
           }
         }
       }
     }
+    setActiveColumns([]);
   }, [active]);
 
-  return active ? (
+  return active && columns.length > 0 ? (
     <CustomTabs
       centered
       tabBarGutter={2}
@@ -109,7 +111,9 @@ const ColumnAttributes = () => {
           );
         })}
     </CustomTabs>
-  ) : null;
+  ) : (
+    <div style={{ textAlign: 'center', marginTop: '24px' }}>Select an item inside the body</div>
+  );
 };
 
 export { ColumnAttributes };
