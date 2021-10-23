@@ -129,15 +129,15 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
       const [, path] = find;
       let item = _.get(mjmlJson, path.slice(1));
       item = { mode: 'move', uniqueClassName: uniqueClassName, config: _.cloneDeep(item) };
-      // let target = e.target;
+      let target = e.target;
       // const backup = target.children[1]?.cloneNode(true);
       // target.children[1].remove();
       // target.addEventListener('dragend', () => {
       //   target.appendChild(backup);
       // });
-      const dummyElement = document.createElement('div');
+      // const dummyElement = document.createElement('div');
 
-      e.dataTransfer.setDragImage(dummyElement, 0, 0);
+      e.dataTransfer.setDragImage(target, 0, 0);
       e.dataTransfer.setData('config', JSON.stringify(item));
     } else {
       logger.info(`move items: drag unable to find the config to transfer ${uniqueClassName}`);
