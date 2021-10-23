@@ -118,8 +118,14 @@ export const OnlyAttributesDrawer = () => {
   const { active, setActive } = useHtmlWrapper();
   const [isColumn, setIsColumn] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [init, setInit] = useState(false);
 
   useEffect(() => {
+    // wierd bug in antd
+    if (active && !init) {
+      setInit(true);
+    }
+
     if (active && active.classList && active.className.includes('mj-column')) {
       setIsColumn(true);
     } else {
@@ -135,7 +141,7 @@ export const OnlyAttributesDrawer = () => {
     }
   }, [isColumn, active]);
 
-  return (
+  return init ? (
     <Drawer
       width={'100%'}
       getContainer={false}
@@ -187,5 +193,5 @@ export const OnlyAttributesDrawer = () => {
         </div>
       </Scrollbars>
     </Drawer>
-  );
+  ) : null;
 };
