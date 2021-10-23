@@ -10,6 +10,12 @@ import { useHtmlWrapper } from '../../Hooks/Htmlwrapper.hook';
 
 const ATTRIBUTE = 'align';
 
+export interface alignOptions {
+  title: string;
+  prop: string;
+  component: any;
+}
+
 export const Align = () => {
   const [visible, path] = useVisibility({ attribute: ATTRIBUTE });
   const { mjmlJson, setMjmlJson } = useEditor();
@@ -26,6 +32,13 @@ export const Align = () => {
     }
   };
 
+  const alignOptions: alignOptions[] = [
+    { title: 'Left', prop: 'left', component: <AlignLeftOutlined /> },
+    { title: 'Justify', prop: 'justify', component: <PicCenterOutlined /> },
+    { title: 'Center', prop: 'center', component: <AlignCenterOutlined /> },
+    { title: 'Right', prop: 'right', component: <AlignRightOutlined /> },
+  ];
+
   return visible ? (
     <Row>
       <Col flex="3">
@@ -33,27 +46,15 @@ export const Align = () => {
       </Col>
       <Col flex="2">
         <Row justify="space-between">
-          <Tooltip title="Left">
-            <Button onClick={() => onClick('left')} type="ghost" icon={<AlignLeftOutlined />} />
-          </Tooltip>
-
-          <Col>
-            <Tooltip title="Justify">
-              <Button onClick={() => onClick('justify')} type="ghost" icon={<PicCenterOutlined />} />
-            </Tooltip>
-          </Col>
-
-          <Col>
-            <Tooltip title="Center">
-              <Button onClick={() => onClick('center')} type="ghost" icon={<AlignCenterOutlined />} />
-            </Tooltip>
-          </Col>
-
-          <Col>
-            <Tooltip title="Right">
-              <Button onClick={() => onClick('right')} type="ghost" icon={<AlignRightOutlined />} />
-            </Tooltip>
-          </Col>
+          {alignOptions.map((option, key) => {
+            return (
+              <Col key={key}>
+                <Tooltip title={option.title}>
+                  <Button onClick={() => onClick(option.prop)} type="ghost" icon={option.component} />
+                </Tooltip>
+              </Col>
+            );
+          })}
         </Row>
       </Col>
     </Row>
