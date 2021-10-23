@@ -32,6 +32,12 @@ const CustomTabs = styled(Tabs)`
   .ant-tabs-content {
     height: 100%;
   }
+  .ant-tabs-tab {
+    padding: 8px 16px !important;
+  }
+  .ant-tabs-tabpane {
+    padding-right: 0px !important;
+  }
 `;
 
 export const Attributes = () => {
@@ -48,11 +54,13 @@ export const Attributes = () => {
 
   return (
     <CustomTabs
+      tabPosition="right"
       defaultActiveKey="2"
-      centered
       style={{ height: '100%' }}
       destroyInactiveTabPane={true}
       title={'Attributes'}
+      size="small"
+      tabBarGutter={1}
     >
       {/* <TabPane tab="Attributes" key="1">
         <Scrollbars style={{ height: '100%' }} autoHide={true}>
@@ -97,14 +105,23 @@ export const Attributes = () => {
           </div>
         </Scrollbars>
       </TabPane> */}
-      <TabPane tab="Choose Column Layout" key="2">
+      <TabPane tab={<span>layout</span>} key="2">
         <Scrollbars style={{ height: '100%' }} autoHide={true}>
           <div className={css.columns}>
             <ColumnSelector />
           </div>
         </Scrollbars>
       </TabPane>
-      <TabPane tab="Column Properties" key="3">
+      <TabPane
+        tab={
+          <>
+            <span>layout</span>
+            <br />
+            <span>config</span>
+          </>
+        }
+        key="3"
+      >
         <Scrollbars style={{ height: '100%' }} autoHide={true}>
           <ColumnAttributes />
         </Scrollbars>
@@ -119,6 +136,10 @@ export const OnlyAttributesDrawer = () => {
   const [isColumn, setIsColumn] = useState(false);
   const [visible, setVisible] = useState(false);
   const [init, setInit] = useState(false);
+
+  const onClose = () => {
+    setVisible(false);
+  };
 
   useEffect(() => {
     // wierd bug in antd
@@ -143,6 +164,7 @@ export const OnlyAttributesDrawer = () => {
 
   return init ? (
     <Drawer
+      destroyOnClose={true}
       width={'100%'}
       getContainer={false}
       title={
@@ -151,7 +173,7 @@ export const OnlyAttributesDrawer = () => {
         </div>
       }
       style={{ position: 'absolute', height: '100%' }}
-      onClose={() => setVisible(false)}
+      onClose={onClose}
       visible={visible}
       maskClosable={false}
       mask={false}

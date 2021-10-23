@@ -69,7 +69,13 @@ const ColumnAttributes = () => {
   }, [active]);
 
   return active ? (
-    <CustomTabs centered defaultActiveKey="0" style={{ height: '100%' }} destroyInactiveTabPane={false}>
+    <CustomTabs
+      centered
+      tabBarGutter={2}
+      defaultActiveKey="0"
+      style={{ height: '100%' }}
+      destroyInactiveTabPane={false}
+    >
       {columns &&
         columns.map((column: any, index: number) => {
           return (
