@@ -3,7 +3,6 @@ import { FONTS_CONFIG } from '../Components/Mods/FontConfig';
 import { useValue, useVisibility } from './Attribute.hook';
 
 const ATTRIBUTE = 'font-family';
-const defaultFonts = ['Ubuntu', 'Helvetica', 'Arial', 'sans-serif'];
 const fonts = FONTS_CONFIG.
               sort((a, b) => a.name > b.name ? 1 : -1).
               map((font) => font.name.trim());
@@ -23,7 +22,7 @@ const useFonts = (): [string[], string] => {
     }
   }, [getValue]);
 
-  return [[...defaultFonts, ...fonts], value];
+  return [fonts, value];
 };
 
 export { useFonts };
