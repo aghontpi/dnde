@@ -50,7 +50,7 @@ const LineHeight = () => {
             addonBefore={<span onClick={addonBeforeClick}>-</span>}
             addonAfter={<span onClick={addonAfterClick}>+</span>}
             value={value}
-            style={{ width: `${value.toString().length + 12}ch ` }}
+            style={{ width: `${value ? value.toString().length + 12 : 12}ch ` }}
           />
         </Col>
       </Row>
