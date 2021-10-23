@@ -1,6 +1,6 @@
 import { View } from './View';
 import css from './Editor.module.scss';
-import { Attributes } from './Attributes';
+import { Attributes, OnlyAttributesDrawer } from './Attributes';
 import { ComponentBank } from './ComponentBank';
 import { Button, PageHeader, Layout, Modal, Input, Row, Col } from 'antd';
 import { success } from '../../Components/Messages';
@@ -96,7 +96,8 @@ export const Editor = () => {
               <div className={css.view}>
                 <View />
               </div>
-              <div className={css.attributes}>
+              <div className={css.attributes} style={{ position: 'relative' }}>
+                <OnlyAttributesDrawer />
                 <Attributes />
               </div>
             </div>

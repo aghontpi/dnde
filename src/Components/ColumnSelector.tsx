@@ -133,7 +133,7 @@ const ColumnSelector = () => {
       </div>
     </>
   ) : (
-    <div style={{ textAlign: 'center' }}>Place some items on the page</div>
+    <div style={{ textAlign: 'center' }}>Select an item on the page</div>
   );
 };
 

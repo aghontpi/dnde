@@ -57,19 +57,23 @@ export const COLUMN = {
   mutableProperties: properties_column,
 };
 
+export const SECTION = {
+  tagName: 'mj-section',
+  attributes: {
+    ...assigned_default_values,
+    'css-class': 'mjml-tag identifier-mj-section',
+    'border-radius': '0px',
+    'background-color': '#fff',
+    'text-align': 'center',
+  },
+  children: [],
+  cannot_have: ['mj-section', 'mj-column'], // 'https://documentation.mjml.io/#mj-column' Columns cannot be nested into columns, and sections cannot be nested into columns as well.
+  mutableProperties: properties,
+};
+
 export const Section = () => {
   let config = {
-    tagName: 'mj-section',
-    attributes: {
-      ...assigned_default_values,
-      'css-class': 'mjml-tag identifier-mj-section',
-      'border-radius': '0px',
-      'background-color': '#fff',
-      'text-align': 'center',
-    },
-    children: [],
-    cannot_have: ['mj-section', 'mj-column'], // 'https://documentation.mjml.io/#mj-column' Columns cannot be nested into columns, and sections cannot be nested into columns as well.
-    mutableProperties: properties,
+    ...SECTION,
   };
 
   const {
