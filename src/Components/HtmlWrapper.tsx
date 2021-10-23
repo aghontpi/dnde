@@ -54,14 +54,10 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
     }
   }, [active]);
 
-  const onHover = useMemo(
-    () => (e: any) => {
-      e.stopPropagation();
-
-      activeHover !== idRef.current && setActiveHover(idRef.current);
-    },
-    [idRef, activeHover]
-  );
+  const onHover = (e: any) => {
+    e.stopPropagation();
+    activeHover !== idRef.current && setActiveHover(idRef.current);
+  };
 
   const onClick = useMemo(
     () =>
