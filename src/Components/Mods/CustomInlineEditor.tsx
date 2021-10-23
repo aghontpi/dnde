@@ -140,6 +140,7 @@ const InlineEditor = () => {
       </Select>
       <Select
         size="small"
+        dropdownMatchSelectWidth={false}
         defaultValue={'Ubuntu'}
         dropdownStyle={{ minWidth: '18px' }}
         style={{ fontSize: '12px' }}
