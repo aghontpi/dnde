@@ -79,6 +79,14 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
 
               // activate editor only for text elements,
               const identifier = findUniqueIdentifier(mjmlTarget, mjmlTarget.classList);
+
+              // if its body, dont show copy or delte.
+              if (identifier?.includes('body')) {
+                setDelActive(false);
+                setCopyActive(false);
+                return;
+              }
+
               if (identifier?.includes('text')) {
                 const x = pos.left;
                 const y = pos.top - 38;

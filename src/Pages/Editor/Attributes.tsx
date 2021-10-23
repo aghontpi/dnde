@@ -25,6 +25,7 @@ import { ColumnAttributes } from '../../Components/ColumnAttributes';
 import { useHtmlWrapper } from '../../Hooks/Htmlwrapper.hook';
 import { useEffect, useRef, useState } from 'react';
 import { LineHeight } from '../../Components/Mods/LineHeight';
+import { BodyAttributes } from '../../Components/BodyAttributes';
 
 const { TabPane } = Tabs;
 
@@ -57,7 +58,7 @@ export const Attributes = () => {
       tabPosition="right"
       defaultActiveKey="2"
       style={{ height: '100%' }}
-      destroyInactiveTabPane={true}
+      destroyInactiveTabPane={false}
       title={'Attributes'}
       size="small"
       tabBarGutter={1}
@@ -105,7 +106,8 @@ export const Attributes = () => {
           </div>
         </Scrollbars>
       </TabPane> */}
-      <TabPane tab={<span>layout</span>} key="2">
+
+      <TabPane tab={<span style={{ fontSize: '12px' }}>layout</span>} key="2">
         <Scrollbars style={{ height: '100%' }} autoHide={true}>
           <div className={css.columns}>
             <ColumnSelector />
@@ -115,9 +117,9 @@ export const Attributes = () => {
       <TabPane
         tab={
           <>
-            <span>layout</span>
+            <span style={{ fontSize: '12px' }}>layout</span>
             <br />
-            <span>config</span>
+            <span style={{ fontSize: '12px' }}>config</span>
           </>
         }
         key="3"
@@ -126,6 +128,19 @@ export const Attributes = () => {
           <ColumnAttributes />
         </Scrollbars>
       </TabPane>
+      <TabPane
+        tab={
+          <>
+            <span style={{ fontSize: '12px' }}>body</span>
+            <br />
+            <span style={{ fontSize: '12px' }}>config</span>
+          </>
+        }
+        key="4"
+      >
+        <BodyAttributes />
+        <Scrollbars style={{ height: '100%' }} autoHide={true}></Scrollbars>
+      </TabPane>
     </CustomTabs>
   );
 };
@@ -133,7 +148,7 @@ export const Attributes = () => {
 export const OnlyAttributesDrawer = () => {
   const { mjmlJson } = useEditor();
   const { active, setActive } = useHtmlWrapper();
-  const [isColumn, setIsColumn] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
   const [visible, setVisible] = useState(false);
   const [init, setInit] = useState(false);
 
@@ -147,20 +162,24 @@ export const OnlyAttributesDrawer = () => {
       setInit(true);
     }
 
-    if (active && active.classList && active.className.includes('mj-column')) {
-      setIsColumn(true);
+    if (
+      active &&
+      ((active.classList && active.className.includes('mj-column')) ||
+        (active.classList && active.className.includes('mj-body')))
+    ) {
+      setIsDisabled(true);
     } else {
-      isColumn && setIsColumn(false);
+      isDisabled && setIsDisabled(false);
     }
   }, [active]);
 
   useEffect(() => {
-    if (!isColumn && active) {
+    if (!isDisabled && active) {
       setVisible(true);
     } else {
       setVisible(false);
     }
-  }, [isColumn, active]);
+  }, [isDisabled, active]);
 
   return init ? (
     <Drawer

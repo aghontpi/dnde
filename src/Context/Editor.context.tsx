@@ -39,6 +39,7 @@ const initialState = {
       tagName: 'mj-body',
       attributes: { 'css-class': 'mjml-tag identifier-mj-body', 'background-color': 'grey', width: '600px' },
       children: [],
+      mutableProperties: ['width', 'background-color'],
     },
   ],
   attributes: {},
