@@ -11,6 +11,7 @@ import { Html } from '../../Components/Html';
 import { Divider } from '../../Components/Divider';
 import { Section } from '../../Components/Section';
 import { Social } from '../../Components/Social';
+import { SectionV2 } from '../../Components/SectionV2';
 
 const { Panel } = Collapse;
 
@@ -21,7 +22,10 @@ const Header = ({ title }: { title: string }) => {
 export const ComponentBank = () => {
   return (
     <Scrollbars style={{ height: '100%' }} autoHide={true}>
-      <Collapse
+      {/* <div style={{ padding: '8px', textAlign: 'center', fontSize: '16px', fontWeight: 'bold' }}>
+        <span>Components</span>
+      </div> */}
+      {/* <Collapse
         expandIconPosition={'right'}
         bordered={false}
         defaultActiveKey={['1', '2']}
@@ -30,19 +34,20 @@ export const ComponentBank = () => {
       >
         <Panel header={<Header title="Drag & Drop Section" />} key="1">
           <Section />
-        </Panel>
-        <Panel header={<Header title="Drag & Drop Content" />} key="2">
-          <div className={css.components}>
-            <Button />
-            <Text />
-            <Image />
-            <Spacer />
-            <Divider />
-            <Html />
-            <Social />
-          </div>
-        </Panel>
-      </Collapse>
+        </Panel> */}
+      {/* <Panel header={<Header title="Drag & Drop Content" />} key="2"> */}
+      <div className={css.components}>
+        <SectionV2 />
+        <Button />
+        <Text />
+        <Image />
+        <Spacer />
+        <Divider />
+        <Html />
+        <Social />
+      </div>
+      {/* </Panel> */}
+      {/* </Collapse> */}
     </Scrollbars>
   );
 };

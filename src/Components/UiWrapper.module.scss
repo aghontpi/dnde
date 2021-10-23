@@ -1,7 +1,7 @@
 .wrapper {
-  width: 100px;
+  width: 80px;
   display: flex;
-  padding: 6px 57px;
+  padding: 10px 60px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -47,12 +47,15 @@
     background: url(../Assets/Images/social.svg) no-repeat center;
   }
 
+  .section {
+    background: url(../Assets/Images/section.svg) no-repeat center;
+  }
+
   span {
     text-align: center;
     color: rgb(126, 113, 113);
     font-size: 15px;
     font-weight: 400;
     margin-top: 0px;
-    margin-bottom: 14px;
   }
 }

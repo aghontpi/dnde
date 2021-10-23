@@ -16,11 +16,10 @@
     background-color: rgb(255, 255, 255);
 
     .components {
-      padding-top: 24px;
+      padding: 24px 0px;
       display: flex;
       flex-wrap: wrap;
-      flex: 1;
-      justify-content: space-between;
+      justify-content: center;
       row-gap: 10px;
     }
 
@@ -32,10 +31,17 @@
       flex-direction: column;
     }
   }
+  // change for new layout
+  .attributes {
+    flex: unset;
+    width: 400px;
+  }
 
   .bank {
-    flex: 0.8;
+    flex: unset;
+    width: 150px;
   }
+  // end changes for new layout
 
   .iconsContainer {
     width: auto;

@@ -35,14 +35,14 @@ const Add = ({ target, droppedConfig, setMjmlJson, mjmlJson, uid }: AddProps) =>
     if (uniqueClassName === 'identifier-mj-body' || uniqueClassName === 'identifier-mj-section') {
       const cleanedMjmlJson = cleanMjmlJson(mjmlJson);
       setMjmlJson({ ...cleanedMjmlJson });
-      error('kindly place the item on column instead ');
+      message.error('Use a section to place the item');
       return null;
     }
   }
 
   if (droppedConfig.tagName && droppedConfig.tagName === 'mj-section') {
     if (uniqueClassName !== 'identifier-mj-body') {
-      const msg = 'Columns can not be nested! it will break mobile design';
+      const msg = 'Sections can not be nested! it will break mobile design';
       message.info(msg);
       logger.log(`operation add: ${msg}`);
       return;

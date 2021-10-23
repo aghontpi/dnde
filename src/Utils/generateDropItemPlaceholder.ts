@@ -165,5 +165,5 @@ const placeItemPlaceHolder = {
     align: 'center',
     'css-class': 'placeitem-placeholder',
   },
-  content: '<h1> + </h1>',
+  content: '<div style="padding:24px">  </div>',
 };
