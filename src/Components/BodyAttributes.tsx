@@ -6,7 +6,7 @@ import { useHtmlWrapper } from '../Hooks/Htmlwrapper.hook';
 import { Background } from './Mods/Background';
 import { Width } from './Mods/WidthHeight';
 
-const BODY_PATH = 'children[1]';
+export const BODY_PATH = 'children[1]';
 
 const BodyContainer = styled.div`
   padding: 16px 0px;
@@ -20,21 +20,6 @@ const BodyContainer = styled.div`
 `;
 
 const BodyAttributes = () => {
-  const { mjmlJson } = useEditor();
-  const [path, setPath] = useState('');
-  const [init, setInit] = useState(false);
-
-  useEffect(() => {
-    if (init === false && path === '') {
-      // body is not deepy nested, the path is static, take advantage of this
-      const bodyConfig = mjmlJson && mjmlJson['children'][1];
-      if (bodyConfig && bodyConfig['tagName'] === 'mj-body') {
-        setPath(BODY_PATH);
-        setInit(true);
-      }
-    }
-  }, [mjmlJson]);
-
   return (
     <BodyContainer>
       <Row justify="center">
@@ -42,12 +27,10 @@ const BodyAttributes = () => {
           <span className="title">Body Properties</span>
         </Col>
       </Row>
-      {path ? (
-        <div className="props-container">
-          <Width activePath={path} />
-          <Background activePath={path} label="Body Background:" />
-        </div>
-      ) : null}
+      <div className="props-container">
+        <Width activePath={BODY_PATH} />
+        <Background activePath={BODY_PATH} label="Body Background:" />
+      </div>
     </BodyContainer>
   );
 };
