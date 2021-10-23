@@ -120,6 +120,7 @@ function replaceContent(input: any) {
   return input;
 }
 
+//todo: ignore exisiting title, custom css tags while import.
 const importJson = (input: any, idGenerator: () => string, rawContent: boolean = false) => {
   let regeneratedIdJson = generateUniqueIdRecursively(input, idGenerator);
 
