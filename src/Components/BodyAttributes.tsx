@@ -6,6 +6,7 @@ import { Background } from './Mods/Background';
 import { Width } from './Mods/WidthHeight';
 import { Title as TitleMod } from './Mods/Title';
 import { UNDOREDO } from '../Utils/undoRedo';
+import { AddCustomFonts } from './Mods/AddCustomFonts';
 
 export const BODY_PATH = 'children[1]';
 
@@ -69,6 +70,11 @@ const BodyAttributes = () => {
 
       <div className="props-container">
         <TitleMod itemIndex={titleIndex} />
+      </div>
+
+      <Title title="Fonts" />
+      <div className="props-container">
+        <AddCustomFonts />
       </div>
     </BodyContainer>
   );
