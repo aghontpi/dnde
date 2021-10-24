@@ -138,8 +138,9 @@ export const Attributes = () => {
         }
         key="4"
       >
-        <BodyAttributes />
-        <Scrollbars style={{ height: '100%' }} autoHide={true}></Scrollbars>
+        <Scrollbars style={{ height: '100%' }} autoHide={true}>
+          <BodyAttributes />
+        </Scrollbars>
       </TabPane>
     </CustomTabs>
   );
