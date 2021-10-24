@@ -29,4 +29,5 @@ export const FONTS_CONFIG = [
   { name: 'Work Sans', value: 'https://fonts.googleapis.com/css2?family=Work+Sans&display=swap' },
   { name: 'Quicksand', value: 'https://fonts.googleapis.com/css2?family=Quicksand&display=swap' },
   { name: 'Fira Sans', value: 'https://fonts.googleapis.com/css2?family=Fira+Sans&display=swap' },
+  { name: 'Ubuntu', value: 'https://fonts.googleapis.com/css2?family=Ubuntu&display=swap' },
 ];

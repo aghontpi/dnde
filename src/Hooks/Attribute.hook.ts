@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
+import { BODY_PATH } from '../Components/BodyAttributes';
 import { findUniqueIdentifier } from '../Utils/closestParent';
 import { findElementInJson } from '../Utils/findElementInMjmlJson';
 import { useEditor } from './Editor.hook';
@@ -21,6 +22,16 @@ const useVisibility = ({ attribute, property, customPath }: useVisibilityProps):
   const { mjmlJson } = useEditor();
 
   useEffect(() => {
+    // if its body, no need to tranverse, as soon as the state'mjmlJson' is available,
+    //   it can be show to the ui
+    // possible optimization: body properties are being on every active item click.
+    //  write seperate Mods for body ex: instead of using common width, create width uniquely for body
+    if (mjmlJson && customPath && customPath === BODY_PATH) {
+      setVisible(true);
+      setPath(BODY_PATH);
+      return;
+    }
+
     if (active) {
       const uniqueIdentifier = findUniqueIdentifier(active, active.classList);
       if (uniqueIdentifier) {

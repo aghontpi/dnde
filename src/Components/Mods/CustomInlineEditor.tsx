@@ -141,7 +141,7 @@ const InlineEditor = () => {
       <Select
         size="small"
         defaultValue={'Ubuntu'}
-        dropdownStyle={{ minWidth: '18px' }}
+        dropdownStyle={{ minWidth: '140px' }}
         style={{ fontSize: '12px' }}
         onChange={(value: any) => {
           InlineEditorActions(null, 'fontFamily', value);

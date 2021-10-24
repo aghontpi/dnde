@@ -26,7 +26,6 @@
     .mods,
     .columns {
       padding: 24px 16px;
-      padding-top: 4px;
       display: flex;
       flex-direction: column;
     }
@@ -55,9 +54,6 @@
 }
 
 .viewHolder {
-  // todo: set width from configuration used from json.
-  width: 600px;
-  max-width: 600px;
   min-height: 100%;
   // background-color: #fff;
   margin: 40px auto;

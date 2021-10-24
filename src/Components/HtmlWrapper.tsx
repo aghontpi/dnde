@@ -54,14 +54,10 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
     }
   }, [active]);
 
-  const onHover = useMemo(
-    () => (e: any) => {
-      e.stopPropagation();
-
-      activeHover !== idRef.current && setActiveHover(idRef.current);
-    },
-    [idRef, activeHover]
-  );
+  const onHover = (e: any) => {
+    e.stopPropagation();
+    activeHover !== idRef.current && setActiveHover(idRef.current);
+  };
 
   const onClick = useMemo(
     () =>
@@ -79,6 +75,14 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
 
               // activate editor only for text elements,
               const identifier = findUniqueIdentifier(mjmlTarget, mjmlTarget.classList);
+
+              // if its body, dont show copy or delte.
+              if (identifier?.includes('body')) {
+                setDelActive(false);
+                setCopyActive(false);
+                return;
+              }
+
               if (identifier?.includes('text')) {
                 const x = pos.left;
                 const y = pos.top - 38;
@@ -125,15 +129,15 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
       const [, path] = find;
       let item = _.get(mjmlJson, path.slice(1));
       item = { mode: 'move', uniqueClassName: uniqueClassName, config: _.cloneDeep(item) };
-      // let target = e.target;
+      let target = e.target;
       // const backup = target.children[1]?.cloneNode(true);
       // target.children[1].remove();
       // target.addEventListener('dragend', () => {
       //   target.appendChild(backup);
       // });
-      const dummyElement = document.createElement('div');
+      // const dummyElement = document.createElement('div');
 
-      e.dataTransfer.setDragImage(dummyElement, 0, 0);
+      e.dataTransfer.setDragImage(target, 0, 0);
       e.dataTransfer.setData('config', JSON.stringify(item));
     } else {
       logger.info(`move items: drag unable to find the config to transfer ${uniqueClassName}`);

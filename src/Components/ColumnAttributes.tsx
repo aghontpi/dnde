@@ -62,14 +62,22 @@ const ColumnAttributes = () => {
             if (!_.isEqual(columns, _columns)) {
               setActiveColumns(_columns);
             }
+            return;
           }
         }
       }
     }
+    setActiveColumns([]);
   }, [active]);
 
-  return active ? (
-    <CustomTabs centered defaultActiveKey="0" style={{ height: '100%' }} destroyInactiveTabPane={false}>
+  return active && columns.length > 0 ? (
+    <CustomTabs
+      centered
+      tabBarGutter={2}
+      defaultActiveKey="0"
+      style={{ height: '100%' }}
+      destroyInactiveTabPane={false}
+    >
       {columns &&
         columns.map((column: any, index: number) => {
           return (
@@ -103,7 +111,9 @@ const ColumnAttributes = () => {
           );
         })}
     </CustomTabs>
-  ) : null;
+  ) : (
+    <div style={{ textAlign: 'center', marginTop: '24px' }}>Select an item inside the body</div>
+  );
 };
 
 export { ColumnAttributes };

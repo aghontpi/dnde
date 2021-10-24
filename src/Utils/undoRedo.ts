@@ -16,8 +16,8 @@ class UndoRedo {
       return;
     }
     this.undo.push(this.copy(action));
-    this.storeToLocalStorage();
     this.redo = [];
+    this.storeToLocalStorage();
   }
 
   public undoAction(current: any = false): any {
@@ -85,12 +85,10 @@ class UndoRedo {
 
   private storeToLocalStorage() {
     try {
-      localStorage.setItem('actions', JSON.stringify(this.undo));
+      localStorage.setItem('actions', JSON.stringify(this.undo[this.undo.length - 1]));
     } catch (e) {
       logger.log('undoredo: error storing to local storage');
       logger.log('undoredo: it is possible this occured due to storage limit in localStorage,truncating undo');
-      this.undo = [this.undo[this.undo.length - 1]];
-      localStorage.setItem('actions', JSON.stringify(this.undo));
     }
   }
 

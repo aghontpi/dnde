@@ -12,7 +12,7 @@ const removePlaceholderBanner = (item: any) => {
 };
 
 const insertAtPlaceholderIndicatorPosition = (item: any, itemToInsert: any) => {
-  if (item.tagName !== 'mj-body' && item.children.length) {
+  if (item.tagName !== 'mj-body' && item.children && item.children.length) {
     // place the dropped config in the placeholder position, this only is needed for
     //   items, which has children
     for (var i = 0; i < item.children.length; i++) {

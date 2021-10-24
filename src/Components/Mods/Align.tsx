@@ -4,17 +4,25 @@ import AlignRightOutlined from '@ant-design/icons/lib/icons/AlignRightOutlined';
 import PicCenterOutlined from '@ant-design/icons/lib/icons/PicCenterOutlined';
 import { Button, Col, Form, Row, Tooltip } from 'antd';
 import _ from 'lodash';
+import { ReactNode } from 'react-router/node_modules/@types/react';
 import { useVisibility } from '../../Hooks/Attribute.hook';
 import { useEditor } from '../../Hooks/Editor.hook';
 import { useHtmlWrapper } from '../../Hooks/Htmlwrapper.hook';
 
 const ATTRIBUTE = 'align';
 
-export interface alignOptions {
+interface AlignOptions {
   title: string;
   prop: string;
-  component: any;
+  component: ReactNode;
 }
+
+const alignOptions: AlignOptions[] = [
+  { title: 'Left', prop: 'left', component: <AlignLeftOutlined /> },
+  { title: 'Justify', prop: 'justify', component: <PicCenterOutlined /> },
+  { title: 'Center', prop: 'center', component: <AlignCenterOutlined /> },
+  { title: 'Right', prop: 'right', component: <AlignRightOutlined /> },
+];
 
 export const Align = () => {
   const [visible, path] = useVisibility({ attribute: ATTRIBUTE });
@@ -32,13 +40,6 @@ export const Align = () => {
     }
   };
 
-  const alignOptions: alignOptions[] = [
-    { title: 'Left', prop: 'left', component: <AlignLeftOutlined /> },
-    { title: 'Justify', prop: 'justify', component: <PicCenterOutlined /> },
-    { title: 'Center', prop: 'center', component: <AlignCenterOutlined /> },
-    { title: 'Right', prop: 'right', component: <AlignRightOutlined /> },
-  ];
-
   return visible ? (
     <Row>
       <Col flex="3">
@@ -46,11 +47,11 @@ export const Align = () => {
       </Col>
       <Col flex="2">
         <Row justify="space-between">
-          {alignOptions.map((option, key) => {
+          {alignOptions.map(({ prop, component, title }, key) => {
             return (
               <Col key={key}>
-                <Tooltip title={option.title}>
-                  <Button onClick={() => onClick(option.prop)} type="ghost" icon={option.component} />
+                <Tooltip title={title}>
+                  <Button onClick={() => onClick(prop)} type="ghost" icon={component} />
                 </Tooltip>
               </Col>
             );

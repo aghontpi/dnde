@@ -3,6 +3,7 @@ import { columnPlaceholder } from '../Components/Section';
 import { PageHeaderItems } from '../Context/Editor.context';
 import { Base64 } from '../Lib/base64';
 import { generateUniqueIdRecursively } from './closestParent';
+import { logger } from './logger';
 
 const cleanMjmlJson = (mjmlJson: any, ignore: string = '') => {
   if (!mjmlJson) {
@@ -123,8 +124,14 @@ function replaceContent(input: any) {
 const importJson = (input: any, idGenerator: () => string, rawContent: boolean = false) => {
   let regeneratedIdJson = generateUniqueIdRecursively(input, idGenerator);
 
-  // remove existing header items nd create new header items.
-  // remove fonts and inject the new fonts later.
+  // if its not raw, content is utf-8 base64 encoded, during export.
+  if (!rawContent) {
+    regeneratedIdJson = replaceContent(regeneratedIdJson);
+  }
+
+  let consolidatedHeaders = [];
+
+  // process existing headers.
   if (
     regeneratedIdJson &&
     regeneratedIdJson.tagName &&
@@ -132,10 +139,27 @@ const importJson = (input: any, idGenerator: () => string, rawContent: boolean =
     regeneratedIdJson.children &&
     regeneratedIdJson.children.length > 1
   ) {
-    regeneratedIdJson.children[0].children = _.cloneDeep(PageHeaderItems);
-  }
+    const exisitngHeaders = regeneratedIdJson.children[0].children;
+    for (let i = 0; exisitngHeaders && i < exisitngHeaders.length; i++) {
+      const item = exisitngHeaders[i];
+      if (item && (item.tagName.includes('title') || item.tagName.includes('style'))) {
+        consolidatedHeaders.push(item);
+      }
+    }
 
-  return rawContent ? regeneratedIdJson : replaceContent(regeneratedIdJson);
+    let pageHeaers = _.cloneDeep(PageHeaderItems);
+    for (let i = 0; pageHeaers && i < pageHeaers.length; i++) {
+      const item = pageHeaers[i];
+      if (item && (item.tagName.includes('title') || item.tagName.includes('style'))) {
+        continue;
+      }
+      consolidatedHeaders.push(item);
+    }
+
+    regeneratedIdJson.children[0].children = consolidatedHeaders;
+  }
+  logger.log('::import -> processedJson', regeneratedIdJson);
+  return regeneratedIdJson;
 };
 
 export { cleanMjmlJson, exportJson, importJson };

@@ -9,7 +9,16 @@ interface UndoRedoProps {
 
 const UndoRedo = ({ undoCallback, redoCallback }: UndoRedoProps) => {
   return (
-    <div style={{ position: 'fixed', padding: '8px', display: 'flex', flexDirection: 'column', rowGap: '4px' }}>
+    <div
+      style={{
+        position: 'fixed',
+        padding: '8px',
+        display: 'flex',
+        flexDirection: 'column',
+        rowGap: '4px',
+        zIndex: 200,
+      }}
+    >
       <Tooltip mouseEnterDelay={0.5} color="cyan" title="undo" placement="right">
         <Button
           disabled={UNDOREDO.isUndoEmpty()}
