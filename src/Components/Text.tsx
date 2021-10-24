@@ -14,18 +14,15 @@ const properties = ['color', 'font-family', 'font-size', 'font-style', 'font-wei
 const properties_with_default_values = {"color": "#000000", "font-family": "Ubuntu, Helvetica, Arial, sans-serif", "font-size": "13px", "font-style": "", "font-weight": "", "line-height": "1", "letter-spacing": "none", "height": "", "text-decoration": "", "text-transform": "", "align": "left", "container-background-color": "", "padding": "10px 25px", "padding-top": "", "padding-bottom": "", "padding-left": "", "padding-right": "", "css-class": ""};
 
 // prettier-ignore
-const assigned_default_values  = {"color": "#000000", "font-family": "Ubuntu, Helvetica, Arial, sans-serif", "font-size": "13px", "line-height": "1", "letter-spacing": "none", "align": "center", "padding": "10px 25px"};
-
-// since use custom inline editor, custom fons wont be included, unless I add them to the font config
-
-const ExtraFontNames: string = FONTS_CONFIG.map((font) => font.name).join(', ');
+const assigned_default_values  = {"color": "#000000", "font-size": "13px", "line-height": "1", "letter-spacing": "none", "align": "center", "padding": "10px 25px"};
+//note to self: removed fontFamily default value.
 
 export const Text = () => {
   const { mjmlJson, setMjmlJson } = useEditor();
   const config = {
     tagName: 'mj-text',
     attributes: {
-      ...{ ...assigned_default_values, 'font-family': `${assigned_default_values['font-family']}, ${ExtraFontNames}` },
+      ...assigned_default_values,
       align: 'left',
       'padding-left': '0px',
       'padding-right': '0px',

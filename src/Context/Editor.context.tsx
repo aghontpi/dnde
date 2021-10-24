@@ -9,13 +9,13 @@ import { useDragAndDropUniqueId } from '../Hooks/Drag.hook';
 import { importJson } from '../Utils/mjmlProcessor';
 import { UNDOREDO } from '../Utils/undoRedo';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { config } from 'process';
 
 export const EditorContext = createContext<any>(null);
 
 export const PageHeaderItems = [
   { tagName: 'mj-title', content: 'dnde-editor' },
   { tagName: 'mj-style', content: HEADSTYLE },
+  { tagName: 'mj-attributes', children: [{ tagName: 'mj-text', attributes: { 'font-family': 'Ubuntu' } }] },
   ...FONTS_CONFIG.map((font) => {
     return {
       tagName: 'mj-font',
