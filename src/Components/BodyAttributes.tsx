@@ -5,6 +5,7 @@ import { useEditor } from '../Hooks/Editor.hook';
 import { Background } from './Mods/Background';
 import { Width } from './Mods/WidthHeight';
 import { Title as TitleMod } from './Mods/Title';
+import { UNDOREDO } from '../Utils/undoRedo';
 
 export const BODY_PATH = 'children[1]';
 
@@ -51,7 +52,14 @@ const BodyAttributes = () => {
   }, []);
 
   return (
-    <BodyContainer>
+    <BodyContainer
+      onMouseDown={(e) => {
+        UNDOREDO.newAction(mjmlJson);
+      }}
+      onBlur={(e) => {
+        UNDOREDO.newAction(mjmlJson);
+      }}
+    >
       <Title title="Body Properties" />
       <div className="props-container">
         <Width activePath={BODY_PATH} />
