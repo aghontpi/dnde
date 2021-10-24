@@ -63,7 +63,7 @@ export const EDContext: FC = (props) => {
         result = await modalConfirmLoadLocalState(
           () => {
             const parsed = JSON.parse(actions);
-            const processed = importJson(parsed[parsed.length - 1], getId, true);
+            const processed = importJson(parsed, getId, true);
             UNDOREDO.newAction(processed);
             setMjmlJson({ ...processed });
           },
