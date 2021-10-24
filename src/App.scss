@@ -8,3 +8,13 @@
   height: 100%;
   font-family: 'Noto Sans', 'Source Sans Pro', 'Open Sans', sans-serif;
 }
+
+.padding-control {
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+  }
+}
