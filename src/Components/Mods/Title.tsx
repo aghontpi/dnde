@@ -18,7 +18,7 @@ const Title = ({ itemIndex: index }: TitleProps) => {
         setValue(titleConfig.content);
       }
     }
-  }, []);
+  }, [index]);
 
   const handleChange = (e: any) => {
     if (index !== -1) {
