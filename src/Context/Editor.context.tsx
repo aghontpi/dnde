@@ -14,7 +14,7 @@ import { config } from 'process';
 export const EditorContext = createContext<any>(null);
 
 export const PageHeaderItems = [
-  { tagName: 'mj-title', attributes: {}, children: [] },
+  { tagName: 'mj-title', content: 'dnde-editor' },
   { tagName: 'mj-style', content: HEADSTYLE },
   ...FONTS_CONFIG.map((font) => {
     return {
@@ -64,12 +64,12 @@ export const EDContext: FC = (props) => {
           () => {
             const parsed = JSON.parse(actions);
             const processed = importJson(parsed[parsed.length - 1], getId, true);
-            UNDOREDO.newAction(_.cloneDeep(processed));
-            setMjmlJson(processed);
+            UNDOREDO.newAction(processed);
+            setMjmlJson({ ...processed });
           },
           () => {
-            setMjmlJson(_.cloneDeep(initialState));
-            UNDOREDO.newAction(_.cloneDeep(initialState));
+            setMjmlJson({ ...initialState });
+            UNDOREDO.newAction(initialState);
             localStorage.removeItem('actions');
           }
         );
