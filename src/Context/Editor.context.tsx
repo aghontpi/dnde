@@ -55,7 +55,8 @@ export const EDContext: FC = (props) => {
 
   useEffect(() => {
     // if app crashed/ user left while editing, restoring from local
-    const actions = localStorage.getItem('actions');
+    // const actions = localStorage.getItem('actions');
+    const actions = false;
 
     async function restoreFromLocalStorage() {
       let result = false;

@@ -2,7 +2,7 @@ import { View } from './View';
 import css from './Editor.module.scss';
 import { Attributes, OnlyAttributesDrawer } from './Attributes';
 import { ComponentBank } from './ComponentBank';
-import { Button, PageHeader, Layout, Modal, Input, Row, Col } from 'antd';
+import { Button, PageHeader, Layout, Modal, Input, Row, Col, Popconfirm } from 'antd';
 import { success } from '../../Components/Messages';
 import mjml2html from 'mjml-browser';
 import { useEditor } from '../../Hooks/Editor.hook';
@@ -14,17 +14,27 @@ import _ from 'lodash';
 import { generatePreview } from '../../Utils/previewGenerator';
 import { UNDOREDO } from '../../Utils/undoRedo';
 import { logger } from '../../Utils/logger';
+import { Prompt } from 'react-router';
 const { Content } = Layout;
 const { confirm } = Modal;
 
 export const Editor = () => {
   const { mjmlJson } = useEditor();
   const [preview, setPreview] = useState(false);
+  const [isBlockingRoute, setIsBlockingRoute] = useState(false);
 
   useEffect(() => {
     // reset undo redo actions on each new load
     UNDOREDO.reset();
   }, []);
+
+  useEffect(() => {
+    if (UNDOREDO.undo.length > 1 || UNDOREDO.redo.length > 1) {
+      setIsBlockingRoute(true);
+      return;
+    }
+    setIsBlockingRoute(false);
+  }, [UNDOREDO.undo, UNDOREDO.redo]);
 
   const copyHTMLAsClipBoard = (e: any) => {
     e.preventDefault();
@@ -52,6 +62,7 @@ export const Editor = () => {
 
   return (
     <Row style={{ height: '100%', width: '100%' }} justify="center">
+      <Prompt when={isBlockingRoute} message={() => 'Are you sure you want to leave, your changes will be lost'} />
       <Col lg={24} xl={0}>
         <div style={{ textAlign: 'center', padding: '40px', paddingTop: '10%' }}>
           <h3>Sorry, You need a device with a larger screen to perform editing, atleast '{'>'}=1200px'</h3>
