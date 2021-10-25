@@ -39,16 +39,27 @@ const updateFonts = (mjmlJson: any, fonts: any, setFonts: (arg: any) => void, se
     if (head && head.children) {
       const fontList = head.children.filter((item: any) => item && item.tagName && item.tagName.includes('font'));
       if (fonts && fontList && fontList.length !== fonts.length) {
-        const sortedFontList = fontList
+        let sortedFontList = fontList
           .map((item: any) => item.attributes.name.trim())
           .sort((a: any, b: any) => (a > b ? 1 : -1));
+        sortedFontList = _.uniq(sortedFontList);
+
         setFonts(sortedFontList);
 
         // update the overall fonts in the mail
-        // uitlizing the fact that the path to attributes tag is always the same
+        // uitlizing the fact that the path to attributes tag is always the same/static
         let mailFont = mjmlJson.children[0].children[2];
-        if (mailFont && mailFont.tagName.includes('attributes')) {
-          mailFont.children[0].attributes['font-family'] = 'Ubuntu,' + sortedFontList.join(',');
+        let toUpdate = 'Ubuntu,' + sortedFontList.join(',');
+        // updating attributes tag in head section. the font-family for changing 'font-family' on the fly for text-tag
+        if (
+          mailFont &&
+          mailFont.tagName.includes('attributes') &&
+          mailFont.children &&
+          mailFont.children[0] &&
+          mailFont.children[0].tagName.includes('text') &&
+          mailFont.children[0]['attributes']['font-family'] !== toUpdate
+        ) {
+          mailFont.children[0].attributes['font-family'] = toUpdate;
           const update = _.set(mjmlJson, 'children[0].children[2]', mailFont);
           if (update) {
             setMjmlJson({ ...update });
