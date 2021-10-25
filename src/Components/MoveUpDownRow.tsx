@@ -71,12 +71,10 @@ const MoveUpDown = ({ className, idRef, active }: MoveUpDownProps) => {
   };
 
   return (
-    <div
-      onMouseDown={ResetEventBehaviour}
-      style={{ position: 'relative', display: active === idRef.current ? 'block' : 'none' }}
-    >
+    <div onMouseDown={ResetEventBehaviour} style={{ display: active === idRef.current ? 'block' : 'none' }}>
       <div
         style={{
+          zIndex: 200,
           position: 'absolute',
           left: -38,
           bottom: 0,

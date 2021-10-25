@@ -209,6 +209,13 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
       : null
   );
 
+  let moveUpDown = null;
+
+  // for sections show Indicators to show up and down.
+  if (originalNode && originalNode.props.className.includes('mj-section')) {
+    moveUpDown = <MoveUpDown className={originalNode.props.className} idRef={idRef} active={active} />;
+  }
+
   const Element = createElement(
     originalNode.nodeName as string,
     {
@@ -228,18 +235,8 @@ export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) 
         position: 'relative',
       },
     },
-    originalNode.children ? [...originalNode.children, ItemName] : null
+    originalNode.children ? [...originalNode.children, ItemName, moveUpDown] : null
   );
-
-  // for sections show Indicators to show up and down.
-  if (originalNode && originalNode.props.className.includes('mj-section')) {
-    return (
-      <>
-        {Element}
-        <MoveUpDown className={originalNode.props.className} idRef={idRef} active={active} />
-      </>
-    );
-  }
 
   return Element;
 });
