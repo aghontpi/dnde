@@ -37,7 +37,6 @@ const AddCustomFonts = () => {
   const handleRemove = (fontName: string) => {
     let head = _.cloneDeep(mjmlJson.children[0]);
     if (head && head.children) {
-      debugger;
       const filteredfonts = head.children.filter((item: any) => {
         if (item && item.tagName && item.tagName.includes('font')) {
           return item.attributes.name !== fontName;
