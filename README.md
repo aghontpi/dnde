@@ -1,6 +1,6 @@
 # Dnde - Mail (Drag and Drop Editor designed for mails)
 
-> Drag and Drop E-mail editor for the web
+> Drag and Drop E-mail editor
 
 [![release][badge]][release link] [![license][license-badge]][license file]
 
@@ -11,27 +11,30 @@
 
 ## Preview
 
-<p align="center">
-<img src="./Screenshots/preview(16Oct2021).png"  width="100%" />
+<p align="center"  >
+<img src="./Screenshots/preview1(25-oct-2021).png"  width="50%" />
+<img src="./Screenshots/preview2(25-oct-2021).png"  width="50%" />
+<img src="./Screenshots/preview3(25-oct-2021).png"  width="50%" />
 </p>
 
 ## Features
 
-- Responsive and mobile friendly emails (achieved through MJML)
-- Design emails by dragging and dropping.
+- Responsive and mobile friendly emails
+- Design emails by drag and drop
+- Add custom fonts
 - Export the design as html/json
-- UNDO and REDO functionality
-- Support for loading custom Fonts
 - Preview the design in the browser (mobile & pc)
-- Support for importing MJML JSON
+- UNDO and REDO functionality
+
+## Logo Contributed by
+
+[Saisohen](https://www.reddit.com/user/Saisohen/)
 
 ## Built with
 
 - [React](https://facebook.github.io/react/)
 - [MJML](https://mjml.io/)
 - [antd](https://ant.design/)
-- [CKEditor](https://ckeditor.com/)
-- [SendGrid](https://sendgrid.com/)
 
 ## Inspired by
 
