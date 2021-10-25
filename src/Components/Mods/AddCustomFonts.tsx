@@ -8,6 +8,7 @@ import { useEditor } from '../../Hooks/Editor.hook';
 const AddCustomFonts = () => {
   const { mjmlJson, setMjmlJson } = useEditor();
   const [fonts, setFonts] = useState([]);
+  const [addFontActive, setAddFontActive] = useState(false);
 
   useEffect(() => {
     if (mjmlJson) {
@@ -94,8 +95,13 @@ const AddCustomFonts = () => {
             )}
         </Col>
         <Col span={24} style={{ textAlign: 'center' }}>
-          <Popover trigger="click" placement="bottom" content={<GetFontsValue addCustomFontClick={handleAddFont} />}>
-            <Button>Add custom font</Button>
+          <Popover
+            visible={addFontActive}
+            trigger="click"
+            placement="bottom"
+            content={<GetFontsValue addCustomFontClick={handleAddFont} popOverCallBacK={setAddFontActive} />}
+          >
+            <Button onClick={(e) => setAddFontActive(!addFontActive)}>Add custom font</Button>
           </Popover>
         </Col>
       </Row>
@@ -109,7 +115,13 @@ const FontInputContainer = styled.div`
   }
 `;
 
-const GetFontsValue = ({ addCustomFontClick }: { addCustomFontClick: (name: string, href: string) => void }) => {
+const GetFontsValue = ({
+  addCustomFontClick,
+  popOverCallBacK,
+}: {
+  addCustomFontClick: (name: string, href: string) => void;
+  popOverCallBacK: (arg: any) => void;
+}) => {
   const [fontName, setFontName] = useState('');
   const [fontUrl, setFontUrl] = useState('');
   return (
@@ -122,12 +134,23 @@ const GetFontsValue = ({ addCustomFontClick }: { addCustomFontClick: (name: stri
       </FormItem>
       <FormItem style={{ textAlign: 'center' }}>
         <Button
-          type="primary"
           onClick={() => {
-            addCustomFontClick(fontName, fontUrl);
+            popOverCallBacK(false);
+            if (fontName && fontUrl) {
+              addCustomFontClick(fontName, fontUrl);
+            }
           }}
         >
           add
+        </Button>
+
+        <Button
+          style={{ marginLeft: '6px' }}
+          onClick={() => {
+            popOverCallBacK(false);
+          }}
+        >
+          cancel
         </Button>
       </FormItem>
     </FontInputContainer>
