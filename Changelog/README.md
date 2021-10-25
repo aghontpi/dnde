@@ -5,7 +5,65 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.0.0-alpha.1] - (Oct 20,2021)
+## [v0.0.0-alpha.2] - (Oct 25,2021)
+
+### Added
+
+- Add logo (9638669)
+- add custom fonts to support on the fly changes to inline editor. (beae200)
+- add custom font popover to controlled popover (3767b36)
+- Add scroll to body attributes (bcbc8f6)
+- Add fonts add/remove feature to body config (02741d4)
+- add custom fonts init (889de11)
+- add UndoRedo for changes in body config tab (5f5028e)
+- Add 'Mod title' to body/html attributes (e2ce37e)
+- add body attributes to new ui (15e0fc5)
+- add Image for new sectionV2 layout (aa2696c)
+- new editor design (22d0f48)
+- add Mod line height (f60368e)
+- add prettier config (3b94f6f)
+
+### Changes
+
+- Update readme for alpha.2 release (d5317e8)
+- refactor fonts for all 'text-tags' to use 'font-family: ...listofall-font-family-configued-and-extra-added'; (3024a04)
+- Update usefont hook to support dynamic fonts (8eb23d8)
+- use minWidth style attributes instead of 'dropdownMatchSelectWidth' (ae435e0)
+- remove inline editor font dropdown width wrap code style update (c595b1f) - Contributed by @[FROSTIN](https://github.com/FR0ST1N)
+- removed default fonts (203efe1) - Contributed by @[FROSTIN](https://github.com/FR0ST1N)
+- sort font list (8d214ca) - Contributed by @[FROSTIN](https://github.com/FR0ST1N)
+- Modify localStorage to only contain last item to recover from crash. (2061500)
+- Update Import logic for mjml Processor (a0c3103)
+- set default email title as dnde-editor (14e93ac)
+- untill dummy drag and drop icon is created, showing the actual image being dragged (8e47f16)
+- usememo causes cpu overhead on mouseHover, removed it (878ec5d)
+- column config shows previous section's config, changed info messages to new ui. (e191e8f)
+- Change how visibility & path state variables are handled in 'useVisibility Hook' for body attributes. (964d2e8)
+- Merge pull request #15 from Alignment Mod Refactor (90828d4) - Contributed by @[Eswaramoorthy Karthikeyan](https://github.com/EswaramoorthyKarthikeyan)
+- change interface name to begin with capital letter and component type from any to ReactNode. (7985402)
+- Change layout of tabs 'top' to 'right' (f6f9443)
+- remove error handling mechanism of storeToLocalStorage. rnd and handle it differently since browsers can not handle more than 5MB to local storage (a065b80)
+- Alignment changes updated using prettier (5530d1c)
+- Bug in antd Drawer inbuilt hook (7ad4d91)
+- onMouseOver optimisation (7c7aba5)
+- change error message for new layout (b65bcf9)
+- handle active hover with stopPropagation instead of mouseEnter and mouseLeave Events (18e5566)
+- remove plus sign and increase height of the placeholder indicator showing when the item should be placed. (e6709a6)
+- Align options looping (7e1234d) - Contributed by @[Eswaramoorthy Karthikeyan](https://github.com/EswaramoorthyKarthikeyan)
+- new indicator to show name of element being hovered. (1006d11)
+- update initial state loading (0ee6ea5)
+- use hashRouter instead of browser router. (e1aae44)
+- dotted to dashed while hover and dragover (b231de1)
+- logger output similar to console in array representation, it is difficult to track variables (dbeeb09)
+- remove generating preview when exporting as html (4be5864)
+
+### Fixes
+
+- fix crash, item should have children before acesssing children length (ad7aa28)
+- Fix crash in lineHeight (d539d64)
+- fix for #13 & #5 (5f8f5e0)
+
+## [v0.0.0-alpha.1] - (Oct 20,2021)
 
 ### Added
 

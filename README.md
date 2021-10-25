@@ -24,11 +24,6 @@
 - Add custom fonts
 - Export the design as html/json
 - Preview the design in the browser (mobile & pc)
-- UNDO and REDO functionality
-
-## Logo Contributed by
-
-[Saisohen](https://www.reddit.com/user/Saisohen/)
 
 ## Built with
 
