@@ -1,13 +1,12 @@
 const path = require('path');
 
 module.exports = (env, argv) => {
-  const srcPath = path.resolve(__dirname, 'src');
   return {
-    // mode: 'development',
+    mode: 'production',
     entry: './src/Package.ts',
     output: {
       filename: 'main.js',
-      path: path.resolve(__dirname, 'dist'),
+      path: path.resolve(__dirname, 'module'),
     },
     module: {
       rules: [
