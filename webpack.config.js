@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = (env, argv) => {
   const srcPath = path.resolve(__dirname, 'src');
   return {
-    mode: 'development',
+    // mode: 'development',
     entry: './src/Package.ts',
     output: {
       filename: 'main.js',
@@ -12,16 +12,39 @@ module.exports = (env, argv) => {
     module: {
       rules: [
         {
-          include: srcPath,
-          test: /\.css$/i,
+          test: /(\.css$|\.module\.css$)/i,
           use: ['style-loader', 'css-loader'],
+        },
+        {
+          //refernece https://webpack.js.org/loaders/css-loader/#css-style-sheet
+          test: /(\.s[ac]ss$|\.module\.s[ac]ss$)/i,
+          use: [
+            {
+              loader: 'style-loader',
+            },
+            {
+              loader: 'css-loader',
+              options: {
+                importLoaders: 1,
+                modules: {
+                  mode: 'local',
+                },
+              },
+            },
+            {
+              loader: 'sass-loader',
+              options: {
+                implementation: require('sass'),
+              },
+            },
+          ],
         },
         {
           test: /\.(png|svg|jpg|jpeg|gif)$/i,
           type: 'asset/resource',
         },
         {
-          test: /\.(js|mjs|jsx|ts|tsx)$/,
+          test: /\.(js|jsx|ts|tsx)$/,
           exclude: /node_modules/,
           use: {
             loader: 'babel-loader',
