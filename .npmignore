@@ -23,6 +23,6 @@ yarn-debug.log*
 yarn-error.log*
 sendgrid.env
 
-# npm package dependencies
 
-/module/
+# npm ignore
+/src/
