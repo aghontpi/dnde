@@ -1,8 +1,8 @@
 {
   "name": "dnde-mail-editor",
   "version": "v0.0.0-alpha.2",
-  "main": "./module/main.js",
-  "files": ["module/**/*" ],
+  "main": "./main.js",
+  "files": ["**/*"],
   "private": false,
   "dependencies": {
     "@ckeditor/ckeditor5-react": "^3.0.2",
@@ -21,20 +21,15 @@
     "mjml-browser": "^4.10.3",
     "mjml-cli": "^4.10.3",
     "quill": "^1.3.7",
-    "react": "^17.0.2",
     "react-color": "^2.19.3",
     "react-custom-scrollbars-2": "^4.4.0",
-    "react-dom": "^17.0.2",
     "react-redux": "^7.2.5",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "react-router-dom": "^5.3.0",
-    "react-scripts": "4.0.3",
     "sass": "^1.43.3",
     "styled-components": "^5.3.1",
-    "typescript": "^4.1.2",
-    "web-vitals": "^1.0.1"
-  },
-  "scripts": {
-    "build:module": "webpack && npm pack"
+    "typescript": "^4.1.2"
   },
   "author": "https://github.com/aghontpi",
   "license": "GPL-3.0",

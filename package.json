@@ -2,7 +2,9 @@
   "name": "dnde-mail-editor",
   "version": "v0.0.0-alpha.2",
   "main": "./module/main.js",
-  "files": ["module/**/*" ],
+  "files": [
+    "module/**/*"
+  ],
   "private": false,
   "dependencies": {
     "@ckeditor/ckeditor5-react": "^3.0.2",
@@ -39,7 +41,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "build:module": "webpack && npm pack"
+    "build:module": "webpack && cp module-package.json module/package.json && cp README.md module/README.md && npm pack ./module/"
   },
   "eslintConfig": {
     "extends": [

@@ -1,3 +1,3 @@
 import Editor from './Pages/Editor/';
 
-export { Editor as DndeEditor };
+export default Editor;

@@ -7,6 +7,8 @@ module.exports = (env, argv) => {
     output: {
       filename: 'main.js',
       path: path.resolve(__dirname, 'module'),
+      library: 'Editor',
+      libraryTarget: 'umd',
     },
     module: {
       rules: [
@@ -48,7 +50,11 @@ module.exports = (env, argv) => {
           use: {
             loader: 'babel-loader',
             options: {
-              presets: ['@babel/preset-env', '@babel/preset-react', '@babel/preset-typescript'],
+              presets: [
+                '@babel/preset-env',
+                ['@babel/preset-react', { runtime: 'automatic' }],
+                '@babel/preset-typescript',
+              ],
             },
           },
         },
