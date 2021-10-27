@@ -3,31 +3,55 @@ import css from './Editor.module.scss';
 import { Attributes, OnlyAttributesDrawer } from './Attributes';
 import { ComponentBank } from './ComponentBank';
 import { Button } from 'antd';
-import { success } from '../../Components/Messages';
 import mjml2html from 'mjml-browser';
 import { useEditor } from '../../Hooks/Editor.hook';
-import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useImperativeHandle, useState } from 'react';
 import { Preview } from './Preview';
-import { exportJson } from '../../Utils/mjmlProcessor';
+import { exportJson, importJson } from '../../Utils/mjmlProcessor';
 import _ from 'lodash';
-import { generatePreview } from '../../Utils/previewGenerator';
 import { UNDOREDO } from '../../Utils/undoRedo';
+import { useDragAndDropUniqueId } from '../../Hooks/Drag.hook';
+import { EMPTY_EDITOR_STATE } from '../../Context/Editor.context';
 
 export const Editor = forwardRef((props, ref) => {
-  const { mjmlJson } = useEditor();
+  const { mjmlJson, setMjmlJson } = useEditor();
   const [preview, setPreview] = useState(false);
+  const { getId } = useDragAndDropUniqueId();
 
   useImperativeHandle(ref, () => {
     return {
       getHtml,
       getJson,
+      loadJson,
     };
   });
 
-  useEffect(() => {
-    // reset undo redo actions on each new load
-    UNDOREDO.reset();
-  }, []);
+  /**
+   *
+   * @param json JSON-String | null
+   * null if want to load empty template
+   * @param raw boolean
+   * raw used for unprocessed json exports, restoring from crash with undoredo
+   * @returns
+   */
+  const loadJson = (json: string, raw: false) => {
+    try {
+      if (json !== null) {
+        const parsedJson = JSON.parse(json);
+        if (parsedJson) {
+          const processedJson = importJson(parsedJson, getId, raw);
+          processedJson && setMjmlJson({ ...processedJson });
+          UNDOREDO.newAction({ ...processedJson });
+        }
+      } else if (json === null) {
+        UNDOREDO.reset();
+        setMjmlJson(_.cloneDeep(EMPTY_EDITOR_STATE));
+      }
+    } catch (e) {
+      throw new Error('Invalid JSON');
+    }
+    return;
+  };
 
   const getHtml = () => {
     let html = '';
@@ -46,13 +70,6 @@ export const Editor = forwardRef((props, ref) => {
       }
     }
     return json;
-  };
-
-  const copyPreviewImage = async (e: any) => {
-    e.preventDefault();
-    const html = mjml2html(mjmlJson).html;
-    navigator.clipboard.writeText(await generatePreview(html));
-    success('Preview Image Copied to clipboard');
   };
 
   return (

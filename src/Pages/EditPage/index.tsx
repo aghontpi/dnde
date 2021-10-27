@@ -1,25 +1,52 @@
 import { Button, Col, Row, Modal, Layout, PageHeader, Input, Form, message } from 'antd';
 import { useEffect, useRef, useState } from 'react';
-import { Prompt } from 'react-router-dom';
+import { Prompt, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { useSendMailMutation } from '../../Api/api';
+import { useLazyGetTemplateQuery, useSendMailMutation } from '../../Api/api';
 import { success } from '../../Components/Messages';
 import { logger } from '../../Utils/logger';
 import { UNDOREDO } from '../../Utils/undoRedo';
 import Editor from '../Editor/';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { generatePreview } from '../../Utils/previewGenerator';
 
 const { Content } = Layout;
-const { confirm } = Modal;
+
+const LOADING_KEY = 'loading';
 
 const EditPage = () => {
   const ref = useRef<any>(null);
+  const { templateId }: { templateId: string | undefined } = useParams();
+  const [trigger, { data, isError, isLoading, isSuccess }] = useLazyGetTemplateQuery();
 
-  const sendEmail = () => {
-    if (ref.current) {
-      const html = ref.current.getHtml();
-      console.log('html', html);
+  useEffect(() => {
+    if (templateId === 'new' || typeof templateId === 'undefined') {
+      ref.current && ref.current.loadJson(null);
+    } else {
+      if (templateId) {
+        message.loading({ content: 'Fetching Template...', key: LOADING_KEY, duration: 0 });
+        trigger({ id: templateId });
+      }
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      try {
+        ref.current && ref.current.loadJson(data.response.data);
+      } catch (e) {
+        message.error('Unable to load template', 3);
+      }
+    } else if (isSuccess && !data) {
+      message.error('Template is empty', 2);
+    }
+    if (isSuccess) {
+      message.destroy(LOADING_KEY);
+    }
+    if (isError) {
+      message.info('Network error, template not fetched.', 2);
+    }
+  }, [isError, isLoading, isSuccess, data]);
 
   const copyJsonInClipBoard = (e: any) => {
     if (ref.current) {
@@ -38,6 +65,15 @@ const EditPage = () => {
       logger.log('html', html);
       success('Copied to clipboard & logged in devtools ');
       e.preventDefault();
+    }
+  };
+
+  const copyPreviewImage = async (e: any) => {
+    if (ref.current) {
+      e.preventDefault();
+      const html = ref.current.html;
+      navigator.clipboard.writeText(await generatePreview(html));
+      success('Preview Image Copied to clipboard');
     }
   };
 
@@ -78,9 +114,6 @@ const EditPage = () => {
             ></PageHeader>
             <Content>
               <Editor ref={ref} />
-              <Button onClick={(e: any) => sendEmail()} style={{ position: 'absolute', bottom: '16px', right: '16px' }}>
-                gethtml
-              </Button>
             </Content>
           </Layout>
         </Col>
@@ -96,7 +129,7 @@ let MESSAGEID = 'sendMailid';
 const SendTestMail = ({ editorRef }: { editorRef: any }) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
-  const [sendMailApi, sendMailApiStatus] = useSendMailMutation();
+  const [sendMailApi] = useSendMailMutation();
 
   const onOk = () => {
     form.validateFields().then(async (values) => {
@@ -176,3 +209,23 @@ const CustomModal = styled(Modal)`
     padding-top: 0px;
   }
 `;
+
+const modalConfirmLoadLocalState = async (okCallback: () => void, cancelCallback: () => void) => {
+  return new Promise<boolean>((resolve, reject) => {
+    Modal.confirm({
+      title: 'Confirm',
+      icon: <ExclamationCircleOutlined />,
+      content: 'local save found do you want to load it?',
+      okText: 'restore',
+      cancelText: 'cancel',
+      onOk: () => {
+        okCallback();
+        resolve(true);
+      },
+      onCancel: () => {
+        cancelCallback();
+        resolve(false);
+      },
+    });
+  });
+};
