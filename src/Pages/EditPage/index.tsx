@@ -11,15 +11,6 @@ const { confirm } = Modal;
 
 const EditPage = () => {
   const ref = useRef<any>(null);
-  const [isBlockingRoute, setIsBlockingRoute] = useState(false);
-
-  useEffect(() => {
-    if (UNDOREDO.undo.length > 1 || UNDOREDO.redo.length > 1) {
-      setIsBlockingRoute(true);
-      return;
-    }
-    setIsBlockingRoute(false);
-  }, [UNDOREDO.undo, UNDOREDO.redo]);
 
   const sendEmail = () => {
     if (ref.current) {
@@ -51,7 +42,10 @@ const EditPage = () => {
   return (
     <div style={{ flex: '1', display: 'flex', width: '100%', height: '100%' }}>
       <Row style={{ height: '100%', width: '100%' }} justify="center">
-        <Prompt when={isBlockingRoute} message={() => 'Are you sure you want to leave, your changes will be lost'} />
+        <Prompt
+          when={UNDOREDO.undo.length > 1 || UNDOREDO.redo.length > 1}
+          message={() => 'Are you sure you want to leave, your changes will be lost'}
+        />
         <Col lg={24} xl={0}>
           <div style={{ textAlign: 'center', padding: '40px', paddingTop: '10%' }}>
             <h3>Sorry, You need a device with a larger screen to perform editing, atleast '{'>'}=1200px'</h3>
