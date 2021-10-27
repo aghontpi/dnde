@@ -1,6 +1,8 @@
-import { Button, Col, Row, Modal, Layout, PageHeader, Input } from 'antd';
+import { Button, Col, Row, Modal, Layout, PageHeader, Input, Form, message } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { Prompt } from 'react-router-dom';
+import styled from 'styled-components';
+import { useSendMailMutation } from '../../Api/api';
 import { success } from '../../Components/Messages';
 import { logger } from '../../Utils/logger';
 import { UNDOREDO } from '../../Utils/undoRedo';
@@ -61,7 +63,7 @@ const EditPage = () => {
               style={{ borderBottom: '1px solid #e8e8e8' }}
               extra={[
                 <>
-                  <SendTestMail key="4" />
+                  <SendTestMail editorRef={ref} key="4" />
                   {/* <Button key="5" onClick={copyPreviewImage}>
                 Copy Preview Image
               </Button> */}
@@ -89,23 +91,88 @@ const EditPage = () => {
 
 export { EditPage };
 
-const SendTestMail = () => {
-  const [mail, SetMail] = useState('');
-  const onBlur = (e: any) => {
-    SetMail(e.currentTarget.value);
+let MESSAGEID = 'sendMailid';
+
+const SendTestMail = ({ editorRef }: { editorRef: any }) => {
+  const [form] = Form.useForm();
+  const [visible, setVisible] = useState(false);
+  const [sendMailApi, sendMailApiStatus] = useSendMailMutation();
+
+  const onOk = () => {
+    form.validateFields().then(async (values) => {
+      if (editorRef.current) {
+        const html = editorRef.current.getHtml();
+        if (html && html.trim().length > 0) {
+          message.loading({ content: 'mail is being sent', key: MESSAGEID, duration: 0 });
+          setVisible(false);
+          const result = (await sendMailApi({
+            to: values.email,
+            html: editorRef.current.getHtml(),
+          })
+            .unwrap()
+            .catch((e) => {
+              message.error({ content: 'unable to contact server', key: MESSAGEID, duration: 0 });
+            })) as any;
+          if (result) {
+            if (result.success) {
+              message.success({ content: result.success, key: MESSAGEID, duration: 4 });
+            } else if (result.error) {
+              message.error({ content: result.error, key: MESSAGEID, duration: 2 });
+            }
+          }
+        } else {
+          message.error('design can not be converted into html');
+        }
+        setVisible(false);
+      } else {
+        setVisible(false);
+      }
+    });
   };
 
-  const msg = () =>
-    confirm({
-      title: 'Email',
-      icon: null,
-      content: <Input onBlur={onBlur} />,
-      onOk: () => {},
-    });
+  const onCancel = () => {
+    setVisible(false);
+  };
 
   return (
-    <Button key="2" type="primary" onClick={msg}>
-      Send Test Mail
-    </Button>
+    <>
+      <Button key="2" type="primary" onClick={() => setVisible(!visible)}>
+        Send Test Mail
+      </Button>
+      <CustomModal
+        closable={false}
+        title={null}
+        visible={visible}
+        onOk={onOk}
+        onCancel={onCancel}
+        okText="sendMail"
+        cancelText="cancel"
+      >
+        <Form layout="vertical" form={form}>
+          <Form.Item
+            label="Email"
+            validateTrigger="onchange"
+            name="email"
+            rules={[{ required: true }, { type: 'email' }]}
+          >
+            <Input />
+          </Form.Item>
+        </Form>
+      </CustomModal>
+    </>
   );
 };
+
+const CustomModal = styled(Modal)`
+  .ant-modal-footer {
+    border-top: unset;
+  }
+
+  .ant-form-item {
+    margin-bottom: 0px;
+  }
+
+  .ant-modal-footer {
+    padding-top: 0px;
+  }
+`;
