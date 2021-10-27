@@ -5,21 +5,22 @@ import { Ckeditor } from '../../Context/Ckeditor.context';
 import { HtmlContextProvider } from '../../Context/Htmlwrapper.context';
 import { QuillEditor } from '../../Context/Quill.context';
 import { CustomEditorProvider } from '../../Context/CustomEditor.context';
+import { forwardRef } from 'react';
 
-const wrapContext = () => (
+const wrapContext = forwardRef((props, ref) => (
   <HtmlContextProvider>
     <CustomEditorProvider>
       <QuillEditor>
         <Ckeditor>
           <DNDContext>
             <EDContext>
-              <Editor />
+              <Editor ref={ref} />
             </EDContext>
           </DNDContext>
         </Ckeditor>
       </QuillEditor>
     </CustomEditorProvider>
   </HtmlContextProvider>
-);
+));
 
 export default wrapContext;

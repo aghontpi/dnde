@@ -7,7 +7,7 @@ import { success } from '../../Components/Messages';
 import mjml2html from 'mjml-browser';
 import { useEditor } from '../../Hooks/Editor.hook';
 import { sendMail } from '../../Utils/sendMail';
-import { useEffect, useState } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { Preview } from './Preview';
 import { exportJson } from '../../Utils/mjmlProcessor';
 import _ from 'lodash';
@@ -18,15 +18,29 @@ import { Prompt } from 'react-router';
 const { Content } = Layout;
 const { confirm } = Modal;
 
-export const Editor = () => {
+export const Editor = forwardRef((props, ref) => {
   const { mjmlJson } = useEditor();
   const [preview, setPreview] = useState(false);
   const [isBlockingRoute, setIsBlockingRoute] = useState(false);
+
+  useImperativeHandle(ref, () => {
+    return {
+      getHtml: getHtml,
+    };
+  });
 
   useEffect(() => {
     // reset undo redo actions on each new load
     UNDOREDO.reset();
   }, []);
+
+  const getHtml = () => {
+    let html = '';
+    if (mjmlJson) {
+      html = mjml2html(mjmlJson).html;
+    }
+    return html;
+  };
 
   useEffect(() => {
     if (UNDOREDO.undo.length > 1 || UNDOREDO.redo.length > 1) {
@@ -117,7 +131,7 @@ export const Editor = () => {
       </Col>
     </Row>
   );
-};
+});
 
 const SendTestMail = () => {
   const { mjmlJson } = useEditor();
