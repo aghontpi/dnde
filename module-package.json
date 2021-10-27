@@ -4,6 +4,10 @@
   "main": "./main.js",
   "files": ["**/*"],
   "private": false,
+  "peerDependencies": {
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  },
   "dependencies": {
     "@ckeditor/ckeditor5-react": "^3.0.2",
     "@reduxjs/toolkit": "^1.6.2",
