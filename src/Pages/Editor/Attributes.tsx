@@ -58,7 +58,7 @@ export const Attributes = () => {
       tabPosition="right"
       defaultActiveKey="2"
       style={{ height: '100%' }}
-      destroyInactiveTabPane={false}
+      destroyInactiveTabPane={true}
       title={'Attributes'}
       size="small"
       tabBarGutter={1}
