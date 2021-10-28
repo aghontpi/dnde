@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = (env, argv) => {
   return {
     mode: 'production',
-    entry: './src/Package.ts',
+    entry: ['./node_modules/antd/dist/antd.css', './src/Package.ts'],
     output: {
       filename: 'main.js',
       path: path.resolve(__dirname, 'module'),
