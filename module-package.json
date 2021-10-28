@@ -1,6 +1,7 @@
 {
-  "name": "dnde-mail-editor",
-  "version": "v0.0.0-alpha.2",
+  "name": "dnd-email-editor",
+  "version": "v0.0.0-alpha.2.build.4",
+  "description": "Drag and Drop Editor designed for mails",
   "main": "./main.js",
   "files": ["**/*"],
   "types": "./index.d.ts",
@@ -41,5 +42,16 @@
   "bugs": {
     "url": "https://github.com/aghontpi/dnde/issues"
   },
-  "homepage": "https://github.com/aghontpi/dnde"
+  "homepage": "https://github.com/aghontpi/dnde",
+  "keywords": [
+    "react-component",
+    "react-email-component",
+    "react-email-editor",
+    "editor",
+    "drag-and-drop",
+    "email-template",
+    "react-email",
+    "drag-n-drop",
+    "mjml"
+  ]
 }

@@ -1,6 +1,7 @@
 {
   "name": "dnde-mail-editor",
-  "version": "v0.0.0-alpha.2",
+  "version": "0.0.0-alpha.2",
+  "description": "Drag and Drop Editor designed for mails",
   "main": "./module/main.js",
   "files": [
     "module/**/*"
@@ -41,7 +42,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "build:module": "WEBPACK_PACKAGE=webpack-module  ./node_modules/webpack-module/bin/webpack.js && cp module-package.json module/package.json && cp index.d.ts module/index.d.ts && cp README.md module/README.md && npm pack ./module/"
+    "build:module": "WEBPACK_PACKAGE=webpack-module  ./node_modules/webpack-module/bin/webpack.js && cp module-package.json module/package.json && cp index.d.ts module/index.d.ts && cp README.md module/README.md  && npm pack ./module/"
   },
   "eslintConfig": {
     "extends": [
@@ -77,8 +78,8 @@
     "css-loader-module": "npm:css-loader@^6.4.0",
     "sass-loader-module": "npm:sass-loader@^12.2.0",
     "style-loader-module": "npm:style-loader@^3.3.1",
-    "webpack-module": "npm:webpack@^5.60.0",
-    "webpack-cli": "^4.9.1"
+    "webpack-cli": "^4.9.1",
+    "webpack-module": "npm:webpack@^5.60.0"
   },
   "bin": {
     "webpackmodule": "./node_modules/webpack-module/bin/webpack.js"
