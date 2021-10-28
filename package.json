@@ -41,7 +41,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "build:module": "webpack && cp module-package.json module/package.json && cp README.md module/README.md && npm pack ./module/"
+    "build:module": "webpack && cp module-package.json module/package.json && cp index.d.ts module/index.d.ts && cp README.md module/README.md && npm pack ./module/"
   },
   "eslintConfig": {
     "extends": [

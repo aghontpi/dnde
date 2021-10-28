@@ -3,6 +3,7 @@
   "version": "v0.0.0-alpha.2",
   "main": "./main.js",
   "files": ["**/*"],
+  "types": "./index.d.ts",
   "private": false,
   "peerDependencies": {
     "react": "^17.0.1",
