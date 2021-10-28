@@ -1,4 +1,8 @@
 const path = require('path');
+const sassloader = require('sass-loader-module');
+const styleloader = require('style-loader-module');
+const cssloader = require('css-loader-module');
+const babelloader = require('babel-loader-module');
 
 module.exports = (env, argv) => {
   return {
@@ -14,17 +18,17 @@ module.exports = (env, argv) => {
       rules: [
         {
           test: /(\.css$|\.module\.css$)/i,
-          use: ['style-loader', 'css-loader'],
+          use: ['style-loader-module', 'css-loader-module'],
         },
         {
           //refernece https://webpack.js.org/loaders/css-loader/#css-style-sheet
           test: /(\.s[ac]ss$|\.module\.s[ac]ss$)/i,
           use: [
             {
-              loader: 'style-loader',
+              loader: 'style-loader-module',
             },
             {
-              loader: 'css-loader',
+              loader: 'css-loader-module',
               options: {
                 importLoaders: 1,
                 modules: {
@@ -33,7 +37,7 @@ module.exports = (env, argv) => {
               },
             },
             {
-              loader: 'sass-loader',
+              loader: 'sass-loader-module',
               options: {
                 implementation: require('sass'),
               },
@@ -52,7 +56,7 @@ module.exports = (env, argv) => {
           test: /\.(js|jsx|ts|tsx)$/,
           exclude: /node_modules/,
           use: {
-            loader: 'babel-loader',
+            loader: 'babel-loader-module',
             options: {
               presets: [
                 '@babel/preset-env',

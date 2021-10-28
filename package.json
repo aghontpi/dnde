@@ -41,7 +41,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "build:module": "webpack && cp module-package.json module/package.json && cp index.d.ts module/index.d.ts && cp README.md module/README.md && npm pack ./module/"
+    "build:module": "WEBPACK_PACKAGE=webpack-module  ./node_modules/webpack-module/bin/webpack.js && cp module-package.json module/package.json && cp index.d.ts module/index.d.ts && cp README.md module/README.md && npm pack ./module/"
   },
   "eslintConfig": {
     "extends": [
@@ -73,12 +73,15 @@
     "@types/react-color": "^3.0.5",
     "@types/react-router-dom": "^5.3.1",
     "@types/styled-components": "^5.1.14",
-    "babel-loader": "^8.2.3",
-    "css-loader": "^6.4.0",
-    "sass-loader": "^12.2.0",
-    "style-loader": "^3.3.1",
-    "webpack": "^5.60.0",
+    "babel-loader-module": "npm:babel-loader@^8.2.3",
+    "css-loader-module": "npm:css-loader@^6.4.0",
+    "sass-loader-module": "npm:sass-loader@^12.2.0",
+    "style-loader-module": "npm:style-loader@^3.3.1",
+    "webpack-module": "npm:webpack@^5.60.0",
     "webpack-cli": "^4.9.1"
+  },
+  "bin": {
+    "webpackmodule": "./node_modules/webpack-module/bin/webpack.js"
   },
   "author": "https://github.com/aghontpi",
   "license": "GPL-3.0",
