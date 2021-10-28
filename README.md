@@ -9,6 +9,80 @@
 [badge]: https://img.shields.io/github/v/release/aghontpi/dnde?include_prereleases&style=flat-square
 [release link]: https://github.com/aghontpi/dnde/releases
 
+## Installation
+
+```bash
+# Yarn
+yarn add dnde-mail-editor
+
+# NPM
+npm install dnde-mail-editor
+
+```
+
+## What's included
+
+Editor includes these api's
+
+- `getHtml` - export the design as html content
+- `getJson` - export as json string, this string can then be used with `loadJson`
+- `loadjson` - load an existing design from json string
+
+## Usage
+
+- Importing
+
+```typescript
+import Editor from 'dnde-mail-editor';
+
+return <Editor />;
+```
+
+- Setup a `ref` using `useRef` and pass it to editor
+
+```typescript
+const ref = React.useRef(null);
+
+return <Editor ref={ref} />;
+```
+
+- Using `getHtml()`, `getJson()` and `loadJson()`
+
+```typescript
+const logValues = () => {
+  if (ref.current) {
+    const html = ref.current.getHtml();
+    const json = ref.current.getJson();
+    console.log(html, json);
+  }
+};
+
+const loadJson = (json: string) => {
+  if (ref.current) {
+    ref.current.loadJson(json);
+  }
+};
+```
+
+- Typescript
+
+Inorder to use typescript and get cool definitions, just pass the type to the ref
+
+```diff
+import Editor from 'dnde-mail-editor';
+
+const ExampleComponent = () => {
+
+- const ref = useRef(null);
++ const ref = useRef<Editor>(null);
+
+  return (
+    <Editor ref={ref}/>
+  );
+
+}
+```
+
 ## Preview
 
 <p align="center"  >
