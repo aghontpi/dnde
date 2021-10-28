@@ -11,7 +11,13 @@
 [npm badge]: https://img.shields.io/npm/v/dnd-email-editor?style=flat-square
 [npm link]: https://www.npmjs.com/package/dnd-email-editor
 
-## Check live demo [here](https://dnde.bluepie.in)
+## Preview / live demo [here](https://dnde.bluepie.in)
+
+<p align="center">
+<img src="https://raw.githubusercontent.com/aghontpi/dnde/master/Screenshots/preview1(25-oct-2021).png"  width="50%" />
+<img src="https://raw.githubusercontent.com/aghontpi/dnde/master/Screenshots/preview2(25-oct-2021).png"  width="50%" />
+<img src="https://raw.githubusercontent.com/aghontpi/dnde/master/Screenshots/preview3(25-oct-2021).png"  width="50%" />
+</p>
 
 ## Installation
 
@@ -99,14 +105,6 @@ One such example would be `unlayer`, It claims to be opensource but its not.
 - later they ask you to pay for its features.
 
 the above reasons and also I was inspired by drag-n-drop editors in general, so I decided to make one.
-
-## Preview
-
-<p align="center"  >
-<img src="https://raw.githubusercontent.com/aghontpi/dnde/master/Screenshots/preview1(25-oct-2021).png"  width="50%" />
-<img src="https://raw.githubusercontent.com/aghontpi/dnde/master/Screenshots/preview2(25-oct-2021).png"  width="50%" />
-<img src="https://raw.githubusercontent.com/aghontpi/dnde/master/Screenshots/preview3(25-oct-2021).png"  width="50%" />
-</p>
 
 ## Features
 
