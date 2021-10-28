@@ -1,7 +1,12 @@
 {
-  "name": "dnde",
-  "version": "0.1.0",
-  "private": true,
+  "name": "dnde-mail-editor",
+  "version": "0.0.0-alpha.2",
+  "description": "Drag and Drop Editor designed for mails",
+  "main": "./module/main.js",
+  "files": [
+    "module/**/*"
+  ],
+  "private": false,
   "dependencies": {
     "@ckeditor/ckeditor5-react": "^3.0.2",
     "@reduxjs/toolkit": "^1.6.2",
@@ -27,7 +32,7 @@
     "react-redux": "^7.2.5",
     "react-router-dom": "^5.3.0",
     "react-scripts": "4.0.3",
-    "sass": "^1.39.2",
+    "sass": "^1.43.3",
     "styled-components": "^5.3.1",
     "typescript": "^4.1.2",
     "web-vitals": "^1.0.1"
@@ -36,7 +41,8 @@
     "start": "BROWSER=none react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "build:module": "WEBPACK_PACKAGE=webpack-module  ./node_modules/webpack-module/bin/webpack.js && cp module-package.json module/package.json && cp index.d.ts module/index.d.ts && cp README.md module/README.md  && npm pack ./module/"
   },
   "eslintConfig": {
     "extends": [
@@ -57,12 +63,31 @@
     ]
   },
   "devDependencies": {
+    "@babel/core": "^7.15.8",
+    "@babel/preset-env": "^7.15.8",
+    "@babel/preset-react": "^7.14.5",
+    "@babel/preset-typescript": "^7.15.0",
     "@sendgrid/mail": "^7.4.6",
     "@types/ckeditor__ckeditor5-core": "^28.0.9",
     "@types/lodash": "^4.14.172",
     "@types/quill": "^2.0.9",
     "@types/react-color": "^3.0.5",
     "@types/react-router-dom": "^5.3.1",
-    "@types/styled-components": "^5.1.14"
-  }
+    "@types/styled-components": "^5.1.14",
+    "babel-loader-module": "npm:babel-loader@^8.2.3",
+    "css-loader-module": "npm:css-loader@^6.4.0",
+    "sass-loader-module": "npm:sass-loader@^12.2.0",
+    "style-loader-module": "npm:style-loader@^3.3.1",
+    "webpack-cli": "^4.9.1",
+    "webpack-module": "npm:webpack@^5.60.0"
+  },
+  "bin": {
+    "webpackmodule": "./node_modules/webpack-module/bin/webpack.js"
+  },
+  "author": "https://github.com/aghontpi",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/aghontpi/dnde/issues"
+  },
+  "homepage": "https://github.com/aghontpi/dnde"
 }
