@@ -1,1 +1,1 @@
-export const HEADSTYLE = 'a{text-decoration:none!important} .htmlblock {}';
+export const HEADSTYLE = 'a{text-decoration:none!important} .body {} ';

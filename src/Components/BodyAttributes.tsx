@@ -7,6 +7,7 @@ import { Width } from './Mods/WidthHeight';
 import { Title as TitleMod } from './Mods/Title';
 import { UNDOREDO } from '../Utils/undoRedo';
 import { AddCustomFonts } from './Mods/AddCustomFonts';
+import { CustomCss } from './Mods/CustomCss';
 
 export const BODY_PATH = 'children[1]';
 
@@ -29,6 +30,7 @@ const BodyAttributes = () => {
   const [cssIndex, setCssIndex] = useState<number>(-1);
 
   useEffect(() => {
+    // todo remove this??, because the path is static,
     // taking advantage of the fact that head tag always has a static path
     if (mjmlJson && mjmlJson['children'] && mjmlJson['children'].length > 0) {
       let headConfig = mjmlJson['children'][0];
@@ -78,7 +80,9 @@ const BodyAttributes = () => {
       </div>
 
       <Title title="Custom CSS" />
-      <div className="props-container"></div>
+      <div className="props-container">
+        <CustomCss />
+      </div>
     </BodyContainer>
   );
 };
