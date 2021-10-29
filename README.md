@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./public/dnde-banner.svg"/>
+  <img src="https://raw.githubusercontent.com/aghontpi/dnde/master/public/dnde-banner.svg"/>
   <br/>
   <br/>
   <i>Drag and Drop E-mail Editor</i>
@@ -18,9 +18,8 @@
 [npm link]: https://www.npmjs.com/package/dnd-email-editor
 
 <h2 align="center"> screens / live demo <a href="https://dnde.bluepie.in">here</a></h2>
-
 <p align="center">
-<img src="./Screenshots/previews(25-oct-2021).gif"  width="50%" />
+<img src="https://raw.githubusercontent.com/aghontpi/dnde/master/Screenshots/previews(25-oct-2021).gif"  width="50%" />
 </p>
 
 ## Installation
