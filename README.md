@@ -1,6 +1,6 @@
-# Dnde - Mail (Drag and Drop Editor designed for mails)
+<p align="center"> <img src="./public/dnde-banner.svg"/> </p>
 
-> Drag and Drop E-mail editor
+<p align="center"> Drag and Drop E-mail Editor </p>
 
 [![release][badge]][release link] [![npm][npm badge]][npm link] [![license][license-badge]][license file]
 
