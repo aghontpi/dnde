@@ -1,8 +1,14 @@
-# Dnde - Mail (Drag and Drop Editor designed for mails)
-
-> Drag and Drop E-mail editor
-
-[![release][badge]][release link] [![npm][npm badge]][npm link] [![license][license-badge]][license file]
+<p align="center">
+  <img src="./public/dnde-banner.svg"/>
+  <br/>
+  <br/>
+  <i>Drag and Drop E-mail Editor</i>
+  <br/>
+  <br/>
+  <a href="https://github.com/aghontpi/dnde/releases"><img src="https://img.shields.io/github/v/release/aghontpi/dnde?include_prereleases&style=flat-square&label=github-release" alt="release"></a>
+  <a href="https://www.npmjs.com/package/dnd-email-editor"><img src="https://img.shields.io/npm/v/dnd-email-editor?style=flat-square" alt="npm"></a>
+  <a href="https://github.com/aghontpi/dnde/blob/master/LICENSE"><img src="https://img.shields.io/github/license/aghontpi/dnde?style=flat-square" alt="license"></a>
+</p>
 
 [license-badge]: https://img.shields.io/github/license/aghontpi/dnde?style=flat-square
 [license file]: https://github.com/aghontpi/dnde/blob/master/LICENSE
@@ -11,12 +17,10 @@
 [npm badge]: https://img.shields.io/npm/v/dnd-email-editor?style=flat-square
 [npm link]: https://www.npmjs.com/package/dnd-email-editor
 
-## Preview / live demo [here](https://dnde.bluepie.in)
+<h2 align="center"> screens / live demo <a href="https://dnde.bluepie.in">here</a></h2>
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/aghontpi/dnde/master/Screenshots/preview1(25-oct-2021).png"  width="50%" />
-<img src="https://raw.githubusercontent.com/aghontpi/dnde/master/Screenshots/preview2(25-oct-2021).png"  width="50%" />
-<img src="https://raw.githubusercontent.com/aghontpi/dnde/master/Screenshots/preview3(25-oct-2021).png"  width="50%" />
+<img src="./Screenshots/previews(25-oct-2021).gif"  width="50%" />
 </p>
 
 ## Installation
@@ -97,7 +101,7 @@ const ExampleComponent = () => {
 
 There are soo many drag and drop editors that helps in **creating website** but **not mails**, because mails differ a lot from `a normal html webpage'
 
-- even if there are `mail editors` avialable, they are paid and not `open-source`.
+- even if there are `mail editors` available, they are paid and not `open-source`.
 
 One such example would be `unlayer`, It claims to be opensource but its not.
 
@@ -117,7 +121,7 @@ the above reasons and also I was inspired by drag-n-drop editors in general, so 
   - add custom fonts
   - list / add/ deletefonts
 - Go back and forth with `Undo / Redo`
-- Preview the design in the browser (mobile & pc)
+- Preview the design in the browser (Mobile & PC)
 
 ## Built with
 
