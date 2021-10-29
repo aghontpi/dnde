@@ -1,5 +1,5 @@
 import { useVisibility } from '../../Hooks/Attribute.hook';
-import { Form, Input } from 'antd';
+import { Col, Form, Input, Row } from 'antd';
 import { useEditor } from '../../Hooks/Editor.hook';
 import { ChangeEvent, useEffect, useState } from 'react';
 import _ from 'lodash';
@@ -54,18 +54,25 @@ export const Content = () => {
   };
 
   return visible ? (
-    <Form.Item label="Content">
-      {htmlBlock ? (
-        <Input.TextArea rows={28} onChange={handleChange} value={value} />
-      ) : (
-        <Input.TextArea
-          disabled={isReadOnly ? isReadOnly : false}
-          readOnly={isReadOnly ? isReadOnly : false}
-          rows={3}
-          onChange={handleChange}
-          value={value}
-        />
-      )}
+    <Form.Item>
+      <Row gutter={[0, 8]}>
+        <Col span={24}>
+          <span className="ant-form-item-label">Content:</span>
+        </Col>
+        <Col span={24}>
+          {htmlBlock ? (
+            <Input.TextArea rows={28} onChange={handleChange} value={value} />
+          ) : (
+            <Input.TextArea
+              disabled={isReadOnly ? isReadOnly : false}
+              readOnly={isReadOnly ? isReadOnly : false}
+              rows={3}
+              onChange={handleChange}
+              value={value}
+            />
+          )}
+        </Col>
+      </Row>
     </Form.Item>
   ) : null;
 };

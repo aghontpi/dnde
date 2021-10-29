@@ -76,6 +76,9 @@ const BodyAttributes = () => {
       <div className="props-container">
         <AddCustomFonts />
       </div>
+
+      <Title title="Custom CSS" />
+      <div className="props-container"></div>
     </BodyContainer>
   );
 };
