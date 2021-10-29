@@ -2,14 +2,12 @@
   <img src="./public/dnde-banner.svg"/>
   <br/>
   <br/>
-  <a href="https://github.com/aghontpi/dnde/releases"><img src="https://img.shields.io/github/license/aghontpi/dnde?style=flat-square" alt="release"></a>
+  <i>Drag and Drop E-mail Editor</i>
+  <br/>
+  <br/>
+  <a href="https://github.com/aghontpi/dnde/releases"><img src="https://img.shields.io/github/v/release/aghontpi/dnde?include_prereleases&style=flat-square&label=github-release" alt="release"></a>
   <a href="https://www.npmjs.com/package/dnd-email-editor"><img src="https://img.shields.io/npm/v/dnd-email-editor?style=flat-square" alt="npm"></a>
   <a href="https://github.com/aghontpi/dnde/blob/master/LICENSE"><img src="https://img.shields.io/github/license/aghontpi/dnde?style=flat-square" alt="license"></a>
-
-  <br/>
-  <br/>
-  <i>Drag and Drop E-mail Editor</i>
-
 </p>
 
 [license-badge]: https://img.shields.io/github/license/aghontpi/dnde?style=flat-square
