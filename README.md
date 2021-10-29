@@ -97,7 +97,7 @@ const ExampleComponent = () => {
 
 There are soo many drag and drop editors that helps in **creating website** but **not mails**, because mails differ a lot from `a normal html webpage'
 
-- even if there are `mail editors` avialable, they are paid and not `open-source`.
+- even if there are `mail editors` available, they are paid and not `open-source`.
 
 One such example would be `unlayer`, It claims to be opensource but its not.
 
@@ -117,7 +117,7 @@ the above reasons and also I was inspired by drag-n-drop editors in general, so 
   - add custom fonts
   - list / add/ deletefonts
 - Go back and forth with `Undo / Redo`
-- Preview the design in the browser (mobile & pc)
+- Preview the design in the browser (Mobile & PC)
 
 ## Built with
 
