@@ -60,7 +60,7 @@ const EditPage = () => {
 
   const copyHTMLAsClipBoard = (e: any) => {
     if (ref.current) {
-      const html = ref.current.html;
+      const html = ref.current.getHtml();
       navigator.clipboard.writeText(html);
       logger.log('html', html);
       success('Copied to clipboard & logged in devtools ');
