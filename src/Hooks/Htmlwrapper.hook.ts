@@ -4,8 +4,6 @@ import { HtmlContext } from '../Context/Htmlwrapper.context';
 export const useHtmlWrapper = () => {
   const htmlContext = useContext(HtmlContext);
   return htmlContext as unknown as {
-    uiList: any[];
-    setUIWrapperList: (prev?: any) => void;
     activeHover: any;
     setActiveHover: (id: string) => void;
     active: any;

@@ -24,8 +24,7 @@ interface HtmlWrapperProps {
 }
 
 export const HtmlWrapper = memo(({ uniqueKey, originalNode }: HtmlWrapperProps) => {
-  const { setUIWrapperList, setActive, setActiveHover, active, activeHover, id, setId, getId, uiList } =
-    useHtmlWrapper();
+  const { setActive, setActiveHover, active, activeHover, id, setId, getId } = useHtmlWrapper();
   const {
     setDelActive,
     setDelX,

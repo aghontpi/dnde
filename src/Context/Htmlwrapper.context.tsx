@@ -4,8 +4,6 @@ import { logger } from '../Utils/logger';
 export const HtmlContext = createContext<any>(null);
 
 export const HtmlContextProvider: FC = memo((props) => {
-  const [uiWrapperList, setUIWrapperList] = useState([]);
-
   const [activeHover, setActiveHover] = useState<any>();
 
   const [active, setActive] = useState<any>();
@@ -19,13 +17,9 @@ export const HtmlContextProvider: FC = memo((props) => {
     logger.log('getId', id);
   };
 
-  //todo: fn remove id from the uiWrapperList, if possible upgrade list to map
-
   return (
     <HtmlContext.Provider
       value={{
-        uiList: uiWrapperList,
-        setUIWrapperList,
         activeHover,
         setActiveHover,
         active,
