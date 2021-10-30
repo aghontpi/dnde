@@ -63,50 +63,6 @@ export const Attributes = () => {
       size="small"
       tabBarGutter={1}
     >
-      {/* <TabPane tab="Attributes" key="1">
-        <Scrollbars style={{ height: '100%' }} autoHide={true}>
-          <div
-            className={css.mods}
-            onMouseDown={(e) => {
-              UNDOREDO.newAction(mjmlJson);
-            }}
-            onBlur={(e) => {
-              UNDOREDO.newAction(mjmlJson);
-            }}
-          >
-            {isColumn ? (
-              <div style={{ textAlign: 'center' }}>
-                The selected Item is a Column, to modify properties <h2> check "Column Properties" Tab</h2>
-              </div>
-            ) : (
-              <>
-                <Width />
-                <Height />
-                <Align />
-                <VerticalAlign />
-                <Content />
-                <LineHeight />
-                <FontSize />
-                <FontFamily />
-                <Padding />
-                <InnerPadding />
-                <ContainerBackground />
-                <Background />
-                <BackgroundImage />
-                <Border />
-                <Border label="Border Width" attribute_name="border-width" />
-                <Border label="Border Style" attribute_name="border-style" />
-                <Background label="Border Color" overrideAttribute="border-color" />
-                <CordinalBorder />
-                <BorderRadius />
-                <Link />
-                <Img />
-              </>
-            )}
-          </div>
-        </Scrollbars>
-      </TabPane> */}
-
       <TabPane tab={<span style={{ fontSize: '12px' }}>layout</span>} key="2">
         <Scrollbars style={{ height: '100%' }} autoHide={true}>
           <div className={css.columns}>

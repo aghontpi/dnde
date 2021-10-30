@@ -22,20 +22,6 @@ const Header = ({ title }: { title: string }) => {
 export const ComponentBank = () => {
   return (
     <Scrollbars style={{ height: '100%' }} autoHide={true}>
-      {/* <div style={{ padding: '8px', textAlign: 'center', fontSize: '16px', fontWeight: 'bold' }}>
-        <span>Components</span>
-      </div> */}
-      {/* <Collapse
-        expandIconPosition={'right'}
-        bordered={false}
-        defaultActiveKey={['1', '2']}
-        style={{ backgroundColor: 'rgb(255,255,255)' }}
-        expandIcon={({ isActive }) => <CaretDownOutlined rotate={isActive ? 0 : 180} />}
-      >
-        <Panel header={<Header title="Drag & Drop Section" />} key="1">
-          <Section />
-        </Panel> */}
-      {/* <Panel header={<Header title="Drag & Drop Content" />} key="2"> */}
       <div className={css.components}>
         <SectionV2 />
         <Button />
@@ -46,8 +32,6 @@ export const ComponentBank = () => {
         <Html />
         <Social />
       </div>
-      {/* </Panel> */}
-      {/* </Collapse> */}
     </Scrollbars>
   );
 };
