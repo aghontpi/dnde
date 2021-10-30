@@ -3,29 +3,26 @@ import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useEditor } from '../../Hooks/Editor.hook';
 
-interface CustomCssProps {
-  itemIndex: number;
-}
+const STYLEPATH = `children[0].children[1]`;
 
-const CustomCss = ({ itemIndex: index }: CustomCssProps) => {
-  const STYLEPATH = `children[0].children[${index}]`;
+const CustomCss = () => {
   const { mjmlJson, setMjmlJson } = useEditor();
   const [value, setValue] = useState('');
   const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
     if (mjmlJson) {
-      const style = mjmlJson.children[0].children[index];
+      const style = mjmlJson.children[0].children[1];
       if (style && style.tagName.includes('style')) {
         const _value = style.content;
         setValue(_value);
       }
     }
-  }, [index]);
+  }, []);
 
   useEffect(() => {
     if (mjmlJson && isActive === false) {
-      const style = mjmlJson.children[0].children[index];
+      const style = mjmlJson.children[0].children[1];
       if (style && style.tagName.includes('style')) {
         const _value = style.content;
         setValue(_value);
@@ -59,9 +56,7 @@ const CustomCss = ({ itemIndex: index }: CustomCssProps) => {
   return (
     <Form.Item>
       <Row gutter={[0, 8]}>
-        <Col span={24}>
-          <span className="ant-form-item-label">Content:</span>
-        </Col>
+        <Col span={24}>{/* <span className="ant-form-item-label">Content:</span> */}</Col>
         <Col span={24}>
           <Input.TextArea
             spellCheck={false}

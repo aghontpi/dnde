@@ -23,9 +23,11 @@ import { VerticalAlign } from '../../Components/Mods/VerticalAlign';
 import { BackgroundImage } from '../../Components/Mods/BackgroundImage';
 import { ColumnAttributes } from '../../Components/ColumnAttributes';
 import { useHtmlWrapper } from '../../Hooks/Htmlwrapper.hook';
-import { useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { LineHeight } from '../../Components/Mods/LineHeight';
-import { BodyAttributes } from '../../Components/BodyAttributes';
+import { BodyAttributes, SideBarDefaultLayout, SideBarDefaultTitle } from '../../Components/BodyAttributes';
+import { CustomCss } from '../../Components/Mods/CustomCss';
+import { AddCustomFonts } from '../../Components/Mods/AddCustomFonts';
 
 const { TabPane } = Tabs;
 
@@ -41,8 +43,22 @@ const CustomTabs = styled(Tabs)`
   }
 `;
 
+const Title = ({ title }: { title: string }) => {
+  return (
+    <>
+      {title.split(' ').map((word, index) => {
+        return (
+          <Fragment key={index + word}>
+            {index !== 0 && <br />}
+            <span style={{ fontSize: '12px' }}>{word}</span>
+          </Fragment>
+        );
+      })}
+    </>
+  );
+};
+
 export const Attributes = () => {
-  const { mjmlJson } = useEditor();
   const { active } = useHtmlWrapper();
   const [isColumn, setIsColumn] = useState(false);
 
@@ -63,39 +79,42 @@ export const Attributes = () => {
       size="small"
       tabBarGutter={1}
     >
-      <TabPane tab={<span style={{ fontSize: '12px' }}>layout</span>} key="2">
+      <TabPane tab={<Title title="layout" />} key="2">
         <Scrollbars style={{ height: '100%' }} autoHide={true}>
           <div className={css.columns}>
             <ColumnSelector />
           </div>
         </Scrollbars>
       </TabPane>
-      <TabPane
-        tab={
-          <>
-            <span style={{ fontSize: '12px' }}>layout</span>
-            <br />
-            <span style={{ fontSize: '12px' }}>config</span>
-          </>
-        }
-        key="3"
-      >
+      <TabPane tab={<Title title="layout config" />} key="3">
         <Scrollbars style={{ height: '100%' }} autoHide={true}>
           <ColumnAttributes />
         </Scrollbars>
       </TabPane>
-      <TabPane
-        tab={
-          <>
-            <span style={{ fontSize: '12px' }}>body</span>
-            <br />
-            <span style={{ fontSize: '12px' }}>config</span>
-          </>
-        }
-        key="4"
-      >
+      <TabPane tab={<Title title="body config" />} key="4">
         <Scrollbars style={{ height: '100%' }} autoHide={true}>
           <BodyAttributes />
+        </Scrollbars>
+      </TabPane>
+      <TabPane tab={<Title title="fonts config" />} key="5">
+        <Scrollbars style={{ height: '100%' }} autoHide={true}>
+          <SideBarDefaultLayout>
+            <SideBarDefaultTitle title="Fonts" />
+            <div className="props-container">
+              <AddCustomFonts />
+            </div>
+          </SideBarDefaultLayout>
+        </Scrollbars>
+      </TabPane>
+      <TabPane tab={<Title title="custom css" />} key="6">
+        <Scrollbars style={{ height: '100%' }} autoHide={true}>
+          <SideBarDefaultLayout>
+            <SideBarDefaultTitle title="Custom css" />
+
+            <div className="props-container">
+              <CustomCss />
+            </div>
+          </SideBarDefaultLayout>
         </Scrollbars>
       </TabPane>
     </CustomTabs>

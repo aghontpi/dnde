@@ -6,8 +6,6 @@ import { Background } from './Mods/Background';
 import { Width } from './Mods/WidthHeight';
 import { Title as TitleMod } from './Mods/Title';
 import { UNDOREDO } from '../Utils/undoRedo';
-import { AddCustomFonts } from './Mods/AddCustomFonts';
-import { CustomCss } from './Mods/CustomCss';
 
 export const BODY_PATH = 'children[1]';
 
@@ -27,7 +25,6 @@ const BodyContainer = styled.div`
 const BodyAttributes = () => {
   const { mjmlJson } = useEditor();
   const [titleIndex, setTitleIndex] = useState<number>(-1);
-  const [cssIndex, setCssIndex] = useState<number>(-1);
 
   useEffect(() => {
     // taking advantage of the fact that head tag always has a static path
@@ -45,8 +42,6 @@ const BodyAttributes = () => {
           const child = children[i];
           if (child && child.tagName && child.tagName.includes('title')) {
             setTitleIndex(i);
-          } else if (child.tagName.includes('style')) {
-            setCssIndex(i);
           }
         }
       }
@@ -64,23 +59,9 @@ const BodyAttributes = () => {
     >
       <Title title="Body Properties" />
       <div className="props-container">
+        <TitleMod itemIndex={titleIndex} />
         <Width activePath={BODY_PATH} />
         <Background activePath={BODY_PATH} label="Body Background:" />
-      </div>
-      <Title title="Head Properties" />
-
-      <div className="props-container">
-        <TitleMod itemIndex={titleIndex} />
-      </div>
-
-      <Title title="Fonts" />
-      <div className="props-container">
-        <AddCustomFonts />
-      </div>
-
-      <Title title="Custom CSS" />
-      <div className="props-container">
-        {cssIndex !== -1 ? <CustomCss itemIndex={cssIndex} /> : <label>something went wrong</label>}
       </div>
     </BodyContainer>
   );
@@ -96,4 +77,4 @@ const Title = ({ title }: { title: string }) => {
   );
 };
 
-export { BodyAttributes };
+export { BodyAttributes, BodyContainer as SideBarDefaultLayout, Title as SideBarDefaultTitle };
