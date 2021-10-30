@@ -30,7 +30,6 @@ const BodyAttributes = () => {
   const [cssIndex, setCssIndex] = useState<number>(-1);
 
   useEffect(() => {
-    // todo remove this??, because the path is static,
     // taking advantage of the fact that head tag always has a static path
     if (mjmlJson && mjmlJson['children'] && mjmlJson['children'].length > 0) {
       let headConfig = mjmlJson['children'][0];
@@ -81,7 +80,7 @@ const BodyAttributes = () => {
 
       <Title title="Custom CSS" />
       <div className="props-container">
-        <CustomCss />
+        {cssIndex !== -1 ? <CustomCss itemIndex={cssIndex} /> : <label>something went wrong</label>}
       </div>
     </BodyContainer>
   );

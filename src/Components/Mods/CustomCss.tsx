@@ -3,26 +3,29 @@ import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useEditor } from '../../Hooks/Editor.hook';
 
-const STYLEPATH = 'children[0].children[1]';
+interface CustomCssProps {
+  itemIndex: number;
+}
 
-const CustomCss = () => {
+const CustomCss = ({ itemIndex: index }: CustomCssProps) => {
+  const STYLEPATH = `children[0].children[${index}]`;
   const { mjmlJson, setMjmlJson } = useEditor();
   const [value, setValue] = useState('');
   const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
     if (mjmlJson) {
-      const style = mjmlJson.children[0].children[1];
+      const style = mjmlJson.children[0].children[index];
       if (style && style.tagName.includes('style')) {
         const _value = style.content;
         setValue(_value);
       }
     }
-  }, []);
+  }, [index]);
 
   useEffect(() => {
     if (mjmlJson && isActive === false) {
-      const style = mjmlJson.children[0].children[1];
+      const style = mjmlJson.children[0].children[index];
       if (style && style.tagName.includes('style')) {
         const _value = style.content;
         setValue(_value);
@@ -46,13 +49,11 @@ const CustomCss = () => {
   const blurHandler = (e: any) => {
     if (!e.currentTarget.contains(e.relatedTarget)) {
       setIsActive(false);
-      console.log('focus out');
     }
   };
 
   const focusHandler = (e: any) => {
     setIsActive(true);
-    console.log('focus in');
   };
 
   return (
