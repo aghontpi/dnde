@@ -6,7 +6,7 @@ import { WrapWithOutline } from './wrapWithOutline';
 
 const DEBUG = false;
 
-const domParser: any = new DOMParser();
+export const domParser: any = new DOMParser();
 
 export const htmlProcessor = (html: string): ReactNode => {
   if (typeof html !== 'string') {

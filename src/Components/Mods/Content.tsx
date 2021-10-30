@@ -4,6 +4,8 @@ import { useEditor } from '../../Hooks/Editor.hook';
 import { ChangeEvent, useEffect, useState } from 'react';
 import _ from 'lodash';
 import { useHtmlWrapper } from '../../Hooks/Htmlwrapper.hook';
+import { domParser } from '../../Utils/htmlProcessor';
+import { logger } from '../../Utils/logger';
 
 const PROPERTY = 'content';
 
@@ -42,8 +44,35 @@ export const Content = () => {
     setValue(value);
     if (path && visible) {
       let element = _.get(mjmlJson, path);
-      // while in middle of editing, if the element is removed.
+      // while in middle of editing, if the element is removed. thus check element is not null
       if (element) {
+        if (htmlBlock) {
+          // if the content is empty, user will not know everything must be within a root node.
+          // thus add a root node to the content.
+          // ex:
+          //   === can not have ===
+          //    <h1>test heading</h1>
+          //    <p>test para</p>
+          //
+          //  === can have ===
+          //   <div>
+          //    <h1>test heading</h1>
+          //    <p>test para</p>
+          //   </div>
+          if (e.currentTarget.value.replace(/\n/, '').trim() === '') {
+            setValue('<div></div>');
+            e.currentTarget.value = '<div></dvi>';
+          }
+          // check the user string is valid or not before updating,
+          // since this is a common component, validat this only for html block
+          const partialHtml = domParser.parseFromString(value.replace(/\n/, ''), 'text/xml');
+          const isError = partialHtml.querySelector('parsererror');
+          if (isError) {
+            logger.log('invalid html in content: not triggering rerender');
+            return;
+          }
+        }
+
         if (element[PROPERTY] !== value) {
           element[PROPERTY] = value;
           const updated = _.set(mjmlJson, path, element);
@@ -61,11 +90,12 @@ export const Content = () => {
         </Col>
         <Col span={24}>
           {htmlBlock ? (
-            <Input.TextArea rows={28} onChange={handleChange} value={value} />
+            <Input.TextArea spellCheck={false} rows={28} onChange={handleChange} value={value} />
           ) : (
             <Input.TextArea
               disabled={isReadOnly ? isReadOnly : false}
               readOnly={isReadOnly ? isReadOnly : false}
+              spellCheck={false}
               rows={3}
               onChange={handleChange}
               value={value}
