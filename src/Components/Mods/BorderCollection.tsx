@@ -6,7 +6,7 @@ import { ChromePicker } from 'react-color';
 import { useEffect, useState } from 'react';
 import { Row, Col } from 'antd';
 import { useEditor } from '../../Hooks/Editor.hook';
-import { useVisibility } from '../../Hooks/Attribute.hook';
+import { useVisibility, useValue } from '../../Hooks/Attribute.hook';
 import styled from 'styled-components';
 
 interface ColorPickerComponentProps {
@@ -45,6 +45,13 @@ export enum BorderDirection {
   All,
 }
 
+enum BorderAttribute {
+  Top = 'border-top',
+  Bottom = 'border-bottom',
+  Left = 'border-left',
+  Right = 'border-right',
+}
+
 export const BorderCollection = ({ activePath, direction }: BorderCollectionProps) => {
   const { mjmlJson, setMjmlJson } = useEditor();
   const [visible, path] = useVisibility({ attribute: 'border', customPath: activePath });
@@ -60,17 +67,87 @@ export const BorderCollection = ({ activePath, direction }: BorderCollectionProp
       let json = {};
       let element = _.get(mjmlJson, path);
       if (direction === BorderDirection.Left || direction === BorderDirection.All)
-        element.attributes['border-left'] = value;
+        element.attributes[BorderAttribute.Left] = value;
       if (direction === BorderDirection.Right || direction === BorderDirection.All)
-        element.attributes['border-right'] = value;
+        element.attributes[BorderAttribute.Right] = value;
       if (direction === BorderDirection.Top || direction === BorderDirection.All)
-        element.attributes['border-top'] = value;
+        element.attributes[BorderAttribute.Top] = value;
       if (direction === BorderDirection.Bottom || direction === BorderDirection.All)
-        element.attributes['border-bottom'] = value;
+        element.attributes[BorderAttribute.Bottom] = value;
       json = _.set(mjmlJson, path, element);
       setMjmlJson({ ...json });
     }
   };
+
+  const splitWidth = (w: string): string[] => {
+    const numPattern = /[0-9]/g;
+    const alphaPattern = /[a-zA-Z]/g;
+    let A: string[] = [];
+    const num = w.match(numPattern);
+    const alpha = w.match(alphaPattern);
+    A.push(num === null ? '' : num.join(''));
+    A.push(alpha === null ? '' : alpha.join(''));
+    return A;
+  };
+
+  // Values
+  const left = useValue({ path, visible, attribute: BorderAttribute.Left });
+  const right = useValue({ path, visible, attribute: BorderAttribute.Right });
+  const top = useValue({ path, visible, attribute: BorderAttribute.Top });
+  const bottom = useValue({ path, visible, attribute: BorderAttribute.Bottom });
+
+  const defaultValue: string = '1px none #000';
+
+  const setValue = (value: string): void => {
+    const VALUE: string[] = value.split(' ');
+    const WIDTH: string[] = splitWidth(VALUE[0]);
+    if (VALUE.length === 3 && WIDTH.length === 2) {
+      setWidth(WIDTH[0]);
+      setUnit(WIDTH[1]);
+      setStyle(VALUE[1]);
+      setColor(VALUE[2]);
+    } else {
+      setValue(defaultValue);
+    }
+  };
+
+  const setVisibleValues = () => {
+    let l: string | undefined = left.getValue();
+    let r: string | undefined = right.getValue();
+    let t: string | undefined = top.getValue();
+    let b: string | undefined = bottom.getValue();
+
+    if (l === r && l === t && l === b && l !== '' && direction === BorderDirection.All) {
+      setValue(l);
+    } else {
+      switch (direction) {
+        case BorderDirection.Left:
+          if (l !== undefined) setValue(l);
+          else setValue(defaultValue);
+          break;
+        case BorderDirection.Right:
+          if (r !== undefined) setValue(r);
+          else setValue(defaultValue);
+          break;
+        case BorderDirection.Top:
+          if (t !== undefined) setValue(t);
+          else setValue(defaultValue);
+          break;
+        case BorderDirection.Bottom:
+          if (b !== undefined) setValue(b);
+          else setValue(defaultValue);
+          break;
+        case BorderDirection.All:
+          setValue(defaultValue);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (visible && path) {
+      setVisibleValues();
+    }
+  }, [visible, path]);
 
   useEffect(() => {
     handleChange(width + unit + ' ' + style + ' ' + color);
