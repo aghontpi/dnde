@@ -155,7 +155,7 @@ export const BorderCollection = ({ activePath, direction }: BorderCollectionProp
 
   return visible ? (
     <>
-      <Row gutter={[0, 8]}>
+      <Row gutter={[0, 4]}>
         {/* Border Style */}
         <Col span={24}>
           <Select value={style} options={BORDER_CONFIG} onChange={(x) => setStyle(x)} />
@@ -212,7 +212,7 @@ const ColorPicker = styled(Col)`
     position: absolute;
     z-index: 2;
     top: -108px;
-    left: -200 px;
+    left: 0px;
   }
 
   .cover {

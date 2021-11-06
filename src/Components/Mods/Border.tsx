@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Col, Form, Input, Row, Typography } from 'antd';
+import { Col, Form, Input, Row, Switch, Typography } from 'antd';
 import { useVisibility } from '../../Hooks/Attribute.hook';
 import { BorderCollection, BorderDirection } from './BorderCollection';
 import { useState } from 'react';
@@ -23,15 +23,47 @@ export const Border = ({ activePath, label, attribute_name }: BorderProps) => {
 
   return visible ? (
     <Form.Item>
-      <Row>
-        <Col span={24}>
+      <Row justify="space-between">
+        <Col flex="none">
           <Typography.Text>{label ? label : 'Border Control :'}</Typography.Text>
         </Col>
-      </Row>
-      <Row style={{ paddingTop: '8px' }}>
-        <Col span={12}>
-          <BorderCollection direction={BorderDirection.All} activePath={activePath} />
+        <Col flex="none">
+          <Switch size="small" checked={isAdvanced} onChange={() => setIsAdvanced(!isAdvanced)} />
         </Col>
+      </Row>
+
+      <Row style={{ paddingTop: '8px' }} gutter={[24, 16]}>
+        {!isAdvanced && (
+          <>
+            <Col span={12}>
+              <Typography.Text style={{ fontSize: '12px' }}>All Directions </Typography.Text>
+              <BorderCollection direction={BorderDirection.All} activePath={activePath} />
+            </Col>
+          </>
+        )}
+        {isAdvanced && (
+          <>
+            <Col span={12}>
+              <Typography.Text style={{ fontSize: '12px' }}>Top</Typography.Text>
+              <BorderCollection direction={BorderDirection.Top} activePath={activePath} />
+            </Col>
+
+            <Col span={12}>
+              <Typography.Text style={{ fontSize: '12px' }}>Right</Typography.Text>
+              <BorderCollection direction={BorderDirection.Right} activePath={activePath} />
+            </Col>
+
+            <Col span={12}>
+              <Typography.Text style={{ fontSize: '12px' }}>Left</Typography.Text>
+              <BorderCollection direction={BorderDirection.Left} activePath={activePath} />
+            </Col>
+
+            <Col span={12}>
+              <Typography.Text style={{ fontSize: '12px' }}>Bottom</Typography.Text>
+              <BorderCollection direction={BorderDirection.Bottom} activePath={activePath} />
+            </Col>
+          </>
+        )}
       </Row>
     </Form.Item>
   ) : null;
