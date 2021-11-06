@@ -9,16 +9,42 @@ import { useEditor } from '../../Hooks/Editor.hook';
 import { useVisibility, useValue } from '../../Hooks/Attribute.hook';
 import styled from 'styled-components';
 
+export enum BorderDirection {
+  Top,
+  Bottom,
+  Left,
+  Right,
+  All,
+}
+
 interface ColorPickerComponentProps {
   color: string;
   setColor: Function;
   showColor: boolean;
   setShowColor: Function;
+  borderDirection?: BorderDirection;
 }
 
-const ColorPickerComponent = ({ color, setColor, showColor, setShowColor }: ColorPickerComponentProps) => {
+const ColorPickerComponent = ({
+  color,
+  setColor,
+  showColor,
+  setShowColor,
+  borderDirection,
+}: ColorPickerComponentProps) => {
+  let left = '0px';
+  if (
+    borderDirection === BorderDirection.Top ||
+    borderDirection === BorderDirection.All ||
+    borderDirection === BorderDirection.Left
+  ) {
+    left = '-40px';
+  } else {
+    left = '-200px';
+  }
+
   return (
-    <ColorPicker color={color}>
+    <ColorPicker left={left} color={color}>
       <div className="swatch" onClick={() => setShowColor(true)}>
         <div className="color"></div>
       </div>
@@ -35,14 +61,6 @@ const ColorPickerComponent = ({ color, setColor, showColor, setShowColor }: Colo
 interface BorderCollectionProps {
   activePath: string | undefined;
   direction: BorderDirection;
-}
-
-export enum BorderDirection {
-  Top,
-  Bottom,
-  Left,
-  Right,
-  All,
 }
 
 enum BorderAttribute {
@@ -170,6 +188,7 @@ export const BorderCollection = ({ activePath, direction }: BorderCollectionProp
             <Col flex="none">
               <ColorPickerComponent
                 color={color}
+                borderDirection={direction}
                 setColor={setColor}
                 showColor={showColor}
                 setShowColor={setShowColor}
@@ -191,7 +210,7 @@ export const BorderCollection = ({ activePath, direction }: BorderCollectionProp
   ) : null;
 };
 
-const ColorPicker = styled(Col)`
+const ColorPicker = styled(Col)<{ left: string }>`
   display: flex;
   .color {
     width: 25px;
@@ -212,7 +231,7 @@ const ColorPicker = styled(Col)`
     position: absolute;
     z-index: 2;
     top: -108px;
-    left: 0px;
+    left: ${(props) => props.left};
   }
 
   .cover {
