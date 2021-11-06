@@ -104,7 +104,7 @@ const ColumnAttributes = () => {
                   />
                   <BorderRadius activePath={column} />
                   <Border activePath={column} />
-                  <CordinalBorder activePath={column} />
+                  {/* <CordinalBorder activePath={column} /> */}
                 </div>
               </Scrollbars>
             </TabPane>

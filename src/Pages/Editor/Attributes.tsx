@@ -203,7 +203,7 @@ export const OnlyAttributesDrawer = () => {
           <Border label="Border Width" attribute_name="border-width" />
           <Border label="Border Style" attribute_name="border-style" />
           <Background label="Border Color" overrideAttribute="border-color" />
-          <CordinalBorder />
+          {/* <CordinalBorder /> */}
           <BorderRadius />
           <Link />
           <Img />

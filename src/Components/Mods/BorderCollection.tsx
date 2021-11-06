@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { BORDER_CONFIG } from './BorderConfig';
 import { UnitConfig } from './UnitConfig';
-import { Select, Input } from 'antd';
+import { Select, Input, Typography } from 'antd';
 import { ChromePicker } from 'react-color';
 import { useEffect, useState } from 'react';
 import { Row, Col } from 'antd';
@@ -18,7 +18,7 @@ interface ColorPickerComponentProps {
 
 const ColorPickerComponent = ({ color, setColor, showColor, setShowColor }: ColorPickerComponentProps) => {
   return (
-    <ColorPicker color={color} flex="none" span={11} offset={1}>
+    <ColorPicker color={color}>
       <div className="swatch" onClick={() => setShowColor(true)}>
         <div className="color"></div>
       </div>
@@ -118,7 +118,7 @@ export const BorderCollection = ({ activePath, direction }: BorderCollectionProp
     let b: string | undefined = bottom.getValue();
 
     if (l === r && l === t && l === b && l !== '' && direction === BorderDirection.All) {
-      setValue(l);
+      l && setValue(l);
     } else {
       switch (direction) {
         case BorderDirection.Left:
@@ -155,28 +155,44 @@ export const BorderCollection = ({ activePath, direction }: BorderCollectionProp
 
   return visible ? (
     <>
-      <Row>
+      <Row gutter={[0, 8]}>
         {/* Border Style */}
-        <Col span={12}>
+        <Col span={24}>
           <Select value={style} options={BORDER_CONFIG} onChange={(x) => setStyle(x)} />
         </Col>
-        {/* Border color */}
-        <ColorPickerComponent color={color} setColor={setColor} showColor={showColor} setShowColor={setShowColor} />
+        <Col span={24}>
+          <Row justify="space-between" align="middle">
+            {/* Border width */}
+            <Col flex="none" style={{ width: '70px' }}>
+              <Input placeholder="Width" value={width} onChange={(x) => setWidth(x.target.value)} />
+            </Col>
+            {/* Border color */}
+            <Col flex="none">
+              <ColorPickerComponent
+                color={color}
+                setColor={setColor}
+                showColor={showColor}
+                setShowColor={setShowColor}
+              />
+            </Col>
+          </Row>
+        </Col>
       </Row>
-      {/* Border width */}
-      <Row>
+
+      {/* dont show unit for user for now */}
+      {/* <Row>
         <Col span={12}>
-          <Input placeholder="Width" value={width} onChange={(x) => setWidth(x.target.value)} />
         </Col>
         <Col span={11} offset={1}>
           <Select value={unit} options={UnitConfig} onChange={(x) => setUnit(x)} style={{ width: '50%' }} />
-        </Col>
-      </Row>
+        </Col> 
+      </Row> */}
     </>
   ) : null;
 };
 
 const ColorPicker = styled(Col)`
+  display: flex;
   .color {
     width: 25px;
     height: 25px;
@@ -184,7 +200,7 @@ const ColorPicker = styled(Col)`
     background: ${(props) => props.color};
   }
   .swatch {
-    padding: 5px;
+    padding: 3px;
     background: #fff;
     border-radius: 1px;
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
@@ -196,7 +212,7 @@ const ColorPicker = styled(Col)`
     position: absolute;
     z-index: 2;
     top: -108px;
-    left: -200px;
+    left: -200 px;
   }
 
   .cover {
