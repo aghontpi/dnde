@@ -34,7 +34,7 @@ export const Border = ({ activePath, label, attribute_name }: BorderProps) => {
       </Row>
 
       <Row style={{ paddingTop: '8px' }} gutter={[24, 16]}>
-        <Col span={12} style={{ display: !isAdvanced ? 'block' : 'none' }}>
+        <Col span={24} style={{ display: !isAdvanced ? 'block' : 'none' }}>
           <Typography.Text style={{ fontSize: '12px' }}>All Directions </Typography.Text>
           <BorderCollection direction={BorderDirection.All} activePath={activePath} />
         </Col>

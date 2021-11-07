@@ -33,15 +33,8 @@ const ColorPickerComponent = ({
   borderDirection,
 }: ColorPickerComponentProps) => {
   let left = '0px';
-  if (
-    borderDirection === BorderDirection.Top ||
-    borderDirection === BorderDirection.All ||
-    borderDirection === BorderDirection.Left
-  ) {
-    left = '-40px';
-  } else {
-    left = '-200px';
-  }
+  if (borderDirection === BorderDirection.Top || borderDirection === BorderDirection.Left) left = '-40px';
+  else left = '-200px';
 
   return (
     <ColorPicker left={left} color={color}>
@@ -173,30 +166,57 @@ export const BorderCollection = ({ activePath, direction }: BorderCollectionProp
 
   return visible ? (
     <>
-      <Row gutter={[0, 4]}>
-        {/* Border Style */}
-        <Col span={24}>
-          <Select value={style} options={BORDER_CONFIG} onChange={(x) => setStyle(x)} />
-        </Col>
-        <Col span={24}>
-          <Row justify="space-between" align="middle">
-            {/* Border width */}
-            <Col flex="none" style={{ width: '70px' }}>
-              <Input placeholder="Width" value={width} onChange={(x) => setWidth(x.target.value)} />
-            </Col>
-            {/* Border color */}
-            <Col flex="none">
-              <ColorPickerComponent
-                color={color}
-                borderDirection={direction}
-                setColor={setColor}
-                showColor={showColor}
-                setShowColor={setShowColor}
-              />
-            </Col>
-          </Row>
-        </Col>
-      </Row>
+      {direction === BorderDirection.All && (
+        <Row gutter={[8, 4]} justify="space-between">
+          <Col span={12}>
+            <Select value={style} options={BORDER_CONFIG} onChange={(x) => setStyle(x)} />
+          </Col>
+          <Col flex="none">
+            <Input
+              style={{ width: '88px' }}
+              placeholder="Width"
+              value={width}
+              onChange={(x) => setWidth(x.target.value)}
+              addonAfter={unit}
+            />
+          </Col>
+          <Col span={4} style={{ display: 'flex', justifyContent: 'flex-end', paddingRight: '0px' }}>
+            <ColorPickerComponent
+              color={color}
+              borderDirection={direction}
+              setColor={setColor}
+              showColor={showColor}
+              setShowColor={setShowColor}
+            />
+          </Col>
+        </Row>
+      )}
+
+      {direction !== BorderDirection.All && (
+        <Row gutter={[0, 4]} justify="space-between">
+          <Col span={24}>
+            <Select value={style} options={BORDER_CONFIG} onChange={(x) => setStyle(x)} />
+          </Col>
+          <Col span={24}>
+            <Row justify="space-between" align="middle">
+              {/* Border width */}
+              <Col flex="none" style={{ width: '88px' }}>
+                <Input placeholder="Width" value={width} onChange={(x) => setWidth(x.target.value)} addonAfter={unit} />
+              </Col>
+              {/* Border color */}
+              <Col flex="none">
+                <ColorPickerComponent
+                  color={color}
+                  borderDirection={direction}
+                  setColor={setColor}
+                  showColor={showColor}
+                  setShowColor={setShowColor}
+                />
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      )}
 
       {/* dont show unit for user for now */}
       {/* <Row>
