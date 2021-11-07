@@ -5,6 +5,48 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v0.0.0-alpha.3] - (Nov 07,2021)
+
+### Added
+
+- Add npm build: pull request #22 from aghontpi/configure-npm-package-build (ae4fbd9, 3ae7471, 2f677db, c8d2e8a, 8224d5f, 7728123, 2f14375, 4668407, fa7a56f, fc4738a, 362a706, 50beb19, d5152de )
+  - [https://www.npmjs.com/package/dnd-email-editor](https://www.npmjs.com/package/dnd-email-editor)
+- Add pull_request_template.md (16a19d6)
+- Add issue/feature-request templates (47f4572, 2988297)
+- add ability to write Custom css Mod, new feature (6ee7a30)
+- Add Banner, update readme: pull request #23 from 1bman/master (fc58716, fae51f3, b56b1d1, a51c32b)
+- Add send mail backend integration (404a64f)
+- Add block user back navigation without using state and directly accessing undoredo global variables (2b3de1c)
+- Add export method to be called as api (e975469)
+
+### Changes
+
+- update border/ Refactor/Update: pull request #25 from FR0ST1N/qol (66943a6, d6e8ec0, cd36473, 7657b3d, 7bb7186, 4d28f96, 5ecfd05, 22749dc, be21b51, 7197857,60c8fe5 )
+- update manifest (057c7de)
+- update links (be8c11c)
+- update readme with Gif & change alignment (8c48128)
+- convert screens to gif (c97e611)
+- change content to be shown in new line, init custom css (18c7218)
+- remove layout code for pre 'alpha.2' (a862fab)
+- update module to v0.0.0-alpha.2.build.6 (78d070e)
+- update to use link references (d0b861e)
+- updates to readme and links (3567c22, 5c329df)
+- remove uiWrapperList, not use for it at this state. (19722a8)
+- remove dependencies from editor component, move page logic seperate (1f9c5df)
+- modify Right Sidebar layout, due to addition of 'custom css' (3402b46)
+- remove dependencies from editor component, move page logic to seperate page (c8ab3cd)
+- remove debug symbol (582005a)
+- instead of showing confirm message when loading to restore previous state, show message when trying to goback. (ba885ab)
+
+### Fixes
+
+- fix: validate user html content before processing, (6bb6654)
+- fix 'copy as html' not working (10a468a)
+- fix In some scenario, 'layout config' needs additional click to show the current layout. (7625786)
+- fix invalid import (b819e02)
+- fix: restore section up/down indicator (e6cee00)
+- fix: complete Remove processing static paths, unnecessary computation, #24 (174dee9)
+
 ## [v0.0.0-alpha.2] - (Oct 25,2021)
 
 ### Added
