@@ -70,7 +70,7 @@ export const BorderCollection = ({ activePath, direction }: BorderCollectionProp
   const [style, setStyle] = useState<string>('none');
   const [color, setColor] = useState<string>('#000');
   const [showColor, setShowColor] = useState<boolean>(false);
-  const [width, setWidth] = useState<string>('1');
+  const [width, setWidth] = useState<string>('0');
   const [unit, setUnit] = useState<string>('px');
 
   const handleChange = (value: string): void => {
@@ -107,7 +107,7 @@ export const BorderCollection = ({ activePath, direction }: BorderCollectionProp
   const top = useValue({ path, visible, attribute: BorderAttribute.Top });
   const bottom = useValue({ path, visible, attribute: BorderAttribute.Bottom });
 
-  const defaultValue: string = '1px none #000';
+  const defaultValue: string = '0px none #000';
 
   const setValue = (value: string): void => {
     const VALUE: string[] = value.split(' ');
