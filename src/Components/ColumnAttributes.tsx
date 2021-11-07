@@ -102,9 +102,9 @@ const ColumnAttributes = () => {
                     overrideAttribute="inner-background-color"
                     activePath={column}
                   />
-                  <BorderRadius activePath={column} />
                   <Border activePath={column} />
-                  <CordinalBorder activePath={column} />
+                  {/* <CordinalBorder activePath={column} /> */}
+                  <BorderRadius activePath={column} />
                 </div>
               </Scrollbars>
             </TabPane>
