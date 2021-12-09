@@ -1,6 +1,6 @@
 {
   "name": "dnd-email-editor",
-  "version": "v0.0.0-alpha.3",
+  "version": "v0.0.0-alpha.4",
   "description": "Drag and Drop Editor designed for mails",
   "main": "./main.js",
   "files": ["**/*"],
@@ -10,18 +10,7 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1"
   },
-  "dependencies": {
-    "antd": "^4.16.13",
-    "lodash": "^4.17.21",
-    "mjml": "^4.10.3",
-    "mjml-browser": "^4.10.3",
-    "mjml-cli": "^4.10.3",
-    "react-color": "^2.19.3",
-    "react-custom-scrollbars-2": "^4.4.0",
-    "react-redux": "^7.2.5",
-    "sass": "^1.43.3",
-    "styled-components": "^5.3.1"
-  },
+  "dependencies": {},
   "author": "https://github.com/aghontpi",
   "license": "GPL-3.0",
   "bugs": {
