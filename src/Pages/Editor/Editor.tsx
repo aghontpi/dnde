@@ -13,7 +13,11 @@ import { UNDOREDO } from '../../Utils/undoRedo';
 import { useDragAndDropUniqueId } from '../../Hooks/Drag.hook';
 import { EMPTY_EDITOR_STATE } from '../../Context/Editor.context';
 
-export const Editor = forwardRef((props, ref) => {
+export interface EmailEditorProps {
+  preview?: boolean;
+}
+
+export const Editor = forwardRef((props: EmailEditorProps, ref) => {
   const { mjmlJson, setMjmlJson } = useEditor();
   const [preview, setPreview] = useState(false);
   const { getId } = useDragAndDropUniqueId();
@@ -78,18 +82,23 @@ export const Editor = forwardRef((props, ref) => {
         <ComponentBank />
       </div>
       <div className={css.view}>
-        <Preview
-          visible={preview}
-          visibleChange={(flag) => setPreview(flag)}
-          inframeContent={preview ? mjml2html(mjmlJson).html : ''}
-        />
-        <Button
-          style={{ position: 'absolute', top: '8px', right: '16px', zIndex: 300 }}
-          key="3"
-          onClick={() => setPreview(true)}
-        >
-          Preview
-        </Button>
+        {/* disable preview only if preview is passed with 'false' */}
+        {(props.preview === undefined || props.preview === true) && (
+          <>
+            <Preview
+              visible={preview}
+              visibleChange={(flag) => setPreview(flag)}
+              inframeContent={preview ? mjml2html(mjmlJson).html : ''}
+            />
+            <Button
+              style={{ position: 'absolute', top: '8px', right: '16px', zIndex: 300 }}
+              key="3"
+              onClick={() => setPreview(true)}
+            >
+              Preview
+            </Button>
+          </>
+        )}
         <View />
       </div>
       <div className={css.attributes} style={{ position: 'relative' }}>
