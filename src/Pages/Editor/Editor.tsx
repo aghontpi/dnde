@@ -5,7 +5,7 @@ import { ComponentBank } from './ComponentBank';
 import { Button } from 'antd';
 import mjml2html from 'mjml-browser';
 import { useEditor } from '../../Hooks/Editor.hook';
-import { forwardRef, useImperativeHandle, useState } from 'react';
+import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import { Preview } from './Preview';
 import { exportJson, importJson } from '../../Utils/mjmlProcessor';
 import _ from 'lodash';
@@ -15,9 +15,11 @@ import { EMPTY_EDITOR_STATE } from '../../Context/Editor.context';
 
 export interface EmailEditorProps {
   preview?: boolean;
+  showUndoRedo?: boolean;
 }
 
 export const Editor = forwardRef((props: EmailEditorProps, ref) => {
+  const viewRef = useRef<any>(null);
   const { mjmlJson, setMjmlJson } = useEditor();
   const [preview, setPreview] = useState(false);
   const { getId } = useDragAndDropUniqueId();
@@ -27,6 +29,12 @@ export const Editor = forwardRef((props: EmailEditorProps, ref) => {
       getHtml,
       getJson,
       loadJson,
+      undoredo: {
+        undoActionCallback,
+        redoActionCallback,
+        isUndoEmpty: UNDOREDO.isUndoEmpty,
+        isRedoEmpty: UNDOREDO.isRedoEmpty,
+      },
     };
   });
 
@@ -76,6 +84,18 @@ export const Editor = forwardRef((props: EmailEditorProps, ref) => {
     return json;
   };
 
+  const undoActionCallback = () => {
+    if (viewRef.current) {
+      viewRef.current.undoCallback();
+    }
+  };
+
+  const redoActionCallback = () => {
+    if (viewRef.current) {
+      viewRef.current.redoCallback();
+    }
+  };
+
   return (
     <div className={css.editor}>
       <div className={css.bank}>
@@ -99,7 +119,7 @@ export const Editor = forwardRef((props: EmailEditorProps, ref) => {
             </Button>
           </>
         )}
-        <View />
+        <View ref={viewRef} showUndoRedo={props.showUndoRedo} />
       </div>
       <div className={css.attributes} style={{ position: 'relative' }}>
         <OnlyAttributesDrawer />

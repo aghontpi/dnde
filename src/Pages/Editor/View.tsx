@@ -12,13 +12,15 @@ import { InlineEditor } from '../../Components/Mods/CustomInlineEditor';
 import styled from 'styled-components';
 import { useHtmlWrapper } from '../../Hooks/Htmlwrapper.hook';
 import { useCkeditor } from '../../Hooks/Ckeditor.hook';
-import { memo, useCallback, useEffect } from 'react';
+import { forwardRef, memo, useCallback, useEffect, useImperativeHandle } from 'react';
 import { UndoRedo } from '../../Components/UndoRedo';
 import _ from 'lodash';
 import { UNDOREDO } from '../../Utils/undoRedo';
 import { logger } from '../../Utils/logger';
 
-interface ViewProps {}
+interface ViewProps {
+  showUndoRedo?: boolean;
+}
 
 const DesignContainer = styled('div')`
   .editor-active {
@@ -28,7 +30,7 @@ const DesignContainer = styled('div')`
   }
 `;
 
-export const View = (props: ViewProps) => {
+export const View = forwardRef((props: ViewProps, ref) => {
   const { mjmlJson, setMjmlJson } = useEditor();
   const { getId } = useDragAndDropUniqueId();
   const { setActive, active } = useHtmlWrapper();
@@ -38,6 +40,13 @@ export const View = (props: ViewProps) => {
     drag: { setIsColumn, isColumn },
   } = useCkeditor();
   const { setCopyActive } = copy;
+
+  useImperativeHandle(ref, () => {
+    return {
+      undoCallback,
+      redoCallback,
+    };
+  });
 
   useEffect(() => {
     UNDOREDO.print();
@@ -104,7 +113,9 @@ export const View = (props: ViewProps) => {
     <Scrollbars style={{ height: '100%' }}>
       <Editor />
       <InlineEditor />
-      <UndoRedo undoCallback={undoCallback} redoCallback={redoCallback} />
+      {(props.showUndoRedo === undefined || props.showUndoRedo === true) && (
+        <UndoRedo undoCallback={undoCallback} redoCallback={redoCallback} />
+      )}
       <DesignContainer
         className={`${css.viewHolder} mjml-wrapper mjml-tag identifier-mj-body`}
         onDrop={onDrop}
@@ -114,7 +125,7 @@ export const View = (props: ViewProps) => {
       </DesignContainer>
     </Scrollbars>
   );
-};
+});
 
 const MjmlProcessor = memo(({ mjml, isColumn }: { mjml: any; isColumn: boolean }) => {
   return mjml && htmlProcessor(mjml2html(mjml).html);
