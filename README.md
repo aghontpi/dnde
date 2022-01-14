@@ -35,11 +35,19 @@ npm install dnd-email-editor
 
 ## What's included
 
-Editor includes these api's
+Props that can be passed to the component:
+
+|      Prop      |  Type   | Default | Optional | Description                                                                                                                              |
+| :------------: | :-----: | :-----: | :------: | ---------------------------------------------------------------------------------------------------------------------------------------- |
+|   `preview`    | boolean | `true`  |   true   | show/hide the inbuilt preview button.                                                                                                    |
+| `showUndoRedo` | boolean | `true`  |   true   | show/hide the inbuilt undo/redo button. <br/><br/> You can create your own undoredo functionality with `undoredo` from api methods below |
+
+Editor exposes these api methods
 
 - `getHtml` - export the design as html content
 - `getJson` - export as json string, this string can then be used with `loadJson`
 - `loadJson` - load an existing design from json string
+- `undoredo` - undo and redo actions
 
 ## Usage
 
@@ -59,7 +67,7 @@ const ref = React.useRef(null);
 return <Editor ref={ref} />;
 ```
 
-- Using `getHtml()`, `getJson()` and `loadJson()`
+- Using `getHtml()`, `getJson()`, `loadJson()`, `undoredo`
 
 ```typescript
 const logValues = () => {
@@ -73,6 +81,24 @@ const logValues = () => {
 const loadJson = (json: string) => {
   if (ref.current) {
     ref.current.loadJson(json);
+  }
+};
+
+const performUndoAction = () => {
+  if (ref.current) {
+    ref.current.undoActionCallback();
+
+    // to check if undo is possible
+    console.log('is undo empty: ', ref.current.isUndoEmpty());
+  }
+};
+
+const performRedoAction = () => {
+  if (ref.current) {
+    ref.current.redoActionCallback();
+
+    // to check if redo is possible
+    console.log('is redo empty: ', ref.current.isRedoEmpty());
   }
 };
 ```
@@ -98,7 +124,7 @@ const ExampleComponent = () => {
 
 ## Purpose
 
-There are soo many drag and drop editors that helps in **creating website** but **not mails**, because mails differ a lot from `a normal html webpage'
+There are soo many drag and drop editors that helps in **creating website** but **not mails**, because mails differ a lot from `a normal html webpage`
 
 - even if there are `mail editors` available, they are paid and not `open-source`.
 

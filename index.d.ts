@@ -5,8 +5,8 @@ export default class Editor extends Component<{ preview?: boolean; showUndoRedo?
   getJson: () => string;
   loadJson: (json: string | null) => string;
   undoredo: {
-    undoActionCallback?: () => void;
-    redoActionCallback?: () => void;
+    undoActionCallback: () => void;
+    redoActionCallback: () => void;
     isUndoEmpty: () => boolean;
     isRedoEmpty: () => boolean;
   };
